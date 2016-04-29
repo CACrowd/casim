@@ -23,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 
 /**
+ * Just a dumy test as place holder and to test travis-ci
  * Created by laemmel on 29.04.16.
  */
 public class DummyTest {
