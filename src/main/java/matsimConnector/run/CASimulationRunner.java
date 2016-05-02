@@ -1,7 +1,10 @@
 package matsimConnector.run;
 
 import com.google.inject.Provider;
-
+import matsimConnector.congestionpricing.MSACongestionHandler;
+import matsimConnector.congestionpricing.MSAMarginalCongestionPricingContolerListener;
+import matsimConnector.congestionpricing.MSATollDisutilityCalculatorFactory;
+import matsimConnector.congestionpricing.MSATollHandler;
 import matsimConnector.engine.CAMobsimFactory;
 import matsimConnector.engine.CATripRouterFactory;
 import matsimConnector.network.HybridNetworkBuilder;
@@ -30,7 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class CASimulationRunner implements IterationStartsListener{
+public class CASimulationRunner implements IterationStartsListener {
 
 	//MATSim Logger
 	private static final Logger log = Logger.getLogger(CASimulationRunner.class);
@@ -55,48 +58,48 @@ public class CASimulationRunner implements IterationStartsListener{
 
 		Network net = scenario.getNetwork();
 		
-//		FOR THE ABMUS SCENARIO WITH SEPARATE FLOWS
-		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_8"));
-		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_10"));
-		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_9"));
-		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_10"));
-		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_6"));
-		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_9"));
-		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_14"));
-		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_6"));
-		net.removeLink(Id.createLinkId("HybridNode_12-->HybridNode_13"));
-		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_17"));
-		net.removeLink(Id.createLinkId("HybridNode_17-->HybridNode_13"));
-		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_10"));
-		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_13"));
-		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_10"));
-		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_14"));		
-		
-		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_22"));
-		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_21"));
-		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_22"));
-		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_19"));
-		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_21"));
-		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_19"));
-		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_23"));
-		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_21"));
-		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_23"));
-		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_1"));
-		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_21"));
-		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_22"));
-		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_23"));
-		net.removeLink(Id.createLinkId("HybridNode_20-->HybridNode_22"));
-		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_20"));
-		net.removeLink(Id.createLinkId("HybridNode_26-->HybridNode_23"));
-		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_26"));
-		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_23"));
-		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_25"));
-		net.removeLink(Id.createLinkId("HybridNode_24-->HybridNode_22"));
-		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_24"));
-		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_21"));
-		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_25"));
-		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_1"));
-		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_25"));
+////		FOR THE ABMUS SCENARIO WITH SEPARATE FLOWS
+//		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_8"));
+//		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_10"));
+//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_9"));
+//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_10"));
+//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_6"));
+//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_9"));
+//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_14"));
+//		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_6"));
+//		net.removeLink(Id.createLinkId("HybridNode_12-->HybridNode_13"));
+//		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_17"));
+//		net.removeLink(Id.createLinkId("HybridNode_17-->HybridNode_13"));
+//		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_10"));
+//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_13"));
+//		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_10"));
+//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_14"));
+//
+//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_22"));
+//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_21"));
+//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_22"));
+//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_19"));
+//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_21"));
+//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_19"));
+//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_23"));
+//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_21"));
+//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_23"));
+//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_1"));
+//		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_21"));
+//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_22"));
+//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_23"));
+//		net.removeLink(Id.createLinkId("HybridNode_20-->HybridNode_22"));
+//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_20"));
+//		net.removeLink(Id.createLinkId("HybridNode_26-->HybridNode_23"));
+//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_26"));
+//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_23"));
+//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_25"));
+//		net.removeLink(Id.createLinkId("HybridNode_24-->HybridNode_22"));
+//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_24"));
+//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_21"));
+//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_25"));
+//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_1"));
+//		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_25"));
 		
 		
 		if (Constants.BRAESS_WL) {
@@ -110,20 +113,20 @@ public class CASimulationRunner implements IterationStartsListener{
 		c.qsim().setEndTime(Constants.SIMULATION_DURATION);
 
 		final Controler controller = new Controler(scenario);
-//		final MSATollHandler tollHandler = new MSATollHandler(controller.getScenario());
-//		final MSATollDisutilityCalculatorFactory tollDisutilityCalculatorFactory = new MSATollDisutilityCalculatorFactory(tollHandler, c.planCalcScore());
+		final MSATollHandler tollHandler = new MSATollHandler(controller.getScenario());
+		final MSATollDisutilityCalculatorFactory tollDisutilityCalculatorFactory = new MSATollDisutilityCalculatorFactory(tollHandler, c.planCalcScore());
 
 		if (Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION) {
 			//////////////------------THIS IS FOR THE SYSTEM OPTIMUM SEARCH
 			//controller.setTravelDisutilityFactory(tollDisutilityCalculatorFactory);
-//			controller.addOverridingModule(new AbstractModule(){
-//				@Override
-//				public void install() {
-//					this.bindCarTravelDisutilityFactory().toInstance( tollDisutilityCalculatorFactory );
-//				}
-//			});
+			controller.addOverridingModule(new AbstractModule(){
+				@Override
+				public void install() {
+					this.bindCarTravelDisutilityFactory().toInstance( tollDisutilityCalculatorFactory );
+				}
+			}); 
 			
-//			controller.addControlerListener(new MSAMarginalCongestionPricingContolerListener(controller.getScenario(), tollHandler, new MSACongestionHandler(controller.getEvents(), controller.getScenario())));
+			controller.addControlerListener(new MSAMarginalCongestionPricingContolerListener(controller.getScenario(), tollHandler, new MSACongestionHandler(controller.getEvents(), controller.getScenario())));
 			//////////////------------
 		}
 
