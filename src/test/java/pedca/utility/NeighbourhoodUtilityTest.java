@@ -34,7 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class NeighbourhoodUtilityTest {
 
 
-	@Test
+	@Test //test will fail
 	public void testCalculateMoorNeighbourhood() {
 		GridPoint neighbour = new GridPoint(5,9);
 		Neighbourhood nb = NeighbourhoodUtility.calculateMooreNeighbourhood(neighbour);
@@ -42,7 +42,7 @@ public class NeighbourhoodUtilityTest {
 		assertThat(nb.size(),is(equalTo(8)));
 	}
 
-	@Test
+	@Test //test will fail
 	public void testCalculateVonNeumannNeighbourhood() {
 		GridPoint neighbour = new GridPoint(8,9);
 		Neighbourhood nb = NeighbourhoodUtility.calculateVonNeumannNeighbourhood(neighbour);
