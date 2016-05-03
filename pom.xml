@@ -22,6 +22,10 @@
             <name>Geotools repository</name>
             <url>http://download.osgeo.org/webdav/geotools</url>
         </repository>
+        <repository>
+            <id>matsim</id>
+            <url>http://dl.bintray.com/matsim/matsim</url>
+        </repository>
     </repositories>
     <build>
         <plugins>
@@ -41,16 +45,16 @@
             <artifactId>matsim</artifactId>
             <version>0.9.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-referencing</artifactId>
-            <version>13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-epsg-hsql</artifactId>
-            <version>13.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>gt-referencing</artifactId>-->
+            <!--<version>14.3</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.geotools</groupId>-->
+            <!--<artifactId>gt-epsg-hsql</artifactId>-->
+            <!--<version>14.3</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>gicentre</groupId>
             <artifactId>gicentreutils</artifactId>
@@ -68,15 +72,19 @@
             <version>2.1.7</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
+            <groupId>kml</groupId>
+            <artifactId>kml</artifactId>
+            <version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-junit</artifactId>
             <version>2.0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
         </dependency>
     </dependencies>
 </project>
