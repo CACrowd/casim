@@ -16,9 +16,15 @@ package pedca.utility;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.WeightedCell;
+
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 
 /**
  * Created by laemmel on 05/05/16.
@@ -30,7 +36,6 @@ public class LotteryTest {
 	private static double frstRndm;
 	private static double scndRndm;
 	private static double thrdRndm;
-	private static double frthRndm;
 
 	@BeforeClass
 	public static void runBeforeClass() {
@@ -38,7 +43,6 @@ public class LotteryTest {
 		frstRndm = CASimRandom.nextDouble();
 		scndRndm = CASimRandom.nextDouble();
 		thrdRndm = CASimRandom.nextDouble();
-		frstRndm = CASimRandom.nextDouble();
 	}
 
 	@Before
@@ -58,7 +62,30 @@ public class LotteryTest {
 	}
 
 	@Test
-	public void testPickWinner() {
+	public void testPickWinnerThird() {
+		ArrayList<WeightedCell> weightedCells = new ArrayList<>();
+		weightedCells.add(new WeightedCell(new GridPoint(1, 1), frstRndm / 3));
+		weightedCells.add(new WeightedCell(new GridPoint(2, 2), frstRndm / 3));
+		WeightedCell wc = new WeightedCell(new GridPoint(3, 1), frstRndm / 2);
+		weightedCells.add(wc);
+		WeightedCell res = Lottery.pickWinner(weightedCells);
+
+		assertThat(res, is(wc));
+
+
+	}
+
+	@Test
+	public void testPickWinnerNull() {
+		ArrayList<WeightedCell> weightedCells = new ArrayList<>();
+		weightedCells.add(new WeightedCell(new GridPoint(1, 1), frstRndm / 3));
+		weightedCells.add(new WeightedCell(new GridPoint(2, 2), frstRndm / 3));
+		WeightedCell wc = new WeightedCell(new GridPoint(3, 1), frstRndm / 4);
+		weightedCells.add(wc);
+		WeightedCell res = Lottery.pickWinner(weightedCells);
+
+		assertThat(res, is(nullValue()));
+
 
 	}
 }
