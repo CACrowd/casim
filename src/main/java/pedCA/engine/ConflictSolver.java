@@ -8,7 +8,7 @@ import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.utility.Constants;
 import pedca.utility.Lottery;
-import pedca.utility.RandomExtractor;
+import pedca.utility.CASimRandom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,8 +106,8 @@ public class ConflictSolver {
         	sameGPPedList.add(multipleGP.get(gp));	
         	
         	if(!frictionCondition()){
-        		int randomWinner = RandomExtractor.nextInt(sameGPPedList.size());
-        		sameGPPedList.remove(randomWinner);
+				int randomWinner = CASimRandom.nextInt(sameGPPedList.size());
+				sameGPPedList.remove(randomWinner);
         	}
         	
         	for(Agent p:sameGPPedList){

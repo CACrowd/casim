@@ -143,10 +143,11 @@ public class Agent extends PhysicalObject{
 	
 	protected void choose(ArrayList<WeightedCell> probabilityValues){
 		WeightedCell winningCell = 	Lottery.pickWinner(probabilityValues);
-		if(winningCell == null)
+		if (winningCell == null)
 			nextpos = position;
-		else
-			nextpos = new GridPoint(winningCell.x, winningCell.y);
+		else {
+			nextpos = new GridPoint(winningCell.getX(), winningCell.getY());
+		}
 	}
 	
 	public void move(){

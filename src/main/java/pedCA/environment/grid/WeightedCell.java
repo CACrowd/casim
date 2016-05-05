@@ -1,9 +1,22 @@
 package pedca.environment.grid;
 
 public class WeightedCell{
-	public int x;
-	public int y;
-	public double p;
+	private int x;
+	private int y;
+
+	public double getP() {
+		return p;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	private double p;
 	
 	public WeightedCell(GridPoint gp, double p){
 		this.x = gp.getX();

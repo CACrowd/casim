@@ -29,7 +29,7 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 public class NeighbourhoodUtilityTest {
 
 
-	@Test //test will fail
+	@Test
 	public void testCalculateMoorNeighbourhood() {
 		GridPoint neighbour = new GridPoint(5,9);
 		Neighbourhood nb = NeighbourhoodUtility.calculateMooreNeighbourhood(neighbour);
@@ -40,7 +40,7 @@ public class NeighbourhoodUtilityTest {
 				new GridPoint(5,10),new GridPoint(5,8),new GridPoint(4,10),new GridPoint(6,10), new GridPoint(4,8),new GridPoint(6,8)));
 	}
 
-	@Test //test will fail
+	@Test
 	public void testCalculateVonNeumannNeighbourhood() {
 		GridPoint neighbour = new GridPoint(8,9);
 		Neighbourhood nb = NeighbourhoodUtility.calculateVonNeumannNeighbourhood(neighbour);
