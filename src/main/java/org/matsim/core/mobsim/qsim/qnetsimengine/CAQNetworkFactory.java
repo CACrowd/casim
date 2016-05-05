@@ -1,13 +1,13 @@
 package org.matsim.core.mobsim.qsim.qnetsimengine;
 
-import matsimConnector.engine.CAAgentFactory;
-import matsimConnector.engine.CAEngine;
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.scenario.CAEnvironment;
-import matsimConnector.scenario.CAScenario;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.IdUtility;
-import matsimConnector.utility.LinkUtility;
+import matsimconnector.engine.CAAgentFactory;
+import matsimconnector.engine.CAEngine;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.scenario.CAEnvironment;
+import matsimconnector.scenario.CAScenario;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
+import matsimconnector.utility.LinkUtility;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -20,7 +20,7 @@ import org.matsim.core.mobsim.qsim.qnetsimengine.QNetsimEngine.NetsimInternalInt
 import org.matsim.core.network.NetworkImpl;
 import org.matsim.vis.snapshotwriters.AgentSnapshotInfoFactory;
 import org.matsim.vis.snapshotwriters.SnapshotLinkWidthCalculator;
-import pedCA.environment.markers.FinalDestination;
+import pedca.environment.markers.FinalDestination;
 
 import javax.inject.Inject;
 import java.util.HashMap;

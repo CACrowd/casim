@@ -1,7 +1,7 @@
 package scenarios;
 
-import pedCA.context.Context;
-import pedCA.engine.SimulationEngine;
+import pedca.context.Context;
+import pedca.engine.SimulationEngine;
 
 public class Controller {
 

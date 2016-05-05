@@ -15,9 +15,8 @@ package pedca.utility;
 
 
 import org.junit.Test;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
-import pedCA.utility.NeighbourhoodUtility;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

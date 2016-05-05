@@ -1,10 +1,10 @@
 package scenarios;
 
-import matsimConnector.utility.Constants;
-import pedCA.context.Context;
-import pedCA.environment.grid.EnvironmentGrid;
-import pedCA.environment.markers.MarkerConfiguration;
-import pedCA.environment.markers.Start;
+import matsimconnector.utility.Constants;
+import pedca.context.Context;
+import pedca.environment.grid.EnvironmentGrid;
+import pedca.environment.markers.MarkerConfiguration;
+import pedca.environment.markers.Start;
 
 import java.io.File;
 import java.io.IOException;

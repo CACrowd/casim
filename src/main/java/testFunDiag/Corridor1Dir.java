@@ -1,8 +1,8 @@
-package testFunDiag;
+package testfundiag;
 
-import matsimConnector.run.CASimulationRunner;
-import matsimConnector.scenarioGenerator.ScenarioGenerator;
-import matsimConnector.utility.Constants;
+import matsimconnector.run.CASimulationRunner;
+import matsimconnector.scenarioGenerator.ScenarioGenerator;
+import matsimconnector.utility.Constants;
 
 import java.io.File;
 import java.util.ArrayList;

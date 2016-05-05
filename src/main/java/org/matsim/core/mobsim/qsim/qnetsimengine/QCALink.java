@@ -1,10 +1,10 @@
 package org.matsim.core.mobsim.qsim.qnetsimengine;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.engine.CAAgentFactory;
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.events.CAAgentConstructEvent;
-import matsimConnector.scenario.CAEnvironment;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.engine.CAAgentFactory;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.events.CAAgentConstructEvent;
+import matsimconnector.scenario.CAEnvironment;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.LinkLeaveEvent;

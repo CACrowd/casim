@@ -1,13 +1,13 @@
 package scenarios;
 
-import matsimConnector.utility.MathUtility;
-import pedCA.environment.grid.EnvironmentGrid;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
-import pedCA.environment.markers.*;
-import pedCA.environment.network.Coordinates;
-import pedCA.utility.Constants;
-import pedCA.utility.NeighbourhoodUtility;
+import matsimconnector.utility.MathUtility;
+import pedca.environment.grid.EnvironmentGrid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.*;
+import pedca.environment.network.Coordinates;
+import pedca.utility.Constants;
+import pedca.utility.NeighbourhoodUtility;
 
 import java.util.ArrayList;
 
