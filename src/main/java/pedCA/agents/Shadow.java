@@ -1,7 +1,7 @@
-package pedCA.agents;
+package pedca.agents;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.utility.Lottery;
+import pedca.environment.grid.GridPoint;
+import pedca.utility.Lottery;
 
 public class Shadow extends PhysicalObject{
 	private final int step;

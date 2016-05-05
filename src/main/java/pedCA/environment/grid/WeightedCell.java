@@ -1,4 +1,4 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
 public class WeightedCell{
 	public int x;

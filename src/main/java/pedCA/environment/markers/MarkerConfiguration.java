@@ -1,7 +1,7 @@
-package pedCA.environment.markers;
+package pedca.environment.markers;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.utility.FileUtility;
+import pedca.environment.grid.GridPoint;
+import pedca.utility.FileUtility;
 
 import java.io.*;
 import java.util.ArrayList;

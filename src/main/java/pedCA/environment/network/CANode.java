@@ -1,4 +1,4 @@
-package pedCA.environment.network;
+package pedca.environment.network;
 
 public class CANode {
 	private int id;

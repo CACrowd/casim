@@ -1,6 +1,6 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
 
 import java.io.File;
 import java.io.IOException;

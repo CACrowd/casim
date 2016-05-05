@@ -18,9 +18,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.utils.misc.Time;
 import processing.core.PConstants;

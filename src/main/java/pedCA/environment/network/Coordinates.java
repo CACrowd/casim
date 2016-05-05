@@ -1,7 +1,7 @@
-package pedCA.environment.network;
+package pedca.environment.network;
 
-import matsimConnector.utility.Constants;
-import pedCA.environment.grid.GridPoint;
+import matsimconnector.utility.Constants;
+import pedca.environment.grid.GridPoint;
 
 import java.io.Serializable;
 

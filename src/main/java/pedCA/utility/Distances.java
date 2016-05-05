@@ -1,7 +1,7 @@
-package pedCA.utility;
+package pedca.utility;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.network.Coordinates;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinates;
 
 public class Distances {
 

@@ -18,9 +18,9 @@ r * project: org.matsim.*
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
 import org.gicentre.utils.move.ZoomPan;
 import processing.core.PVector;

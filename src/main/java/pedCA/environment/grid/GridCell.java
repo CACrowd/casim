@@ -1,4 +1,4 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;

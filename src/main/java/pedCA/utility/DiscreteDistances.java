@@ -1,7 +1,7 @@
-package pedCA.utility;
+package pedca.utility;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.output.Log;
+import pedca.environment.grid.GridPoint;
+import pedca.output.Log;
 
 public class DiscreteDistances {
 	private int radius;

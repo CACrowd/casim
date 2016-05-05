@@ -18,9 +18,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.run;
+package matsimconnector.run;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 
 public class RunDaganzoExperiments {
 	public static void main(String [] args) {

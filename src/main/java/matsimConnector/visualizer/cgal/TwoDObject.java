@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.cgal;
+package matsimconnector.visualizer.cgal;
 
 public interface TwoDObject {
 	

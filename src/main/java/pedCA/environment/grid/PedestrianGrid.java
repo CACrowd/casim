@@ -1,9 +1,9 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
-import pedCA.agents.Agent;
-import pedCA.agents.PhysicalObject;
-import pedCA.agents.Shadow;
-import pedCA.utility.Constants;
+import pedca.agents.Agent;
+import pedca.agents.PhysicalObject;
+import pedca.agents.Shadow;
+import pedca.utility.Constants;
 
 import java.util.ArrayList;
 

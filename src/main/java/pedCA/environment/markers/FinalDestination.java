@@ -1,8 +1,8 @@
-package pedCA.environment.markers;
+package pedca.environment.markers;
 
-import matsimConnector.environment.TransitionArea;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.network.Coordinates;
+import matsimconnector.environment.TransitionArea;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinates;
 
 import java.util.ArrayList;
 

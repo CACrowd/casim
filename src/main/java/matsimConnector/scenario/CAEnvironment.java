@@ -1,13 +1,13 @@
-package matsimConnector.scenario;
+package matsimconnector.scenario;
 
 
-import matsimConnector.environment.TransitionArea;
+import matsimconnector.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import pedCA.context.Context;
-import pedCA.environment.markers.FinalDestination;
-import pedCA.environment.network.CANetwork;
+import pedca.context.Context;
+import pedca.environment.markers.FinalDestination;
+import pedca.environment.network.CANetwork;
 
 import java.util.HashMap;
 import java.util.Map;

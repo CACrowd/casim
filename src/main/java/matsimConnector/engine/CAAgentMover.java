@@ -1,17 +1,17 @@
-package matsimConnector.engine;
+package matsimconnector.engine;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.events.*;
-import matsimConnector.utility.Constants;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.events.*;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CALink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CAQLink;
-import pedCA.context.Context;
-import pedCA.engine.AgentMover;
-import pedCA.environment.grid.GridPoint;
+import pedca.context.Context;
+import pedca.engine.AgentMover;
+import pedca.environment.grid.GridPoint;
 
 public class CAAgentMover extends AgentMover {
 

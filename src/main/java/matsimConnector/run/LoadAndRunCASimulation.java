@@ -1,7 +1,7 @@
-package matsimConnector.run;
+package matsimconnector.run;
 
-import matsimConnector.scenarioGenerator.ScenarioGenerator;
-import matsimConnector.utility.Constants;
+import matsimconnector.scenarioGenerator.ScenarioGenerator;
+import matsimconnector.utility.Constants;
 
 import java.io.*;
 import java.util.ArrayList;

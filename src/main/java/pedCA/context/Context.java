@@ -1,12 +1,12 @@
-package pedCA.context;
+package pedca.context;
 
-import matsimConnector.environment.TransitionArea;
-import pedCA.agents.Population;
-import pedCA.environment.grid.EnvironmentGrid;
-import pedCA.environment.grid.FloorFieldsGrid;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.markers.MarkerConfiguration;
-import pedCA.environment.network.CANetwork;
+import matsimconnector.environment.TransitionArea;
+import pedca.agents.Population;
+import pedca.environment.grid.EnvironmentGrid;
+import pedca.environment.grid.FloorFieldsGrid;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.markers.MarkerConfiguration;
+import pedca.environment.network.CANetwork;
 
 import java.io.IOException;
 import java.util.ArrayList;

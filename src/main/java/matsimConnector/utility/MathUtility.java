@@ -1,8 +1,8 @@
-package matsimConnector.utility;
+package matsimconnector.utility;
 
 import org.matsim.api.core.v01.Coord;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.network.Coordinates;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinates;
 
 public class MathUtility {
 	public static double EuclideanDistance(Coord c1, Coord c2) {

@@ -1,6 +1,6 @@
-package matsimConnector.events;
+package matsimconnector.events;
 
-import matsimConnector.agents.Pedestrian;
+import matsimconnector.agents.Pedestrian;
 import org.matsim.api.core.v01.events.Event;
 
 import java.util.Map;

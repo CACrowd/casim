@@ -1,4 +1,4 @@
-package pedCA.output;
+package pedca.output;
 
 public class Log {
 

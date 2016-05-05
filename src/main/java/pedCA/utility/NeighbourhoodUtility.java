@@ -1,7 +1,7 @@
-package pedCA.utility;
+package pedca.utility;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
 
 public class NeighbourhoodUtility {
 

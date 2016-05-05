@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.congestionpricing;
+package matsimconnector.congestionpricing;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;

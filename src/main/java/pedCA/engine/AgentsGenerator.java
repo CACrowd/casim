@@ -1,17 +1,17 @@
-package pedCA.engine;
+package pedca.engine;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.environment.TransitionArea;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.environment.TransitionArea;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-import pedCA.agents.Agent;
-import pedCA.agents.Population;
-import pedCA.context.Context;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.markers.Destination;
-import pedCA.environment.markers.Start;
-import pedCA.output.Log;
-import pedCA.utility.Lottery;
+import pedca.agents.Agent;
+import pedca.agents.Population;
+import pedca.context.Context;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.Start;
+import pedca.output.Log;
+import pedca.utility.Lottery;
 
 import java.util.ArrayList;
 

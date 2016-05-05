@@ -18,9 +18,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.congestionpricing;
+package matsimconnector.congestionpricing;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;

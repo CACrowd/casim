@@ -1,9 +1,9 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
-import pedCA.environment.markers.Destination;
-import pedCA.environment.markers.MarkerConfiguration;
-import pedCA.utility.Constants;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.MarkerConfiguration;
+import pedca.utility.Constants;
 
 import java.io.BufferedWriter;
 import java.io.File;

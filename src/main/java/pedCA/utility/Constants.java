@@ -1,4 +1,4 @@
-package pedCA.utility;
+package pedca.utility;
 
 public class Constants {
 	//General useful constants
@@ -17,8 +17,8 @@ public class Constants {
 	//Constants for Conflict Management
 	public static final double FRICTION_PROBABILITY = 0.;
 
-	public static final double CELL_SIZE = matsimConnector.utility.Constants.CA_CELL_SIDE;
-	public static final double STEP_DURATION = matsimConnector.utility.Constants.CA_STEP_DURATION;
+	public static final double CELL_SIZE = matsimconnector.utility.Constants.CA_CELL_SIDE;
+	public static final double STEP_DURATION = matsimconnector.utility.Constants.CA_STEP_DURATION;
 
 	public static final int SHADOWS_LIFE = 2;
 

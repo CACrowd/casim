@@ -1,7 +1,7 @@
-package pedCA.output;
+package pedca.output;
 
-import matsimConnector.events.*;
-import matsimConnector.utility.Constants;
+import matsimconnector.events.*;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;

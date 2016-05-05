@@ -19,7 +19,7 @@
  * *********************************************************************** */
 
 
-package matsimConnector.visualizer.cgal;
+package matsimconnector.visualizer.cgal;
 
 import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;

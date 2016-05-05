@@ -1,17 +1,17 @@
-package matsimConnector.scenario;
+package matsimconnector.scenario;
 
-import matsimConnector.network.HybridNetworkBuilder;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.IdUtility;
-import matsimConnector.utility.LinkUtility;
-import matsimConnector.utility.MathUtility;
+import matsimconnector.network.HybridNetworkBuilder;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
+import matsimconnector.utility.LinkUtility;
+import matsimconnector.utility.MathUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
-import pedCA.context.Context;
-import pedCA.output.Log;
+import pedca.context.Context;
+import pedca.output.Log;
 
 import java.io.IOException;
 import java.util.HashMap;

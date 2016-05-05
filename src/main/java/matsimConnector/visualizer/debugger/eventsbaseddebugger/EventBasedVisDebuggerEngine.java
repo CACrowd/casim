@@ -18,25 +18,25 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.events.*;
-import matsimConnector.events.debug.*;
-import matsimConnector.scenario.CAEnvironment;
-import matsimConnector.scenario.CAScenario;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.MathUtility;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.events.*;
+import matsimconnector.events.debug.*;
+import matsimconnector.scenario.CAEnvironment;
+import matsimconnector.scenario.CAScenario;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.MathUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
-import pedCA.environment.grid.EnvironmentGrid;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.network.Coordinates;
-import pedCA.utility.FileUtility;
+import pedca.environment.grid.EnvironmentGrid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.network.Coordinates;
+import pedca.utility.FileUtility;
 
 import java.io.File;
 import java.util.*;
@@ -87,7 +87,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 		if((iteration%2==0) && Constants.SAVE_FRAMES){
 			String pathName = Constants.PATH+"/videos/frames/it"+iteration;
 			FileUtility.deleteDirectory(new File(pathName));
-			fs = new FrameSaver(pathName, "png", 300);
+			fs = new FrameSaver(pathName, "png", 10);
 		}
 		this.vis.fs = fs;
 		this.keyControl.fs = fs;
@@ -144,7 +144,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 	private void drawObjects(EnvironmentGrid environmentGrid) {
 		for (int y=0; y<environmentGrid.getRows(); y++)
 			for(int x=0; x<environmentGrid.getColumns();x++)
-				if (environmentGrid.getCellValue(y, x)==pedCA.utility.Constants.ENV_OBSTACLE)
+				if (environmentGrid.getCellValue(y, x) == pedca.utility.Constants.ENV_OBSTACLE)
 					drawObstacle(new GridPoint(x,y));		
 				else if(environmentGrid.belongsToTacticalDestination(new GridPoint(x, y)))
 					drawTacticalDestinationCell(new GridPoint(x,y));

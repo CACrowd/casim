@@ -1,9 +1,9 @@
-package pedCA.engine;
+package pedca.engine;
 
-import pedCA.agents.Agent;
-import pedCA.agents.Population;
-import pedCA.context.Context;
-import pedCA.output.Log;
+import pedca.agents.Agent;
+import pedca.agents.Population;
+import pedca.context.Context;
+import pedca.output.Log;
 
 public class AgentMover {
 	//private final Context context;

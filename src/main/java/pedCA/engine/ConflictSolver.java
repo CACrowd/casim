@@ -1,14 +1,14 @@
-package pedCA.engine;
+package pedca.engine;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.utility.MathUtility;
-import pedCA.agents.Agent;
-import pedCA.context.Context;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.utility.Constants;
-import pedCA.utility.Lottery;
-import pedCA.utility.RandomExtractor;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.utility.MathUtility;
+import pedca.agents.Agent;
+import pedca.context.Context;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.utility.Constants;
+import pedca.utility.Lottery;
+import pedca.utility.RandomExtractor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

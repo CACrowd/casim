@@ -1,12 +1,12 @@
-package pedCA.environment.network;
+package pedca.environment.network;
 
-import matsimConnector.utility.MathUtility;
-import pedCA.environment.grid.FloorFieldsGrid;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.markers.Destination;
-import pedCA.environment.markers.MarkerConfiguration;
-import pedCA.environment.markers.TacticalDestination;
-import pedCA.utility.Constants;
+import matsimconnector.utility.MathUtility;
+import pedca.environment.grid.FloorFieldsGrid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.MarkerConfiguration;
+import pedca.environment.markers.TacticalDestination;
+import pedca.utility.Constants;
 
 import java.util.ArrayList;
 

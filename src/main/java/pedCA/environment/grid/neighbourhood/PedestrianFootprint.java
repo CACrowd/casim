@@ -1,10 +1,10 @@
-package pedCA.environment.grid.neighbourhood;
+package pedca.environment.grid.neighbourhood;
 
-import pedCA.environment.grid.Grid;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.network.Coordinates;
-import pedCA.utility.Constants;
-import pedCA.utility.Distances;
+import pedca.environment.grid.Grid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinates;
+import pedca.utility.Constants;
+import pedca.utility.Distances;
 
 import java.io.BufferedWriter;
 import java.io.File;

@@ -1,7 +1,7 @@
-package pedCA.engine;
+package pedca.engine;
 
-import pedCA.agents.Agent;
-import pedCA.agents.Population;
+import pedca.agents.Agent;
+import pedca.agents.Population;
 
 public class AgentsUpdater {
 	private Population population;

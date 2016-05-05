@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.events.debug;
+package matsimconnector.events.debug;
 
 import org.matsim.core.events.handler.EventHandler;
 

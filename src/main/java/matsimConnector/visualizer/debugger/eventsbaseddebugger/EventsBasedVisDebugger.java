@@ -18,9 +18,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.gicentre.utils.move.ZoomPan;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Node;
@@ -99,8 +99,8 @@ public class EventsBasedVisDebugger extends PApplet {
 		computeOffsets(sc);
 		this.fr = new JFrame();
 		//				this.fr.setSize(1024,788);
-		this.fr.setSize(3840,2160);
-		//		this.fr.setSize(1280,740);
+//		this.fr.setSize(3840,2160);
+		this.fr.setSize(1280, 740);
 		//		this.fr.setSize(720,740);
 		JPanel compositePanel = new JPanel();
 		compositePanel.setLayout(new OverlayLayout(compositePanel));
@@ -151,8 +151,8 @@ public class EventsBasedVisDebugger extends PApplet {
 
 	@Override
 	public void setup() {
-		size(1024,768);
-		//		size(1280,720);
+//		size(1024,768);
+		size(1280, 720);
 		//		size(720,720);
 		background(0);
 

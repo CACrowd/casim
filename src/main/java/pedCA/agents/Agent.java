@@ -1,17 +1,17 @@
-package pedCA.agents;
+package pedca.agents;
 
-import matsimConnector.utility.MathUtility;
-import pedCA.context.Context;
-import pedCA.environment.grid.FloorFieldsGrid;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.grid.WeightedCell;
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
-import pedCA.environment.markers.Destination;
-import pedCA.utility.Constants;
-import pedCA.utility.DirectionUtility;
-import pedCA.utility.DirectionUtility.Heading;
-import pedCA.utility.Lottery;
+import matsimconnector.utility.MathUtility;
+import pedca.context.Context;
+import pedca.environment.grid.FloorFieldsGrid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.grid.WeightedCell;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.Destination;
+import pedca.utility.Constants;
+import pedca.utility.DirectionUtility;
+import pedca.utility.DirectionUtility.Heading;
+import pedca.utility.Lottery;
 
 import java.util.ArrayList;
 

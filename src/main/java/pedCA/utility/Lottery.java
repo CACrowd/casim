@@ -1,8 +1,8 @@
-package pedCA.utility;
+package pedca.utility;
 
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.WeightedCell;
-import pedCA.utility.DirectionUtility.Heading;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.WeightedCell;
+import pedca.utility.DirectionUtility.Heading;
 
 import java.util.ArrayList;
 import java.util.Collections;

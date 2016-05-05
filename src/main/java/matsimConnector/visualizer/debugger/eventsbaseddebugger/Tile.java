@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import org.geotools.geometry.jts.JTS;

@@ -1,4 +1,4 @@
-package pedCA.agents;
+package pedca.agents;
 
 import java.util.ArrayList;
 

@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package pedCA.output;
+package pedca.output;
 
 import org.matsim.core.utils.misc.StringUtils;
 

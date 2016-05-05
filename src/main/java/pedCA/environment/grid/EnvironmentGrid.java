@@ -1,6 +1,6 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
-import pedCA.utility.Constants;
+import pedca.utility.Constants;
 
 import java.io.*;
 import java.util.StringTokenizer;

@@ -1,6 +1,6 @@
-package matsimConnector.scenarioGenerator;
+package matsimconnector.scenarioGenerator;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.PopulationWriter;
 import org.matsim.core.config.Config;
@@ -11,8 +11,8 @@ import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.network.NetworkWriter;
 import org.matsim.core.scenario.ScenarioUtils;
-import pedCA.context.Context;
-import pedCA.output.Log;
+import pedca.context.Context;
+import pedca.output.Log;
 import scenarios.ContextGenerator;
 
 public class ScenarioGenerator {
@@ -24,7 +24,7 @@ public class ScenarioGenerator {
 	private static final int CA_ROWS = (int)Math.round((DOOR_WIDTH/ Constants.CA_CELL_SIDE));
 	private static final int CA_COLS = (int)Math.round((CA_LENGTH/ Constants.CA_CELL_SIDE));
 	private static Double TOTAL_DENSITY = 4.;
-	private static int POPULATION_SIZE = 15000;
+	private static int POPULATION_SIZE = 4000;
 
 	
 	public static void main(String [] args) {
@@ -44,8 +44,8 @@ public class ScenarioGenerator {
 		Scenario scenario = ScenarioUtils.createScenario(c);
 		
 		Context contextCA = createCAScenario(calcFundDiag);
-		PgStationNetworkGenerator.createNetwork(scenario, contextCA);
-		
+//		PgStationNetworkGenerator.createNetwork(scenario, contextCA);
+		NetworkGenerator.createNetwork(scenario, contextCA);
 
 		
 		c.network().setInputFile(inputDir + "/network.xml.gz");
@@ -53,16 +53,16 @@ public class ScenarioGenerator {
 		//c.strategy().addParam("Module_1", "playground.gregor.sim2d_v4.replanning.Sim2DReRoutePlanStrategy");
 		c.strategy().addParam("Module_1", "ReRoute");
 		c.strategy().addParam("ModuleProbability_1", ".05");
-		c.strategy().addParam("ModuleDisableAfterIteration_1", "75");
+		c.strategy().addParam("ModuleDisableAfterIteration_1", "10");
 		c.strategy().addParam("Module_2", "ChangeExpBeta");
 		c.strategy().addParam("ModuleProbability_2", ".9");
 		c.strategy().addParam("Module_3", "ReRoute");
 		c.strategy().addParam("ModuleProbability_3", ".05");
-		c.strategy().addParam("ModuleDisableAfterIteration_3", "125");
+		c.strategy().addParam("ModuleDisableAfterIteration_3", "30");
 		c.strategy().setMaxAgentPlanMemorySize(5);
 
 		c.controler().setOutputDirectory(outputDir);
-		c.controler().setLastIteration(200);
+		c.controler().setLastIteration(0);
 		c.controler().setRoutingAlgorithmType(ControlerConfigGroup.RoutingAlgorithmType.AStarLandmarks);
 
 		c.plans().setInputFile(inputDir + "/population.xml.gz");
@@ -96,12 +96,13 @@ public class ScenarioGenerator {
 		c.controler().setMobsim(Constants.CA_MOBSIM_MODE);
 		c.global().setCoordinateSystem(Constants.COORDINATE_SYSTEM);
 		c.qsim().setEndTime(60*10);
-		
-		c.travelTimeCalculator().setTraveltimeBinSize(900);
-		c.planCalcScore().setBrainExpBeta(1);
-		
 
-		PgStationPopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
+		c.travelTimeCalculator().setTraveltimeBinSize(60);
+		c.planCalcScore().setBrainExpBeta(1);
+
+
+		PopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
+//		PgStationPopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
 //		MyPopulationGenerator90deg.createPopulation(scenario);
 //		MyPopulationGenerator180deg.createPopulation(scenario);
 		

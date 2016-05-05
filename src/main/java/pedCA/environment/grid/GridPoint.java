@@ -1,4 +1,4 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
 import java.io.Serializable;
 
@@ -42,4 +42,5 @@ public class GridPoint implements Serializable{
 	public String toString(){
 		return getY()+" "+getX();
 	}
+
 }

@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.utility;
+package matsimconnector.utility;
 
 /**
  * A class for incremental variance computation. The algorithm has been adapted

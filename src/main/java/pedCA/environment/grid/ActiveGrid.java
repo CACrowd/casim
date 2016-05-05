@@ -1,4 +1,4 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
 import java.io.File;
 import java.io.IOException;

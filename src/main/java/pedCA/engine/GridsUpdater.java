@@ -1,8 +1,8 @@
-package pedCA.engine;
+package pedca.engine;
 
-import pedCA.context.Context;
-import pedCA.environment.grid.ActiveGrid;
-import pedCA.environment.grid.PedestrianGrid;
+import pedca.context.Context;
+import pedca.environment.grid.ActiveGrid;
+import pedca.environment.grid.PedestrianGrid;
 
 import java.util.ArrayList;
 

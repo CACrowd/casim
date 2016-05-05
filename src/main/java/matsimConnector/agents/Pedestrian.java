@@ -1,19 +1,19 @@
-package matsimConnector.agents;
+package matsimconnector.agents;
 
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.IdUtility;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-import pedCA.agents.Agent;
-import pedCA.context.Context;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.grid.neighbourhood.Neighbourhood;
-import pedCA.environment.markers.Destination;
-import pedCA.environment.markers.FinalDestination;
-import pedCA.utility.NeighbourhoodUtility;
+import pedca.agents.Agent;
+import pedca.context.Context;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.FinalDestination;
+import pedca.utility.NeighbourhoodUtility;
 
 public class Pedestrian extends Agent {
 

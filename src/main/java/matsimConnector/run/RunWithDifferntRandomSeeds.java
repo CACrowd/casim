@@ -18,11 +18,11 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.run;
+package matsimconnector.run;
 
-import matsimConnector.utility.Variance;
+import matsimconnector.utility.Variance;
 import org.matsim.core.utils.misc.StringUtils;
-import pedCA.utility.Constants;
+import pedca.utility.Constants;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -38,7 +38,7 @@ public class RunWithDifferntRandomSeeds {
 	public static void main(String [] args) throws IOException {
 		String pwd = System.getProperty("user.dir");
 		String dataDir = "/Users/laemmel/devel/plaueexp/dec2010_trajectories/sim/";
-		String outPutDataFile = matsimConnector.utility.Constants.OUTPUT_PATH + "/Output/Fundamental_Diagram/Classical_Voronoi/rho_v_Voronoi_agentTrajectoriesFlippedTranslatedCleaned.txt_id_1.dat";
+		String outPutDataFile = matsimconnector.utility.Constants.OUTPUT_PATH + "/Output/Fundamental_Diagram/Classical_Voronoi/rho_v_Voronoi_agentTrajectoriesFlippedTranslatedCleaned.txt_id_1.dat";
 		
 		//1. run simulations
 		for (int i = 0; i < 1000; i++) {

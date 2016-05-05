@@ -1,8 +1,8 @@
-package pedCA.output;
+package pedca.output;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.events.*;
-import matsimConnector.utility.MathUtility;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.events.*;
+import matsimconnector.utility.MathUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.controler.events.AfterMobsimEvent;
 import org.matsim.core.controler.listener.AfterMobsimListener;

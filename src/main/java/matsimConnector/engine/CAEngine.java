@@ -1,9 +1,9 @@
-package matsimConnector.engine;
+package matsimconnector.engine;
 
-import matsimConnector.events.CAEngineStepPerformedEvent;
-import matsimConnector.scenario.CAEnvironment;
-import matsimConnector.scenario.CAScenario;
-import matsimConnector.utility.Constants;
+import matsimconnector.events.CAEngineStepPerformedEvent;
+import matsimconnector.scenario.CAEnvironment;
+import matsimconnector.scenario.CAScenario;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -13,7 +13,7 @@ import org.matsim.core.mobsim.qsim.interfaces.MobsimEngine;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CALink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CAQLink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QCALink;
-import pedCA.engine.SimulationEngine;
+import pedca.engine.SimulationEngine;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.debugger.eventsbaseddebugger;
+package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
 public interface ClockedVisDebuggerAdditionalDrawer extends
 		VisDebuggerAdditionalDrawer {

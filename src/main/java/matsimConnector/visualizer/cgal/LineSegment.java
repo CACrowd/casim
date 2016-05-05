@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.cgal;
+package matsimconnector.visualizer.cgal;
 
 public class LineSegment {
 	public double  x0;

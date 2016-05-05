@@ -1,13 +1,13 @@
-package matsimConnector.environment;
+package matsimconnector.environment;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.MathUtility;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.grid.PedestrianGrid;
-import pedCA.environment.markers.FinalDestination;
-import pedCA.environment.network.Coordinates;
-import pedCA.utility.Lottery;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.MathUtility;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.grid.PedestrianGrid;
+import pedca.environment.markers.FinalDestination;
+import pedca.environment.network.Coordinates;
+import pedca.utility.Lottery;
 
 import java.util.ArrayList;
 

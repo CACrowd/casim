@@ -1,8 +1,8 @@
-package matsimConnector.scenarioGenerator;
+package matsimconnector.scenarioGenerator;
 
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.Distances;
-import matsimConnector.utility.MathUtility;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.Distances;
+import matsimconnector.utility.MathUtility;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -11,10 +11,10 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkFactory;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.network.NetworkImpl;
-import pedCA.context.Context;
-import pedCA.environment.markers.Destination;
-import pedCA.environment.markers.FinalDestination;
-import pedCA.environment.network.Coordinates;
+import pedca.context.Context;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.FinalDestination;
+import pedca.environment.network.Coordinates;
 
 import java.util.ArrayList;
 import java.util.HashSet;

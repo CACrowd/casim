@@ -16,7 +16,7 @@
  *   See also COPYING, LICENSE and WARRANTY file                           *
  *                                                                         *
  * *********************************************************************** */
-package matsimConnector.congestionpricing;
+package matsimconnector.congestionpricing;
 
 import org.matsim.core.events.handler.EventHandler;
 

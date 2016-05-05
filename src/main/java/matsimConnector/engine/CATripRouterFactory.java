@@ -1,6 +1,6 @@
-package matsimConnector.engine;
+package matsimconnector.engine;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.router.DefaultRoutingModules;
 import org.matsim.core.router.RoutingModule;

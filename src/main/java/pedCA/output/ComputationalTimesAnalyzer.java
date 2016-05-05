@@ -1,6 +1,6 @@
-package pedCA.output;
+package pedca.output;
 
-import matsimConnector.events.*;
+import matsimconnector.events.*;
 
 import java.io.File;
 import java.io.FileWriter;

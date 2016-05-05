@@ -1,12 +1,12 @@
-package matsimConnector.utility;
+package matsimconnector.utility;
 
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.scenario.CAEnvironment;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.scenario.CAEnvironment;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QCALink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-import pedCA.environment.markers.FinalDestination;
+import pedca.environment.markers.FinalDestination;
 
 import java.util.Set;
 

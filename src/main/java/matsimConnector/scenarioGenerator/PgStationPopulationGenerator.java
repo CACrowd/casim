@@ -1,4 +1,4 @@
-package matsimConnector.scenarioGenerator;
+package matsimconnector.scenarioGenerator;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -7,7 +7,7 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.gbl.MatsimRandom;
-import pedCA.output.Log;
+import pedca.output.Log;
 
 import java.util.ArrayList;
 

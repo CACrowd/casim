@@ -1,8 +1,8 @@
-package pedCA.environment.grid;
+package pedca.environment.grid;
 
-import pedCA.environment.grid.neighbourhood.PedestrianFootprint;
-import pedCA.utility.Constants;
-import pedCA.utility.Distances;
+import pedca.environment.grid.neighbourhood.PedestrianFootprint;
+import pedca.utility.Constants;
+import pedca.utility.Distances;
 
 import java.io.File;
 import java.io.IOException;

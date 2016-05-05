@@ -1,4 +1,4 @@
-package matsimConnector.events;
+package matsimconnector.events;
 
 import org.matsim.api.core.v01.events.Event;
 

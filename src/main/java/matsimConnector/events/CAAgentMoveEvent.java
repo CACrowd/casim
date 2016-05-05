@@ -1,8 +1,8 @@
-package matsimConnector.events;
+package matsimconnector.events;
 
-import matsimConnector.agents.Pedestrian;
+import matsimconnector.agents.Pedestrian;
 import org.matsim.api.core.v01.events.Event;
-import pedCA.environment.grid.GridPoint;
+import pedca.environment.grid.GridPoint;
 
 import java.util.Map;
 

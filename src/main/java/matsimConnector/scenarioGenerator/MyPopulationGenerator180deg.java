@@ -1,6 +1,6 @@
-package matsimConnector.scenarioGenerator;
+package matsimconnector.scenarioGenerator;
 
-import matsimConnector.utility.Constants;
+import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;

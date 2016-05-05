@@ -21,7 +21,7 @@
 /**
  * 
  */
-package matsimConnector.congestionpricing;
+package matsimconnector.congestionpricing;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;

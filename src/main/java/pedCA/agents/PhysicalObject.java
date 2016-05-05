@@ -1,6 +1,6 @@
-package pedCA.agents;
+package pedca.agents;
 
-import pedCA.environment.grid.GridPoint;
+import pedca.environment.grid.GridPoint;
 
 public abstract class PhysicalObject {
 	protected GridPoint position;

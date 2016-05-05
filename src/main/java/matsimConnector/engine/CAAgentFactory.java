@@ -1,14 +1,14 @@
-package matsimConnector.engine;
+package matsimconnector.engine;
 
-import matsimConnector.agents.Pedestrian;
-import matsimConnector.environment.TransitionArea;
-import matsimConnector.scenario.CAEnvironment;
-import matsimConnector.utility.IdUtility;
+import matsimconnector.agents.Pedestrian;
+import matsimconnector.environment.TransitionArea;
+import matsimconnector.scenario.CAEnvironment;
+import matsimconnector.utility.IdUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-import pedCA.engine.AgentsGenerator;
-import pedCA.environment.grid.GridPoint;
+import pedca.engine.AgentsGenerator;
+import pedca.environment.grid.GridPoint;
 
 import java.util.HashMap;
 import java.util.Map;

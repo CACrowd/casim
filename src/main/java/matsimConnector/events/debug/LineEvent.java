@@ -18,9 +18,9 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.events.debug;
+package matsimconnector.events.debug;
 
-import matsimConnector.visualizer.cgal.LineSegment;
+import matsimconnector.visualizer.cgal.LineSegment;
 import org.matsim.api.core.v01.events.Event;
 
 

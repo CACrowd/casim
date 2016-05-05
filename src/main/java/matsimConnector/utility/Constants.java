@@ -1,4 +1,4 @@
-package matsimConnector.utility;
+package matsimconnector.utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class Constants {
 	
 	public static double SIMULATION_DURATION = 20000;
 	public static int SIMULATION_ITERATIONS = 50;
-	public static boolean SAVE_FRAMES = false;
+
 	
 	/** name to use to add CAScenario to a matsim scenario as a scenario element **/ 
 	public static final String CASCENARIO_NAME = "CAScenario";
@@ -56,7 +56,7 @@ public class Constants {
 	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
 	public static boolean BRAESS_WL = false;
 	public static boolean VIS = true;
-	
+	public static boolean SAVE_FRAMES = true;
 	public static List<String> stairsLinks;
 	static{
 		stairsLinks = new ArrayList<String>();

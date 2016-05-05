@@ -1,6 +1,6 @@
-package pedCA.environment.markers;
+package pedca.environment.markers;
 
-import pedCA.environment.grid.GridPoint;
+import pedca.environment.grid.GridPoint;
 
 import java.io.Serializable;
 import java.util.ArrayList;

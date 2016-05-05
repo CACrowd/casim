@@ -1,10 +1,10 @@
-package matsimConnector.utility;
+package matsimconnector.utility;
 
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
-import pedCA.environment.grid.GridPoint;
-import pedCA.environment.network.Coordinates;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinates;
 
 import java.util.ArrayList;
 

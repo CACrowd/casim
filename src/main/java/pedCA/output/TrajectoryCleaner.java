@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package pedCA.output;
+package pedca.output;
 
 import com.vividsolutions.jts.geom.*;
 import org.matsim.core.utils.geometry.geotools.MGC;

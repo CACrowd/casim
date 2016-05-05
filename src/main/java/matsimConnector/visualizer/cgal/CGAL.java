@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package matsimConnector.visualizer.cgal;
+package matsimconnector.visualizer.cgal;
 
 /**
  * This class provides basic computational geometry algorithms

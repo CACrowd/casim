@@ -1,9 +1,9 @@
-package matsimConnector.network;
+package matsimconnector.network;
 
-import matsimConnector.scenario.CAEnvironment;
-import matsimConnector.scenario.CAScenario;
-import matsimConnector.utility.Constants;
-import matsimConnector.utility.IdUtility;
+import matsimconnector.scenario.CAEnvironment;
+import matsimconnector.scenario.CAScenario;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
@@ -11,8 +11,8 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.network.NetworkFactoryImpl;
 import org.matsim.core.network.NetworkImpl;
 import org.matsim.core.network.NetworkUtils;
-import pedCA.environment.network.CAEdge;
-import pedCA.environment.network.CANode;
+import pedca.environment.network.CAEdge;
+import pedca.environment.network.CANode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
