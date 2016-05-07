@@ -29,9 +29,11 @@ public class Lottery {
 	public static void normalizeProbabilities(ArrayList<WeightedCell> probabilityValues, double probabilitySum){
 		for(WeightedCell wc:probabilityValues){
 			probabilityValues.set(probabilityValues.indexOf(wc), new WeightedCell(new GridPoint(wc.getX(), wc.getY()), wc.getP() / probabilitySum));
+
 		}
 	}
-	
+
+	//TODO never used --> remove or use [gl May 2016]
 	public static void sort(ArrayList<WeightedCell> wc){
 		Collections.sort(wc, new Comparator<WeightedCell>(){
 			@Override
@@ -47,10 +49,13 @@ public class Lottery {
 		});
 	}
 
+
 	public static <T> T extractObject(ArrayList<T> objects){
 		return extractObjects(objects, 1).get(0);
 	}
-	
+
+
+
 	public static <T> ArrayList<T> extractObjects(ArrayList<T> objects, int howMany) {
 		if(howMany >= objects.size())
 			return objects;
@@ -58,7 +63,11 @@ public class Lottery {
 		@SuppressWarnings("unchecked")
 		ArrayList<T> cellsCopy = (ArrayList<T>) objects.clone();
 		for(int i=0;i<howMany;i++){
-			int extracted_index = (int) (CASimRandom.nextDouble() * cellsCopy.size());
+			int extracted_index = (int) (CASimRandom.nextDouble() * cellsCopy.size()); //TODO why not using CASimRandom.nextInt(cellsCopy.size()) instead?
+			//TODO also, it might be faster to have a List<Integer> with elements 0,1,2 ... max_expected_cells and the each time this method is called perform
+			//TODO a random permutation (Collections.shuffle) and use the first ``howMany'' elements as indexes for the copy operation [GL May 2016]
+
+
 			extracted.add(cellsCopy.get(extracted_index));
 			cellsCopy.remove(extracted_index);
 		}
