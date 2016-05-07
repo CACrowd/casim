@@ -71,8 +71,6 @@ public class LotteryTest {
 		WeightedCell res = Lottery.pickWinner(weightedCells);
 
 		assertThat(res, is(wc));
-
-
 	}
 
 	@Test
@@ -85,7 +83,19 @@ public class LotteryTest {
 		WeightedCell res = Lottery.pickWinner(weightedCells);
 
 		assertThat(res, is(nullValue()));
+	}
 
-
+	@Test
+	public void testNormalizeProbabilities() {
+		ArrayList<WeightedCell> weightedCells = new ArrayList<>();
+		weightedCells.add(new WeightedCell(new GridPoint(1, 1), frstRndm));
+		weightedCells.add(new WeightedCell(new GridPoint(2, 2), scndRndm));
+		WeightedCell wc = new WeightedCell(new GridPoint(3, 1), thrdRndm);
+		weightedCells.add(wc);
+		double probSum = frstRndm + scndRndm + thrdRndm;
+		Lottery.normalizeProbabilities(weightedCells, probSum);
+		assertThat(weightedCells.get(0).getP(), is(frstRndm / probSum));
+		assertThat(weightedCells.get(1).getP(), is(scndRndm / probSum));
+		assertThat(weightedCells.get(2).getP(), is(thrdRndm / probSum));
 	}
 }
