@@ -22,6 +22,7 @@ import pedca.environment.grid.WeightedCell;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -97,5 +98,21 @@ public class LotteryTest {
 		assertThat(weightedCells.get(0).getP(), is(frstRndm / probSum));
 		assertThat(weightedCells.get(1).getP(), is(scndRndm / probSum));
 		assertThat(weightedCells.get(2).getP(), is(thrdRndm / probSum));
+	}
+
+	@Test
+	public void testSort() {
+		ArrayList<WeightedCell> weightedCells = new ArrayList<>();
+		WeightedCell wc0 = new WeightedCell(new GridPoint(1, 1), 0.1);
+		weightedCells.add(wc0);
+		WeightedCell wc1 = new WeightedCell(new GridPoint(2, 2), 0.9);
+		weightedCells.add(wc1);
+		WeightedCell wc2 = new WeightedCell(new GridPoint(3, 1), 0.05);
+		weightedCells.add(wc2);
+
+		Lottery.sort(weightedCells);
+
+		assertThat(weightedCells, contains(wc2, wc0, wc1));
+
 	}
 }
