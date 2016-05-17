@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE network SYSTEM "http://www.matsim.org/files/dtd/network_v1.dtd">
+<network>
+
+    <!-- ====================================================================== -->
+
+    <nodes>
+        <node id="n0" x="2.7755575615628914E-17" y="4.6000000000000005"/>
+        <node id="n1" x="-10.0" y="4.6000000000000005"/>
+        <node id="n2" x="44.4" y="4.6000000000000005"/>
+        <node id="n3" x="54.4" y="4.6"/>
+        <node id="n4" x="-20.0" y="4.6000000000000005"/>
+        <node id="n6" x="64.4" y="4.6"/>
+        <node id="n_e" x="64.4" y="14.6"/>
+        <node id="n_w" x="-20.0" y="14.600000000000001"/>
+    </nodes>
+
+    <!-- ====================================================================== -->
+
+    <links capperiod="00:00:01" effectivecellsize="0.26" effectivelanewidth="0.71">
+        <link id="l0" from="n0" to="n1" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l1" from="n1" to="n0" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l10" from="n6" to="n_e" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l11" from="n_e" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l2" from="n2" to="n3" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l3" from="n3" to="n2" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l4" from="n1" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l5" from="n4" to="n1" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l6" from="n4" to="n_w" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l7" from="n_w" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l8" from="n3" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+        <link id="l9" from="n6" to="n3" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+              oneway="1" modes="walk"/>
+    </links>
+
+    <!-- ====================================================================== -->
+
+</network>
