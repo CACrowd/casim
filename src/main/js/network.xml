@@ -2,48 +2,393 @@
 <!DOCTYPE network SYSTEM "http://www.matsim.org/files/dtd/network_v1.dtd">
 <network>
 
-    <!-- ====================================================================== -->
+	<!-- ====================================================================== -->
 
-    <nodes>
-        <node id="n0" x="2.7755575615628914E-17" y="4.6000000000000005"/>
-        <node id="n1" x="-10.0" y="4.6000000000000005"/>
-        <node id="n2" x="44.4" y="4.6000000000000005"/>
-        <node id="n3" x="54.4" y="4.6"/>
-        <node id="n4" x="-20.0" y="4.6000000000000005"/>
-        <node id="n6" x="64.4" y="4.6"/>
-        <node id="n_e" x="64.4" y="14.6"/>
-        <node id="n_w" x="-20.0" y="14.600000000000001"/>
-    </nodes>
+	<nodes>
+		<node id="HybridNode_0" x="0.20000000000000004" y="4.6000000000000005"/>
+		<node id="HybridNode_1" x="44.199999999999996" y="4.6000000000000005"/>
+		<node id="HybridNode_10" x="42.60000000000001" y="1.0000000000000002"/>
+		<node id="HybridNode_11" x="1.0000000000000002" y="1.8000000000000005"/>
+		<node id="HybridNode_12" x="4.2" y="1.8000000000000005"/>
+		<node id="HybridNode_13" x="7.3999999999999995" y="1.8000000000000005"/>
+		<node id="HybridNode_14" x="10.6" y="1.8000000000000005"/>
+		<node id="HybridNode_15" x="13.800000000000002" y="1.8000000000000005"/>
+		<node id="HybridNode_16" x="17.000000000000004" y="1.8000000000000005"/>
+		<node id="HybridNode_17" x="20.200000000000003" y="1.8000000000000005"/>
+		<node id="HybridNode_18" x="22.200000000000003" y="1.8000000000000005"/>
+		<node id="HybridNode_19" x="43.400000000000006" y="1.8000000000000005"/>
+		<node id="HybridNode_2" x="1.8000000000000005" y="1.0000000000000002"/>
+		<node id="HybridNode_20" x="24.600000000000005" y="2.6000000000000005"/>
+		<node id="HybridNode_21" x="27.800000000000008" y="2.6000000000000005"/>
+		<node id="HybridNode_22" x="31.0" y="2.6000000000000005"/>
+		<node id="HybridNode_23" x="34.2" y="2.6000000000000005"/>
+		<node id="HybridNode_24" x="37.400000000000006" y="2.6000000000000005"/>
+		<node id="HybridNode_25" x="40.60000000000001" y="2.6000000000000005"/>
+		<node id="HybridNode_26" x="23.8" y="3.4"/>
+		<node id="HybridNode_27" x="27.000000000000004" y="3.4"/>
+		<node id="HybridNode_28" x="30.200000000000003" y="3.4"/>
+		<node id="HybridNode_29" x="33.40000000000001" y="3.4"/>
+		<node id="HybridNode_3" x="5.0" y="1.0000000000000002"/>
+		<node id="HybridNode_30" x="36.6" y="3.4"/>
+		<node id="HybridNode_31" x="39.800000000000004" y="3.4"/>
+		<node id="HybridNode_32" x="1.0000000000000002" y="3.8000000000000003"/>
+		<node id="HybridNode_33" x="1.0000000000000002" y="5.3999999999999995"/>
+		<node id="HybridNode_34" x="2.6000000000000005" y="5.800000000000001"/>
+		<node id="HybridNode_35" x="5.8" y="5.800000000000001"/>
+		<node id="HybridNode_36" x="8.999999999999998" y="5.800000000000001"/>
+		<node id="HybridNode_37" x="12.200000000000001" y="5.800000000000001"/>
+		<node id="HybridNode_38" x="15.4" y="5.800000000000001"/>
+		<node id="HybridNode_39" x="18.600000000000005" y="5.800000000000001"/>
+		<node id="HybridNode_4" x="8.2" y="1.0000000000000002"/>
+		<node id="HybridNode_40" x="3.4" y="6.6000000000000005"/>
+		<node id="HybridNode_41" x="6.6000000000000005" y="6.6000000000000005"/>
+		<node id="HybridNode_42" x="9.8" y="6.6000000000000005"/>
+		<node id="HybridNode_43" x="13.0" y="6.6000000000000005"/>
+		<node id="HybridNode_44" x="16.200000000000003" y="6.6000000000000005"/>
+		<node id="HybridNode_45" x="19.400000000000006" y="6.6000000000000005"/>
+		<node id="HybridNode_46" x="1.0000000000000002" y="7.3999999999999995"/>
+		<node id="HybridNode_47" x="22.200000000000003" y="7.3999999999999995"/>
+		<node id="HybridNode_48" x="25.400000000000002" y="7.3999999999999995"/>
+		<node id="HybridNode_49" x="28.600000000000005" y="7.3999999999999995"/>
+		<node id="HybridNode_5" x="11.4" y="1.0000000000000002"/>
+		<node id="HybridNode_50" x="31.8" y="7.3999999999999995"/>
+		<node id="HybridNode_51" x="35.00000000000001" y="7.3999999999999995"/>
+		<node id="HybridNode_52" x="38.20000000000001" y="7.3999999999999995"/>
+		<node id="HybridNode_53" x="41.40000000000001" y="7.3999999999999995"/>
+		<node id="HybridNode_54" x="43.400000000000006" y="7.3999999999999995"/>
+		<node id="HybridNode_55" x="1.8000000000000005" y="8.2"/>
+		<node id="HybridNode_56" x="21.400000000000006" y="8.2"/>
+		<node id="HybridNode_57" x="23.0" y="8.2"/>
+		<node id="HybridNode_58" x="26.200000000000003" y="8.2"/>
+		<node id="HybridNode_59" x="29.400000000000006" y="8.2"/>
+		<node id="HybridNode_6" x="14.600000000000001" y="1.0000000000000002"/>
+		<node id="HybridNode_60" x="32.6" y="8.2"/>
+		<node id="HybridNode_61" x="35.800000000000004" y="8.2"/>
+		<node id="HybridNode_62" x="39.00000000000001" y="8.2"/>
+		<node id="HybridNode_63" x="42.60000000000001" y="8.2"/>
+		<node id="HybridNode_7" x="17.800000000000004" y="1.0000000000000002"/>
+		<node id="HybridNode_8" x="21.400000000000006" y="1.0000000000000002"/>
+		<node id="HybridNode_9" x="23.0" y="1.0000000000000002"/>
+		<node id="n0" x="2.7755575615628914E-17" y="4.6000000000000005"/>
+		<node id="n1" x="-10.0" y="4.6000000000000005"/>
+		<node id="n2" x="44.4" y="4.6000000000000005"/>
+		<node id="n3" x="54.4" y="4.6"/>
+		<node id="n4" x="-20.0" y="4.6000000000000005"/>
+		<node id="n6" x="64.4" y="4.6"/>
+		<node id="n_e" x="64.4" y="14.6"/>
+		<node id="n_w" x="-20.0" y="14.600000000000001"/>
+		<node id="dummy" x="0" y="-1"/>
+	</nodes>
 
-    <!-- ====================================================================== -->
+	<!-- ====================================================================== -->
 
-    <links capperiod="00:00:01" effectivecellsize="0.26" effectivelanewidth="0.71">
-        <link id="l0" from="n0" to="n1" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l1" from="n1" to="n0" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l10" from="n6" to="n_e" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l11" from="n_e" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l2" from="n2" to="n3" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l3" from="n3" to="n2" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l4" from="n1" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l5" from="n4" to="n1" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l6" from="n4" to="n_w" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l7" from="n_w" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l8" from="n3" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-        <link id="l9" from="n6" to="n3" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
-              oneway="1" modes="walk"/>
-    </links>
+	<links capperiod="00:00:01" effectivecellsize="0.26" effectivelanewidth="0.71">
+		<link id="HybridNode_0-->HybridNode_32" from="HybridNode_0" to="HybridNode_32" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_0-->HybridNode_33" from="HybridNode_0" to="HybridNode_33" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_1-->HybridNode_19" from="HybridNode_1" to="HybridNode_19" length="2.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_1-->HybridNode_54" from="HybridNode_1" to="HybridNode_54" length="2.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_10-->HybridNode_19" from="HybridNode_10" to="HybridNode_19" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_10-->HybridNode_9" from="HybridNode_10" to="HybridNode_9" length="19.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_11-->HybridNode_2" from="HybridNode_11" to="HybridNode_2" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_11-->HybridNode_32" from="HybridNode_11" to="HybridNode_32" length="2.0"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_12-->HybridNode_3" from="HybridNode_12" to="HybridNode_3" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_12-->HybridNode_40" from="HybridNode_12" to="HybridNode_40" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_13-->HybridNode_4" from="HybridNode_13" to="HybridNode_4" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_13-->HybridNode_41" from="HybridNode_13" to="HybridNode_41" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_14-->HybridNode_42" from="HybridNode_14" to="HybridNode_42" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_14-->HybridNode_5" from="HybridNode_14" to="HybridNode_5" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_15-->HybridNode_43" from="HybridNode_15" to="HybridNode_43" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_15-->HybridNode_6" from="HybridNode_15" to="HybridNode_6" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_16-->HybridNode_44" from="HybridNode_16" to="HybridNode_44" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_16-->HybridNode_7" from="HybridNode_16" to="HybridNode_7" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_17-->HybridNode_45" from="HybridNode_17" to="HybridNode_45" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_17-->HybridNode_8" from="HybridNode_17" to="HybridNode_8" length="1.2485281374238573"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_18-->HybridNode_47" from="HybridNode_18" to="HybridNode_47" length="5.6000000000000005"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_18-->HybridNode_8" from="HybridNode_18" to="HybridNode_8" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_18-->HybridNode_9" from="HybridNode_18" to="HybridNode_9" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_19-->HybridNode_1" from="HybridNode_19" to="HybridNode_1" length="2.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_19-->HybridNode_10" from="HybridNode_19" to="HybridNode_10" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_19-->HybridNode_54" from="HybridNode_19" to="HybridNode_54" length="5.6000000000000005"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_2-->HybridNode_11" from="HybridNode_2" to="HybridNode_11" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_2-->HybridNode_34" from="HybridNode_2" to="HybridNode_34" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_20-->HybridNode_26" from="HybridNode_20" to="HybridNode_26" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_20-->HybridNode_48" from="HybridNode_20" to="HybridNode_48" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_21-->HybridNode_27" from="HybridNode_21" to="HybridNode_27" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_21-->HybridNode_49" from="HybridNode_21" to="HybridNode_49" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_22-->HybridNode_28" from="HybridNode_22" to="HybridNode_28" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_22-->HybridNode_50" from="HybridNode_22" to="HybridNode_50" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_23-->HybridNode_29" from="HybridNode_23" to="HybridNode_29" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_23-->HybridNode_51" from="HybridNode_23" to="HybridNode_51" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_24-->HybridNode_30" from="HybridNode_24" to="HybridNode_30" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_24-->HybridNode_52" from="HybridNode_24" to="HybridNode_52" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_25-->HybridNode_31" from="HybridNode_25" to="HybridNode_31" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_25-->HybridNode_53" from="HybridNode_25" to="HybridNode_53" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_26-->HybridNode_20" from="HybridNode_26" to="HybridNode_20" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_26-->HybridNode_57" from="HybridNode_26" to="HybridNode_57" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_27-->HybridNode_21" from="HybridNode_27" to="HybridNode_21" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_27-->HybridNode_58" from="HybridNode_27" to="HybridNode_58" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_28-->HybridNode_22" from="HybridNode_28" to="HybridNode_22" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_28-->HybridNode_59" from="HybridNode_28" to="HybridNode_59" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_29-->HybridNode_23" from="HybridNode_29" to="HybridNode_23" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_29-->HybridNode_60" from="HybridNode_29" to="HybridNode_60" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_3-->HybridNode_12" from="HybridNode_3" to="HybridNode_12" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_3-->HybridNode_35" from="HybridNode_3" to="HybridNode_35" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_30-->HybridNode_24" from="HybridNode_30" to="HybridNode_24" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_30-->HybridNode_61" from="HybridNode_30" to="HybridNode_61" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_31-->HybridNode_25" from="HybridNode_31" to="HybridNode_25" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_31-->HybridNode_62" from="HybridNode_31" to="HybridNode_62" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_32-->HybridNode_0" from="HybridNode_32" to="HybridNode_0" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_32-->HybridNode_11" from="HybridNode_32" to="HybridNode_11" length="2.0"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_32-->HybridNode_33" from="HybridNode_32" to="HybridNode_33" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_33-->HybridNode_0" from="HybridNode_33" to="HybridNode_0" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_33-->HybridNode_32" from="HybridNode_33" to="HybridNode_32" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_33-->HybridNode_46" from="HybridNode_33" to="HybridNode_46" length="2.0"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_34-->HybridNode_2" from="HybridNode_34" to="HybridNode_2" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_34-->HybridNode_40" from="HybridNode_34" to="HybridNode_40" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_35-->HybridNode_3" from="HybridNode_35" to="HybridNode_3" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_35-->HybridNode_41" from="HybridNode_35" to="HybridNode_41" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_36-->HybridNode_4" from="HybridNode_36" to="HybridNode_4" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_36-->HybridNode_42" from="HybridNode_36" to="HybridNode_42" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_37-->HybridNode_43" from="HybridNode_37" to="HybridNode_43" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_37-->HybridNode_5" from="HybridNode_37" to="HybridNode_5" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_38-->HybridNode_44" from="HybridNode_38" to="HybridNode_44" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_38-->HybridNode_6" from="HybridNode_38" to="HybridNode_6" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_39-->HybridNode_45" from="HybridNode_39" to="HybridNode_45" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_39-->HybridNode_7" from="HybridNode_39" to="HybridNode_7" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_4-->HybridNode_13" from="HybridNode_4" to="HybridNode_13" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_4-->HybridNode_36" from="HybridNode_4" to="HybridNode_36" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_40-->HybridNode_12" from="HybridNode_40" to="HybridNode_12" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_40-->HybridNode_34" from="HybridNode_40" to="HybridNode_34" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_41-->HybridNode_13" from="HybridNode_41" to="HybridNode_13" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_41-->HybridNode_35" from="HybridNode_41" to="HybridNode_35" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_42-->HybridNode_14" from="HybridNode_42" to="HybridNode_14" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_42-->HybridNode_36" from="HybridNode_42" to="HybridNode_36" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_43-->HybridNode_15" from="HybridNode_43" to="HybridNode_15" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_43-->HybridNode_37" from="HybridNode_43" to="HybridNode_37" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_44-->HybridNode_16" from="HybridNode_44" to="HybridNode_16" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_44-->HybridNode_38" from="HybridNode_44" to="HybridNode_38" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_45-->HybridNode_17" from="HybridNode_45" to="HybridNode_17" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_45-->HybridNode_39" from="HybridNode_45" to="HybridNode_39" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_46-->HybridNode_33" from="HybridNode_46" to="HybridNode_33" length="2.0"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_46-->HybridNode_55" from="HybridNode_46" to="HybridNode_55" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_47-->HybridNode_18" from="HybridNode_47" to="HybridNode_18" length="5.6000000000000005"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_47-->HybridNode_56" from="HybridNode_47" to="HybridNode_56" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_47-->HybridNode_57" from="HybridNode_47" to="HybridNode_57" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_48-->HybridNode_20" from="HybridNode_48" to="HybridNode_20" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_48-->HybridNode_58" from="HybridNode_48" to="HybridNode_58" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_49-->HybridNode_21" from="HybridNode_49" to="HybridNode_21" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_49-->HybridNode_59" from="HybridNode_49" to="HybridNode_59" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_5-->HybridNode_14" from="HybridNode_5" to="HybridNode_14" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_5-->HybridNode_37" from="HybridNode_5" to="HybridNode_37" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_50-->HybridNode_22" from="HybridNode_50" to="HybridNode_22" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_50-->HybridNode_60" from="HybridNode_50" to="HybridNode_60" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_51-->HybridNode_23" from="HybridNode_51" to="HybridNode_23" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_51-->HybridNode_61" from="HybridNode_51" to="HybridNode_61" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_52-->HybridNode_24" from="HybridNode_52" to="HybridNode_24" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_52-->HybridNode_62" from="HybridNode_52" to="HybridNode_62" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_53-->HybridNode_25" from="HybridNode_53" to="HybridNode_25" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_53-->HybridNode_63" from="HybridNode_53" to="HybridNode_63" length="1.2485281374238573"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_54-->HybridNode_1" from="HybridNode_54" to="HybridNode_1" length="2.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_54-->HybridNode_19" from="HybridNode_54" to="HybridNode_19" length="5.6000000000000005"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_54-->HybridNode_63" from="HybridNode_54" to="HybridNode_63" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_55-->HybridNode_46" from="HybridNode_55" to="HybridNode_46" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_55-->HybridNode_56" from="HybridNode_55" to="HybridNode_56" length="19.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_56-->HybridNode_47" from="HybridNode_56" to="HybridNode_47" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_56-->HybridNode_55" from="HybridNode_56" to="HybridNode_55" length="19.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_56-->HybridNode_57" from="HybridNode_56" to="HybridNode_57" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_57-->HybridNode_26" from="HybridNode_57" to="HybridNode_26" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_57-->HybridNode_47" from="HybridNode_57" to="HybridNode_47" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_57-->HybridNode_56" from="HybridNode_57" to="HybridNode_56" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_58-->HybridNode_27" from="HybridNode_58" to="HybridNode_27" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_58-->HybridNode_48" from="HybridNode_58" to="HybridNode_48" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_59-->HybridNode_28" from="HybridNode_59" to="HybridNode_28" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_59-->HybridNode_49" from="HybridNode_59" to="HybridNode_49" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_6-->HybridNode_15" from="HybridNode_6" to="HybridNode_15" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_6-->HybridNode_38" from="HybridNode_6" to="HybridNode_38" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_60-->HybridNode_29" from="HybridNode_60" to="HybridNode_29" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_60-->HybridNode_50" from="HybridNode_60" to="HybridNode_50" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_61-->HybridNode_30" from="HybridNode_61" to="HybridNode_30" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_61-->HybridNode_51" from="HybridNode_61" to="HybridNode_51" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_62-->HybridNode_31" from="HybridNode_62" to="HybridNode_31" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_62-->HybridNode_52" from="HybridNode_62" to="HybridNode_52" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_63-->HybridNode_53" from="HybridNode_63" to="HybridNode_53" length="1.2485281374238573"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_63-->HybridNode_54" from="HybridNode_63" to="HybridNode_54" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_7-->HybridNode_16" from="HybridNode_7" to="HybridNode_16" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_7-->HybridNode_39" from="HybridNode_7" to="HybridNode_39" length="4.848528137423857"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_8-->HybridNode_17" from="HybridNode_8" to="HybridNode_17" length="1.2485281374238573"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_8-->HybridNode_18" from="HybridNode_8" to="HybridNode_18" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_8-->HybridNode_9" from="HybridNode_8" to="HybridNode_9" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_9-->HybridNode_10" from="HybridNode_9" to="HybridNode_10" length="19.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_9-->HybridNode_18" from="HybridNode_9" to="HybridNode_18" length="0.965685424949238"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="HybridNode_9-->HybridNode_8" from="HybridNode_9" to="HybridNode_8" length="1.6"
+			  freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0" oneway="1" modes="car,walkCA,walk"/>
+		<link id="l0" from="HybridNode_0" to="n1" length="15.0" freespeed="1.3333333333333335" capacity="12.0"
+			  permlanes="1.0" oneway="1" modes="car,CA->Q,walk"/>
+		<link id="l1" from="n1" to="n0" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l10" from="n6" to="n_e" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l11" from="n_e" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l2" from="HybridNode_1" to="n3" length="15.0" freespeed="1.3333333333333335" capacity="12.0"
+			  permlanes="1.0" oneway="1" modes="car,CA->Q,walk"/>
+		<link id="l3" from="n3" to="n2" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l4" from="n1" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l5" from="n4" to="n1" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l6" from="n4" to="n_w" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l7" from="n_w" to="n4" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l8" from="n3" to="n6" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="l9" from="n6" to="n3" length="10.0" freespeed="1.3333333333333335" capacity="12.0" permlanes="1.0"
+			  oneway="1" modes="walk"/>
+		<link id="n0-->HybridNode_0" from="n0" to="HybridNode_0" length="5.0" freespeed="1.3333333333333335"
+			  capacity="6.0" permlanes="10.0" oneway="1" modes="car,Q->CA,walk"/>
+		<link id="n2-->HybridNode_1" from="n2" to="HybridNode_1" length="5.0" freespeed="1.3333333333333335"
+			  capacity="6.0" permlanes="10.0" oneway="1" modes="car,Q->CA,walk"/>
+	</links>
 
-    <!-- ====================================================================== -->
+	<!-- ====================================================================== -->
 
 </network>
