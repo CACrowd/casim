@@ -26,6 +26,7 @@ import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.scenario.ScenarioUtils;
+import pedca.output.CAScenarioWriter;
 import pedca.output.FundamentalDiagramWriter;
 
 import java.io.BufferedReader;
@@ -185,6 +186,13 @@ public class CASimulationRunner implements IterationStartsListener {
 		controller.addControlerListener(runner);
 		controller.run();
 
+		try {
+			new CAScenarioWriter(scenarioCA).write(c.controler().getOutputDirectory() + "/grid.json");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 		//		new TrajectoryFlipTranslate(Constants.OUTPUT_PATH+"/agentTrajectories.txt", 
 		//				Constants.OUTPUT_PATH+"/agentTrajectoriesFlippedTranslated.txt", -2.41, 2.79).run();
 		//		new TrajectoryCleaner(Constants.OUTPUT_PATH+"/agentTrajectoriesFlippedTranslated.txt", 
@@ -226,6 +234,7 @@ public class CASimulationRunner implements IterationStartsListener {
 		//			throw new RuntimeException(e);
 		//		}		
 	}
+
 
 	private static void logToLog(Process p1) throws IOException {
 		{

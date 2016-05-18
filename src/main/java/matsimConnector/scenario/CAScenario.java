@@ -7,9 +7,11 @@ import matsimconnector.utility.LinkUtility;
 import matsimconnector.utility.MathUtility;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.events.Event;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.api.experimental.events.EventsManager;
 import pedca.context.Context;
 import pedca.output.Log;
 
@@ -169,4 +171,6 @@ public class CAScenario {
 	public CAEnvironment getCAEnvironment(Link link) {
 		return linkToEnvironment.get(link);
 	}
+
+
 }
