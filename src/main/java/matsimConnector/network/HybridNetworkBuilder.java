@@ -43,8 +43,8 @@ public class HybridNetworkBuilder {
 		
 		for (CANode nodeCA : environmentCA.getCANetwork().getNodes()) {
 			Id<Node> id = IdUtility.createNodeId(nodeCA.getId());
-			double x = nodeCA.getCoordinates().getX();
-			double y = nodeCA.getCoordinates().getY();
+			double x = nodeCA.getCoordinate().getX();
+			double y = nodeCA.getCoordinate().getY();
 			Node node = fac.createNode(id, new Coord(x,y));		
 			net.addNode(node);
 		}

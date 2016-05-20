@@ -1,7 +1,7 @@
 package pedca.environment.markers;
 
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 import pedca.utility.Constants;
 
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ public class TacticalDestination extends Destination {
 	private static final long serialVersionUID = 1L;
 	private boolean isStairsBorder;
 	private double width;
-	private final Coordinates coordinates;
+	private final Coordinate coordinate;
 
-	public TacticalDestination(Coordinates coordinates, ArrayList<GridPoint> cells, boolean isStairsBorder) {
+	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
 		super(cells);
-		this.coordinates = coordinates;
+		this.coordinate = coordinate;
 		this.isStairsBorder = isStairsBorder;
 		calculateWidth();
 	}
 
-	public Coordinates getCoordinates(){
-		return coordinates;
+	public Coordinate getCoordinate() {
+		return coordinate;
 	}
 	
 	/**

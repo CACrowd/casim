@@ -32,7 +32,7 @@ public class CAEdge {
 	@Override
 	public String toString(){
 		String result = super.toString()+"\n";
-		result += "FROM: "+n1.getCoordinates()+" to "+n2.getCoordinates() +"\n";
+		result += "FROM: " + n1.getCoordinate() + " to " + n2.getCoordinate() + "\n";
 		result += "LENGTH: "+length;
 		return result;
 	}

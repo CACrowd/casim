@@ -34,7 +34,7 @@ public class CANetwork{
 		for (Destination destination : markerConfiguration.getDestinations())
 			if (destination instanceof TacticalDestination){
 				TacticalDestination td = (TacticalDestination) destination;
-				CANode node = new CANode(td.getID(), td.getCoordinates(), td.getWidth());
+				CANode node = new CANode(td.getID(), td.getCoordinate(), td.getWidth());
 				addNode(node);
 			}
 			

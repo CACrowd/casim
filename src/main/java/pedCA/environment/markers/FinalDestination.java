@@ -2,7 +2,7 @@ package pedca.environment.markers;
 
 import matsimconnector.environment.TransitionArea;
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 
 import java.util.ArrayList;
 
@@ -13,9 +13,9 @@ public class FinalDestination extends TacticalDestination {
 	private int rotation = -1;
 	private GridPoint environmentRef;
 	private TransitionArea transitionArea;
-	
-	public FinalDestination(Coordinates coordinates, ArrayList<GridPoint> cells) {
-		super(coordinates, cells, false);
+
+	public FinalDestination(Coordinate coordinate, ArrayList<GridPoint> cells) {
+		super(coordinate, cells, false);
 		calculateRotationAndRef();
 	}
 

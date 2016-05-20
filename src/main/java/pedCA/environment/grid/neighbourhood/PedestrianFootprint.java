@@ -2,7 +2,7 @@ package pedca.environment.grid.neighbourhood;
 
 import pedca.environment.grid.Grid;
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 import pedca.utility.Constants;
 import pedca.utility.Distances;
 
@@ -29,7 +29,7 @@ public class PedestrianFootprint extends Grid<Double>{
 	private void initValues() {
 		for(int i=0;i<getRows();i++)
 			for(int j=0;j<getColumns();j++){
-				double distance = Distances.EuclideanDistance(new Coordinates(j*Constants.CELL_SIZE,i*Constants.CELL_SIZE), new Coordinates(center.getX()*Constants.CELL_SIZE,center.getY()*Constants.CELL_SIZE));
+				double distance = Distances.EuclideanDistance(new Coordinate(j * Constants.CELL_SIZE, i * Constants.CELL_SIZE), new Coordinate(center.getX() * Constants.CELL_SIZE, center.getY() * Constants.CELL_SIZE));
 				if(distance <= radius){
 					get(i, j).add(1.);
 					area+=Math.pow(Constants.CELL_SIZE, 2);
@@ -37,7 +37,7 @@ public class PedestrianFootprint extends Grid<Double>{
 			}
 		for(int i=0;i<getRows();i++)
 			for(int j=0;j<getColumns();j++){
-				double distance = Distances.EuclideanDistance(new Coordinates(j*Constants.CELL_SIZE,i*Constants.CELL_SIZE), new Coordinates(center.getX()*Constants.CELL_SIZE,center.getY()*Constants.CELL_SIZE));
+				double distance = Distances.EuclideanDistance(new Coordinate(j * Constants.CELL_SIZE, i * Constants.CELL_SIZE), new Coordinate(center.getX() * Constants.CELL_SIZE, center.getY() * Constants.CELL_SIZE));
 				if(distance <= radius){
 					get(i, j).set(0, this.get(i, j).get(0)/area);
 					valuesMap.put(new GridPoint(j-center.getX(),i-center.getY()), get(i,j).get(0));

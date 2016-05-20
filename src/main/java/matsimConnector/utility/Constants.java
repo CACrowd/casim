@@ -55,7 +55,7 @@ public class Constants {
 	public static final String COORDINATE_SYSTEM = "EPSG:3395";
 	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
 	public static boolean BRAESS_WL = false;
-	public final static boolean VIS = false;
+	public final static boolean VIS = true;
 	public static boolean SAVE_FRAMES = false;
 	public static List<String> stairsLinks;
 	static{

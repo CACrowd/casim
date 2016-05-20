@@ -5,7 +5,7 @@ import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
 import pedca.environment.markers.*;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 import pedca.utility.Constants;
 import pedca.utility.NeighbourhoodUtility;
 
@@ -66,20 +66,20 @@ public class EnvironmentGenerator {
 			result.add(new GridPoint(j,start.getY()));
 		return result;
 	}
-	
-	public static Coordinates generateCoordinates(ArrayList<GridPoint> cells) {
+
+	public static Coordinate generateCoordinates(ArrayList<GridPoint> cells) {
 		return generateCoordinates(cells, new GridPoint(0,0));
 	}
-		
-	public static Coordinates generateCoordinates(ArrayList<GridPoint> cells, GridPoint shift) {
-		Coordinates result = calculateCentroid(cells);
+
+	public static Coordinate generateCoordinates(ArrayList<GridPoint> cells, GridPoint shift) {
+		Coordinate result = calculateCentroid(cells);
 		result.setX(result.getX()+shift.getX());
 		result.setY(result.getY()+shift.getY());
 		return result;
 	}
 
-	public static Coordinates calculateCentroid(ArrayList<GridPoint> cells) {
-		Coordinates result = new Coordinates(0,0);
+	public static Coordinate calculateCentroid(ArrayList<GridPoint> cells) {
+		Coordinate result = new Coordinate(0, 0);
 		for (GridPoint point : cells){
 			result.setX(result.getX()+(point.getX()*Constants.CELL_SIZE)+Constants.CELL_SIZE/2);
 			result.setY(result.getY()+(point.getY()*Constants.CELL_SIZE)+Constants.CELL_SIZE/2);

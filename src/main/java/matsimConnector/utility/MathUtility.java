@@ -2,7 +2,7 @@ package matsimconnector.utility;
 
 import org.matsim.api.core.v01.Coord;
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 
 public class MathUtility {
 	public static double EuclideanDistance(Coord c1, Coord c2) {
@@ -12,8 +12,8 @@ public class MathUtility {
 	public static void rotate(GridPoint point, double degrees){
 		rotate(point, degrees, 0, 0);
 	}
-	
-	public static void rotate(Coordinates point, double degrees){
+
+	public static void rotate(Coordinate point, double degrees) {
 		rotate(point, degrees, 0, 0);
 	}
 	
@@ -28,12 +28,12 @@ public class MathUtility {
 		point.setX((int)x_res);
 	    point.setY((int)y_res);
 	}
-	
-	public static void rotate(Coordinates point, double degrees, Coordinates center){
+
+	public static void rotate(Coordinate point, double degrees, Coordinate center) {
 		rotate(point, degrees, center.getX(), center.getY());
 	}
-	
-	public static void rotate(Coordinates point, double degrees, double x_center, double y_center){
+
+	public static void rotate(Coordinate point, double degrees, double x_center, double y_center) {
 		double x = point.getX();
 		double y = point.getY();
 		degrees = Math.toRadians(degrees);

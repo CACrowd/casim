@@ -6,7 +6,7 @@ import matsimconnector.utility.MathUtility;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.markers.FinalDestination;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 import pedca.utility.Lottery;
 
 import java.util.ArrayList;
@@ -69,14 +69,14 @@ public class TransitionArea extends PedestrianGrid {
 		MathUtility.rotate(result, 360-rotation);
 		return result;
 	}
-	
-	public Coordinates convertCoordinates(Coordinates tACoordinates){
-		Coordinates result = new Coordinates(tACoordinates.getX(),tACoordinates.getY());
-		Coordinates shift = new Coordinates(0,0);
+
+	public Coordinate convertCoordinates(Coordinate tACoordinate) {
+		Coordinate result = new Coordinate(tACoordinate.getX(), tACoordinate.getY());
+		Coordinate shift = new Coordinate(0, 0);
 		MathUtility.rotate(result, rotation);
 		MathUtility.rotate(shift, rotation, Constants.CA_CELL_SIDE*0.5, Constants.CA_CELL_SIDE*0.5);
-		Coordinates transAreaRef = new Coordinates(this.transAreaRef);
-		Coordinates environmentRef = new Coordinates(this.environmentRef);
+		Coordinate transAreaRef = gridPoint2Coordinate(this.transAreaRef);
+		Coordinate environmentRef = gridPoint2Coordinate(this.environmentRef);
 		double x_r = result.getX()-transAreaRef.getX()+environmentRef.getX()+shift.getX();
 		double y_r = result.getY()-transAreaRef.getY()+environmentRef.getY()+shift.getY();
 		result.setX(x_r); result.setY(y_r);

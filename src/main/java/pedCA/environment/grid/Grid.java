@@ -1,16 +1,27 @@
 package pedca.environment.grid;
 
+import matsimconnector.utility.Constants;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.network.Coordinate;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Grid <T>{
+	private double offsetY = 0.;
+	private double offsetX = 0.;
 	protected ArrayList<ArrayList<GridCell<T>>> cells;
-	
-	public Grid (int rows,int cols){
+
+	public Grid(int rows, int cols, double offsetX, double offsetY) {
+
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 		initGrid(rows, cols);
+	}
+
+	public Grid (int rows,int cols){
+		this(rows, cols, 0, 0);
 	}
 	
 	public Grid(File file) throws IOException{
@@ -35,7 +46,11 @@ public abstract class Grid <T>{
 				addElementAt(i);
 		}
 	}
-	
+
+	public Coordinate gridPoint2Coordinate(GridPoint gp) {
+		return new Coordinate(gp.getX() * Constants.CA_CELL_SIDE + offsetX, gp.getY() * Constants.CA_CELL_SIDE + offsetY);
+	}
+
 	public void add(int i,int j, T object){
 		get(i,j).add(object);
 	}

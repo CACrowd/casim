@@ -19,9 +19,8 @@ import matsimconnector.utility.Constants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pedca.environment.grid.EnvironmentGrid;
-import pedca.environment.grid.GridCell;
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,23 +33,24 @@ import java.io.IOException;
 public class CAScenarioWriter {
 
 
-    private final CAScenario sc;
+    private final EnvironmentGrid grid;
 
-    public CAScenarioWriter(CAScenario scenarioCA) {
-        this.sc = scenarioCA;
+    public CAScenarioWriter(EnvironmentGrid grid) {
+
+        this.grid = grid;
+
     }
 
     public void write(String file) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(new File(file)));
 //        bw.append("[\n");
         JSONArray array = new JSONArray();
-        for (CAEnvironment env : sc.getEnvironments().values()) {
-            EnvironmentGrid grid = env.getContext().getEnvironmentGrid();
+//        for (CAEnvironment env : sc.getEnvironments().values()) {
             for (int i = grid.getRows() - 1; i >= 0; i--) {
                 for (int j = 0; j < grid.getColumns(); j++) {
 
                     GridPoint gp = new GridPoint(j, i);
-                    Coordinates coord = new Coordinates(gp);
+                    Coordinate coord = grid.gridPoint2Coordinate(gp);
                     JSONObject obj = new JSONObject();
                     obj.put("kind", grid.getCellValue(i, j));
                     obj.put("x", coord.getX());
@@ -62,7 +62,7 @@ public class CAScenarioWriter {
 //                    bw.append(",\n");
                     array.put(obj);
                 }
-            }
+//            }
 
 
         }

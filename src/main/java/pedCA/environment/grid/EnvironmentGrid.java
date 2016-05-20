@@ -7,6 +7,10 @@ import java.util.StringTokenizer;
 
 public class EnvironmentGrid extends Grid<Integer> {
 
+	public EnvironmentGrid(int rows, int cols, double offsetX, double offsetY) {
+		super(rows, cols, offsetX, offsetY);
+	}
+
 	public EnvironmentGrid(int rows, int cols) {
 		super(rows, cols);
 	}

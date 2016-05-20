@@ -14,7 +14,7 @@ import org.matsim.core.network.NetworkImpl;
 import pedca.context.Context;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -139,10 +139,10 @@ public class NetworkGenerator {
 				FinalDestination destinationCA = (FinalDestination) dest;
 				ArrayList<Node> nodes = new ArrayList<Node>();
 				for (int i=0; i<nLinks;i++){
-					double x = destinationCA.getCoordinates().getX();
-					double y = destinationCA.getCoordinates().getY();
-					Coordinates coord = new Coordinates(x-(LINK_LENGTH*i)-0.2,y);
-					MathUtility.rotate(coord, destinationCA.getRotation(), destinationCA.getCoordinates());
+					double x = destinationCA.getCoordinate().getX();
+					double y = destinationCA.getCoordinate().getY();
+					Coordinate coord = new Coordinate(x - (LINK_LENGTH * i) - 0.2, y);
+					MathUtility.rotate(coord, destinationCA.getRotation(), destinationCA.getCoordinate());
 					nodes.add(fac.createNode(Id.create("n"+nodeCount,Node.class), new Coord(coord.getX(),coord.getY())));
 					net.addNode(nodes.get(nodes.size()-1));
 					nodeCount++;
@@ -198,26 +198,26 @@ public class NetworkGenerator {
 				east.add(node);
 		}
 		if (south.size()>0){
-			Coordinates centroid = Distances.centroid(south);
+			Coordinate centroid = Distances.centroid(south);
 			Node orDestNode = fac.createNode(Id.create("n"+net.getNodes().size(),Node.class), new Coord(centroid.getX(),centroid.getY()-LINK_LENGTH));
 			net.addNode(orDestNode);
 			connect(orDestNode, south, net, fac,'s');
 		
 		}
 		if (north.size()>0){
-			Coordinates centroid = Distances.centroid(north);
+			Coordinate centroid = Distances.centroid(north);
 			Node orDestNode = fac.createNode(Id.create("n"+net.getNodes().size(),Node.class), new Coord(centroid.getX(),centroid.getY()+LINK_LENGTH));
 			net.addNode(orDestNode);
 			connect(orDestNode, north, net, fac,'n');
 		}
 		if (west.size()>0){
-			Coordinates centroid = Distances.centroid(west);
+			Coordinate centroid = Distances.centroid(west);
 			Node orDestNode = fac.createNode(Id.create("n"+net.getNodes().size(),Node.class), new Coord(centroid.getX()-LINK_LENGTH,centroid.getY()));
 			net.addNode(orDestNode);
 			connect(orDestNode, west, net, fac, 'w');
 		}
 		if (east.size()>0){
-			Coordinates centroid = Distances.centroid(east);
+			Coordinate centroid = Distances.centroid(east);
 			Node orDestNode = fac.createNode(Id.create("n"+net.getNodes().size(),Node.class), new Coord(centroid.getX()+LINK_LENGTH,centroid.getY()));
 			net.addNode(orDestNode);
 			connect(orDestNode, east, net, fac, 'e');

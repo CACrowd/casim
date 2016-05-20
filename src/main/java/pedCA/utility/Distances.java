@@ -1,7 +1,7 @@
 package pedca.utility;
 
 import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinates;
+import pedca.environment.network.Coordinate;
 
 public class Distances {
 
@@ -9,7 +9,7 @@ public class Distances {
 		return Math.sqrt((gp1.getX()-gp2.getX())^2+(gp1.getY()-gp2.getY())^2);
 	}
 
-	public static double EuclideanDistance(Coordinates c1, Coordinates c2) {
+	public static double EuclideanDistance(Coordinate c1, Coordinate c2) {
 		return Math.sqrt(Math.pow(c1.getX()-c2.getX(),2)+Math.pow(c1.getY()-c2.getY(),2));
 	}
 

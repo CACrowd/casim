@@ -187,7 +187,7 @@ public class CASimulationRunner implements IterationStartsListener {
 		controller.run();
 
 		try {
-			new CAScenarioWriter(scenarioCA).write(c.controler().getOutputDirectory() + "/grid.json");
+			new CAScenarioWriter(scenarioCA.getEnvironments().values().iterator().next().getContext().getEnvironmentGrid()).write(c.controler().getOutputDirectory() + "/grid.json");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

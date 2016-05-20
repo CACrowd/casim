@@ -3,13 +3,13 @@ package pedca.environment.network;
 public class CANode {
 	private int id;
 	private int destinationId;
-	private Coordinates coordinates;
+	private Coordinate coordinate;
 	private double width;
-	
-	
-	public CANode(int id, Coordinates coordinates, double width){
+
+
+	public CANode(int id, Coordinate coordinate, double width) {
 		this.id = id;
-		this.coordinates = coordinates;
+		this.coordinate = coordinate;
 		this.width = width;
 		setDestinationId(id);
 	}
@@ -26,8 +26,8 @@ public class CANode {
 		this.destinationId = destinationId;
 	}
 
-	public Coordinates getCoordinates() {
-		return coordinates;
+	public Coordinate getCoordinate() {
+		return coordinate;
 	}
 	
 	public double getWidth() {
@@ -35,7 +35,7 @@ public class CANode {
 	}
 	
 	public String toString(){
-		String result = "Coordinates: "+coordinates.toString()+"\n";
+		String result = "Coordinate: " + coordinate.toString() + "\n";
 		result += "WIDTH: "+width;
 		return result;
 	}
