@@ -12,6 +12,7 @@ import pedca.environment.network.CANetwork;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO: extract interface outside matsim package [gl May 16]
 public class CAEnvironment {
 	private Id<CAEnvironment> id;
 	private Context context;
@@ -21,8 +22,9 @@ public class CAEnvironment {
 	public CAEnvironment(String id, Context context){
 		this(Id.create(id,CAEnvironment.class),context);
 	}
-	
-	public CAEnvironment(Id<CAEnvironment> id, Context context){
+
+
+    public CAEnvironment(Id<CAEnvironment> id, Context context){
 		this.id = id;
 		this.context = context;
 		this.transitionAreas = new HashMap<Id<Link>,TransitionArea>();
