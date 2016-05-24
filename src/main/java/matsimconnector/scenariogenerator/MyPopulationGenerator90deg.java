@@ -1,4 +1,4 @@
-package matsimconnector.scenarioGenerator;
+package matsimconnector.scenariogenerator;
 
 import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
@@ -19,9 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MyPopulationGenerator180deg {
+public class MyPopulationGenerator90deg {
 
-	private static final Logger log = Logger.getLogger(MyPopulationGenerator180deg.class);
+	private static final Logger log = Logger.getLogger(MyPopulationGenerator90deg.class);
 	
 	protected static void createPopulation(Scenario sc) {
 		Network network = sc.getNetwork();
@@ -31,7 +31,7 @@ public class MyPopulationGenerator180deg {
 			if (isOriginNode(node)){
 				initLinks.add(node.getOutLinks().values().iterator().next());
 			}
-			if (isDestinationNode(node)){
+			else{
 				destinationLinks.add(node.getOutLinks().values().iterator().next());
 			}
 		}
@@ -42,29 +42,29 @@ public class MyPopulationGenerator180deg {
 
 
 		//ugly coded - needs to be cleaned up [GL Mar 2015]
-		Link rightLeftLink = initLinks.get(3);
-		Link leftRightLink = initLinks.get(2);
+		Link topDownLink = initLinks.get(0);
+		Link leftRightLink = initLinks.get(1);
 		
 
-		List<Double> rightLeftDepartureTimes = new ArrayList<>();
+		List<Double> topDownDepartureTimes = new ArrayList<>();
 		List<Double> leftRightDepartureTimes = new ArrayList<>();
 		try {
-			loadDepartureTimes(rightLeftDepartureTimes,leftRightDepartureTimes);
+			loadDepartureTimes(topDownDepartureTimes,leftRightDepartureTimes);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 		
-		for (double time : rightLeftDepartureTimes) {
+		for (double time : topDownDepartureTimes) {
 			Person pers = factory.createPerson(Id.create("p"+population.getPersons().size(),Person.class));
 			Plan plan = factory.createPlan();
 			pers.addPlan(plan);
 			Activity act0;
-			act0 = factory.createActivityFromLinkId("origin", rightLeftLink.getId());
+			act0 = factory.createActivityFromLinkId("origin", topDownLink.getId());
 			act0.setEndTime(time);
 			plan.addActivity(act0);
 			Leg leg = factory.createLeg("car");
 			plan.addLeg(leg);
-			Activity act1 = factory.createActivityFromLinkId("destination", getDestinationLinkId(rightLeftLink,destinationLinks));
+			Activity act1 = factory.createActivityFromLinkId("destination", getDestinationLinkId(topDownLink,destinationLinks));
 			plan.addActivity(act1);
 			population.addPerson(pers);
 		}
@@ -85,20 +85,20 @@ public class MyPopulationGenerator180deg {
 	}
 
 	private static void loadDepartureTimes(List<Double> topDownDepartureTimes, List<Double> leftRightDepartureTimes) throws IOException {
-		String tF = Constants.RESOURCE_PATH + "/originalTrajectories180DegConverted.txt";
+		String tF = Constants.RESOURCE_PATH + "/originalTrajectories90DegConverted.txt";
 												
 		BufferedReader br = new BufferedReader(new FileReader(new File(tF)));
 		String l = br.readLine();
 		Set<String> handled = new HashSet<>();
 		while (l != null) {
 			String[] expl = StringUtils.explode(l, ' ');
-			if (expl.length == 5) {
+			if (expl.length == 5 && !l.startsWith("#")) {
 				String id = expl[0];
 				if (!handled.contains(id)) {
 					handled.add(id);
 					double time = Double.parseDouble(expl[1])/15; //15 fps
 					double x = Double.parseDouble(expl[2]);
-					if (x < 0) { //left-to-right
+					if (x < -2) { //left-to-right
 						leftRightDepartureTimes.add(time);
 					} else {
 						topDownDepartureTimes.add(time);
@@ -133,14 +133,9 @@ public class MyPopulationGenerator180deg {
 	}
 
 	private static boolean isOriginNode(Node node) {
-//		return node.getId().toString().endsWith("w")||node.getId().toString().endsWith("s");
-		return node.getId().toString().endsWith("n")||node.getId().toString().endsWith("s")||node.getId().toString().endsWith("w")||node.getId().toString().endsWith("e");
+		return node.getId().toString().endsWith("w")||node.getId().toString().endsWith("s");
+		//return node.getId().toString().endsWith("n")||node.getId().toString().endsWith("s")||node.getId().toString().endsWith("w")||node.getId().toString().endsWith("e");
 	}
-	
-	private static boolean isDestinationNode(Node node) {
-		return node.getId().toString().endsWith("n")||node.getId().toString().endsWith("s")||node.getId().toString().endsWith("w")||node.getId().toString().endsWith("e");
-	}
-
 
 	protected static void createCorridorPopulation(Scenario sc, int populationSize){
 		Population population = sc.getPopulation();

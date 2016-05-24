@@ -21,7 +21,7 @@ public class Constants {
 	public static Double CA_TEST_END_TIME = 0.; //1200.;
 	
 	public static double SIMULATION_DURATION = 20000;
-	public static int SIMULATION_ITERATIONS = 1;
+	public static int SIMULATION_ITERATIONS = 10;
 
 	
 	/** name to use to add CAScenario to a matsim scenario as a scenario element **/ 
@@ -53,7 +53,7 @@ public class Constants {
 	public static String INPUT_PATH = DEBUG_TEST_PATH+"/input";
 	public static String OUTPUT_PATH = DEBUG_TEST_PATH+"/output";
 	public static final String COORDINATE_SYSTEM = "EPSG:3395";
-	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
+	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated_b04.csv";
 	public static boolean BRAESS_WL = false;
 	public final static boolean VIS = true;
 	public static boolean SAVE_FRAMES = false;

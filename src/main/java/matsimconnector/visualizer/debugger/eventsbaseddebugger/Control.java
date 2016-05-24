@@ -203,7 +203,7 @@ public class Control implements KeyListener, MouseWheelListener {
 		}
 
 		//this works with ALT+ò
-		if (e.getModifiers() == 8 &&  e.getKeyChar()=='ò') {
+		if (e.getModifiers() == 8 &&  e.getKeyChar()=='A') {
 			Zoom z = new Zoom();
 			z.z = this.zoomer.getZoomScale();
 			z.o = this.zoomer.getPanOffset();
@@ -220,7 +220,7 @@ public class Control implements KeyListener, MouseWheelListener {
 				this.movements.put(e.getKeyCode()-48, this.current);
 			}
 
-		}else if (e.getKeyChar()=='ò'){
+		}else if (e.getKeyChar()=='A'){
 			Zoom z = this.zooms.get(e.getKeyCode());
 			if (z != null) {
 				log.info("loading zoom:" + z.o.x + ":" + z.o.y + "x" + z.z);
@@ -230,7 +230,7 @@ public class Control implements KeyListener, MouseWheelListener {
 				this.tileMap.panEnded();
 			}
 		}
-		if (e.getKeyChar()=='ù'){
+		if (e.getKeyChar()=='A'){//ù
 			log.info("loading static zoom:" + staticZoom.o.x + ":" + staticZoom.o.y + "x" + staticZoom.z);
 			this.zoomer.setZoomScale(staticZoom.z);
 			this.zoomer.setPanOffset(staticZoom.o.x, staticZoom.o.y);

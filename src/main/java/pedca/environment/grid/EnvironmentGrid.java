@@ -3,6 +3,7 @@ package pedca.environment.grid;
 import pedca.utility.Constants;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class EnvironmentGrid extends Grid<Integer> {
@@ -52,22 +53,29 @@ public class EnvironmentGrid extends Grid<Integer> {
 	
 	@Override
 	protected void loadFromCSV(File environmentFile) throws IOException{
+		ArrayList<String> fileLines = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new FileReader(environmentFile));
 		String line = br.readLine();
-		for (int row = 0;line!=null;row++){
+		while (line!=null){
+			fileLines.add(line);
+			line = br.readLine();
+		}
+		for (int row = fileLines.size()-1;row>=0;row--){
 			addRow();
+			line=fileLines.get(row);
 			StringTokenizer st = new StringTokenizer(line,",");
-			if (st.countTokens()==1)
+			if (st.countTokens()==1) {
 				st = new StringTokenizer(line, ";");
-			if (st.countTokens()==1)
+			}
+			if (st.countTokens()==1) {
 				st = new StringTokenizer(line, "\t");
+			}
 			String value_s;
 			do{
 				value_s = st.nextToken();
 				int field_value = Integer.parseInt(value_s);
-				addElementAt(row, field_value);
+				addElementAt(fileLines.size()-1-row, field_value);
 			}while(st.countTokens()>0);
-			line = br.readLine();
 		}
 		br.close();
 	}
@@ -84,7 +92,7 @@ public class EnvironmentGrid extends Grid<Integer> {
 		} 
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
-		for(int i=0;i<getRows();i++){
+		for(int i=getRows()-1;i>=0;i--){
 			String line="";
 			for(int j=0;j<getColumns();j++)
 				line+=getCellValue(i,j)+",";

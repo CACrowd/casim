@@ -1,6 +1,6 @@
 package matsimconnector.run;
 
-import matsimconnector.scenarioGenerator.ScenarioGenerator;
+import matsimconnector.scenariogenerator.ScenarioGenerator;
 import matsimconnector.utility.Constants;
 
 import java.io.*;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class LoadAndRunCASimulation {
 
 	public static void main(String[] args) {
-		reverseFile(new File(Constants.RESOURCE_PATH+"/"+Constants.ENVIRONMENT_FILE));
+		//reverseFile(new File(Constants.RESOURCE_PATH+"/"+Constants.ENVIRONMENT_FILE));
 		if(args.length != 0 && Boolean.parseBoolean(args[0])){
 			Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = Boolean.parseBoolean(args[0]);
 			Constants.OUTPUT_PATH = Constants.DEBUG_TEST_PATH+"/outputSO";
@@ -19,7 +19,7 @@ public class LoadAndRunCASimulation {
 			Constants.INPUT_PATH = Constants.DEBUG_TEST_PATH+"/inputNE";
 		}		
 		
-		Constants.ENVIRONMENT_FILE = "env_inverse.csv";
+		//Constants.ENVIRONMENT_FILE = "env_inverse.csv";
 		
 		ScenarioGenerator.main(new String[0]);
 		CASimulationRunner.main(new String[0]);

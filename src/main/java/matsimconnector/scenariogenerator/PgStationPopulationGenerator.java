@@ -1,4 +1,4 @@
-package matsimconnector.scenarioGenerator;
+package matsimconnector.scenariogenerator;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;

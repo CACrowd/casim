@@ -1,7 +1,7 @@
 package testfundiag;
 
 import matsimconnector.run.CASimulationRunner;
-import matsimconnector.scenarioGenerator.ScenarioGenerator;
+import matsimconnector.scenariogenerator.ScenarioGenerator;
 import matsimconnector.utility.Constants;
 
 import java.io.File;

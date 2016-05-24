@@ -1,4 +1,4 @@
-package matsimconnector.scenarioGenerator;
+package matsimconnector.scenariogenerator;
 
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.Distances;
