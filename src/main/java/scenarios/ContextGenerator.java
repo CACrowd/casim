@@ -34,8 +34,8 @@ public class ContextGenerator {
 		return context;
 	}
 	
-	public static Context createAndSaveBidCorridorContext(String path, int rows, int cols, int populationSize){
-		Context context = getBidCorridorContext(rows, cols, populationSize);
+	public static Context createAndSaveBidCorridorContext(String path, int rows, int cols){
+		Context context = getBidCorridorContext(rows, cols);
 		try {
 			context.saveConfiguration(path);
 		} catch (IOException e) {
@@ -44,27 +44,33 @@ public class ContextGenerator {
 		return context;
 	}
 	
-	private static Context getBidCorridorContext(int rows, int cols, int populationSize) {
-		EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
-		EnvironmentGenerator.initCorridorWithWalls(environmentGrid);
+	public static Context createAndSaveBottleneckContext(String path, double sizeX, double sizeY, double bottleneckWidth, double bottleneckHeight, double bottleneckPosY) {
+		Context context = getBottleneckContext(sizeX, sizeY, bottleneckWidth, bottleneckHeight, bottleneckPosY);
+		try {
+			context.saveConfiguration(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return context;
+	}
+	
+	private static Context getBottleneckContext(double sizeX, double sizeY, double bottleneckWidth, double bottleneckHeight, double bottleneckPosY) {
+		EnvironmentGrid environmentGrid = new EnvironmentGrid((int)(sizeY/Constants.CA_CELL_SIDE), (int)(sizeX/Constants.CA_CELL_SIDE));
+		EnvironmentGenerator.initBottleneckScenario(environmentGrid, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
-		/**
-		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
-		markerConfiguration.addDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
-		markerConfiguration.addDestination(EnvironmentGenerator.getCorridorWestDestination(environmentGrid));
-		Start startW = EnvironmentGenerator.getCorridorWestStart(environmentGrid);
-		startW.setTotalPedestrians(populationSize);
-		Start startE = EnvironmentGenerator.getCorridorEastStart(environmentGrid);
-		startE.setTotalPedestrians(populationSize);
-		markerConfiguration.addStart(startE);
-		markerConfiguration.addStart(startW);
-		**/
+		return new Context(environmentGrid, markerConfiguration);
+	}
+	
+	private static Context getBidCorridorContext(int rows, int cols) {
+		EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
+		EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
+		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
 		return new Context(environmentGrid, markerConfiguration);
 	}
 
 	public static Context getCorridorContext(int rows, int cols, int populationSize){
 		EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
-		EnvironmentGenerator.initCorridorWithWalls(environmentGrid);
+		EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
 		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
 		markerConfiguration.addDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
 		Start start = EnvironmentGenerator.getCorridorWestStart(environmentGrid);

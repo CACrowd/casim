@@ -1,17 +1,24 @@
 package matsimconnector.scenariogenerator;
 
+import java.util.ArrayList;
+
+import matsimconnector.utility.Constants;
+
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
-import org.matsim.api.core.v01.population.*;
-
-import java.util.ArrayList;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
+import org.matsim.api.core.v01.population.Population;
+import org.matsim.api.core.v01.population.PopulationFactory;
 
 public class PopulationGenerator {
 
-	protected static void createPopulation(Scenario sc, int populationSize) {
+	public static void createPopulation(Scenario sc, int populationSize) {
 		Network network = sc.getNetwork();
 		ArrayList <Link> initLinks = new ArrayList<Link>();
 		ArrayList <Link> destinationLinks = new ArrayList<Link>();
@@ -81,7 +88,11 @@ public class PopulationGenerator {
 	}
 
 	private static boolean isOriginNode(Node node) {
-		return node.getId().toString().endsWith("e")||node.getId().toString().endsWith("s");
+		boolean result = false;
+		for (int i=0;!result&&i<Constants.ORIGIN_FLOWS.length();i++){
+			result=node.getId().toString().endsWith(""+Constants.ORIGIN_FLOWS.charAt(i));
+		}				
+		return result;
 		//return node.getId().toString().endsWith("n")||node.getId().toString().endsWith("s")||node.getId().toString().endsWith("w")||node.getId().toString().endsWith("e");
 	}
 	

@@ -38,6 +38,11 @@ public class CAScenario {
 		loadConfiguration(path);
 	}
 	
+	public CAScenario(Context contextCA){
+		this();
+		addCAEnvironment(new CAEnvironment("0", contextCA));
+	}
+	
 	public void initNetworks(){
 		for (CAEnvironment environmentCA : environments.values())
 			HybridNetworkBuilder.buildNetwork(environmentCA,this);

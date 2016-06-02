@@ -3,7 +3,6 @@ package pedca.output;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import matsimconnector.events.CAAgentChangeLinkEvent;
 import matsimconnector.events.CAAgentConstructEvent;
@@ -15,26 +14,23 @@ import matsimconnector.events.CAAgentMoveToOrigin;
 import matsimconnector.events.CAEngineStepPerformedEvent;
 import matsimconnector.events.CAEventHandler;
 
-public class FundamentalDiagramWriter implements CAEventHandler{
+public class FlowAnalyzer implements CAEventHandler{
 	
-	private final double density;
 	private File csvFile;
-	private int pedestrianInside;
-	private final int populationSize;
-	private ArrayList<Double> travelTimes;
+	private int totalFlowPerStep;
+	private int lastSec;
 	
-	public FundamentalDiagramWriter(double density, int populationSize, String outputFileName){
-		this.density = density;
-		this.populationSize = populationSize;
-		this.pedestrianInside = 0;
-		this.travelTimes = null;
+	public FlowAnalyzer(String pathName){
+		this.totalFlowPerStep = 0;
+		this.lastSec = 0;
 		try {
-			 csvFile = new File(outputFileName);
+			 csvFile = new File(pathName+"/flow_data.csv");
 			 FileWriter csvWriter;
 			 if(!csvFile.exists()){
+				new File(pathName).mkdir();
 			    csvFile.createNewFile();
 			    csvWriter = new FileWriter(csvFile);
-			    csvWriter.write("#Density[m^-2],TravelTime[sec]\n");
+			    csvWriter.write("Time[s],Flow[1/s]\n");
 			    
 			}else
 				csvWriter = new FileWriter(csvFile,true);
@@ -42,12 +38,6 @@ public class FundamentalDiagramWriter implements CAEventHandler{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public FundamentalDiagramWriter(double density, int populationSize, ArrayList<Double> travelTimes){
-		this.density = density; 
-		this.populationSize = populationSize;
-		this.travelTimes = travelTimes; 
 	}
 	
 	@Override
@@ -70,33 +60,16 @@ public class FundamentalDiagramWriter implements CAEventHandler{
 
 	@Override
 	public void handleEvent(CAAgentMoveToOrigin event) {
-		if(pedestrianInside == populationSize)
-			if (csvFile != null){
-				try {
-					FileWriter csvWriter = new FileWriter(csvFile,true);
-					csvWriter.write(this.density+","+event.getTravelTime()+"\n");
-					csvWriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			else{
-				travelTimes.add(event.getTravelTime());
-			}
-		else{
-			event.getPedestrian().lastTimeCheckAtExit=null;
-		}
+		
 	}
 
 	@Override
 	public void handleEvent(CAAgentEnterEnvironmentEvent event) {
-		this.pedestrianInside+=1;
 	}	
 
 	@Override
 	public void handleEvent(CAAgentLeaveEnvironmentEvent event) {
-		this.pedestrianInside-=1;
-		
+		totalFlowPerStep+=1;
 	}
 
 
@@ -107,8 +80,18 @@ public class FundamentalDiagramWriter implements CAEventHandler{
 
 	@Override
 	public void handleEvent(CAEngineStepPerformedEvent event) {
-		// TODO Auto-generated method stub
-		
+		if ((int)event.getTime()>lastSec){
+			try {
+				FileWriter csvWriter = new FileWriter(csvFile,true);
+				csvWriter.write(event.getTime()+","+totalFlowPerStep+"\n");
+				csvWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally{
+				totalFlowPerStep = 0;
+				lastSec = (int)event.getTime();
+			}
+		}
 	}
 
 }
