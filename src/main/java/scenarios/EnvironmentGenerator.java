@@ -19,18 +19,18 @@ public class EnvironmentGenerator {
 				environment.setCellValue(row, col, Constants.ENV_WALKABLE_CELL);
 	}
 	
-	public static void initBottleneckScenario(EnvironmentGrid environment, double bottleneckWidth, double bottleneckHeight, double bottleneckPosY){
+	public static void initBottleneckScenario(EnvironmentGrid environment, float bottleneckWidth, float bottleneckHeight, float bottleneckPosY){
 		initCorridorWithWalls(environment, true);
-		int centerY = (int)(bottleneckPosY/Constants.CELL_SIZE);
-		int centerX = environment.getColumns()/2;
-		int discreteWidth = (int)Math.ceil(bottleneckWidth/Constants.CELL_SIZE);
-		int discreteHeigth = (int)Math.ceil(bottleneckHeight/Constants.CELL_SIZE);
+		int b_centerY = (int)(bottleneckPosY/Constants.CELL_SIZE);
+		int b_centerX = environment.getColumns()/2;
+		int discreteWidth = (int)Math.round(bottleneckWidth/Constants.CELL_SIZE);
+		int discreteHeigth = (int)Math.round(bottleneckHeight/Constants.CELL_SIZE);
 		
 		//borders of the two wall
-		int wallTop = (int) (centerY + Math.floor((discreteHeigth-1)/2));
+		int wallTop = (int) (b_centerY + Math.floor((discreteHeigth-1)/2));
 		int wallBottom = wallTop - discreteHeigth + 1;
 		
-		int wallEast = (int)(centerX + Math.floor((discreteWidth-1)/2)) + 1;
+		int wallEast = (int)(b_centerX + Math.floor((discreteWidth-1)/2)) + 1;
 		int wallWest = wallEast - discreteWidth - 1;
 		
 		for (int y = wallBottom; y<=wallTop;y++){

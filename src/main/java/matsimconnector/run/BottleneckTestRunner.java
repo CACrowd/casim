@@ -40,16 +40,16 @@ public class BottleneckTestRunner implements IterationStartsListener {
 	private String inputDir;
 	private String outputDir;
 	private int pedsNumber;	
-	private double scenarioWidth;
-	private double scenarioHeight;
-	private double bWidth;
-	private double bHeight;
-	double bPosY;
+	private float scenarioWidth;
+	private float scenarioHeight;
+	private float bWidth;
+	private float bHeight;
+	private float bPosY;
 	private EventBasedVisDebuggerEngine dbg;
 	
-	public BottleneckTestRunner(int pedsNumber, double scenarioWidth, double scenarioHeight, double bWidth, double bHeight, double bPosY){
-		this.inputDir = Constants.FD_TEST_PATH+"bottleneck/"+(double)(Math.round(bWidth * 10) / 10d)+"/input";
-		this.outputDir = Constants.FD_TEST_PATH+"bottleneck/"+(double)(Math.round(bWidth * 10) / 10d)+"/output";
+	public BottleneckTestRunner(int pedsNumber, float scenarioWidth, float scenarioHeight, float bWidth, float bHeight, float bPosY){
+		this.inputDir = Constants.FD_TEST_PATH+"bottleneck/"+(Math.round(bWidth * 10) / 10f)+"/input";
+		this.outputDir = Constants.FD_TEST_PATH+"bottleneck/"+(Math.round(bWidth * 10) / 10f)+"/output";
 		this.scenarioWidth = scenarioWidth;
 		this.scenarioHeight = scenarioHeight;
 		this.bWidth = bWidth;

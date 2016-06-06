@@ -17,23 +17,38 @@ import matsimconnector.events.CAEventHandler;
 public class FlowAnalyzer implements CAEventHandler{
 	
 	private File csvFile;
-	private int totalFlowPerStep;
+	private File csvFileGlbAvg;
+	private int totalFlowPerSec;
 	private int lastSec;
+	private float avgFlowForSteadyState;
+	private int steadyStateBegin;
+	private int steadyStateEnd;
+	//private int timeWindowSize;
+	//private float totalFlowPerTimeWindow;
 	
 	public FlowAnalyzer(String pathName){
-		this.totalFlowPerStep = 0;
-		this.lastSec = 0;
+		steadyStateBegin = 35;
+		steadyStateEnd = 45;
 		try {
-			 csvFile = new File(pathName+"/flow_data.csv");
-			 FileWriter csvWriter;
-			 if(!csvFile.exists()){
-				new File(pathName).mkdir();
-			    csvFile.createNewFile();
-			    csvWriter = new FileWriter(csvFile);
-			    csvWriter.write("Time[s],Flow[1/s]\n");
-			    
-			}else
-				csvWriter = new FileWriter(csvFile,true);
+			File path = new File(pathName);
+			if(!path.exists())
+				new File(pathName).mkdir();			
+			
+			csvFile = new File(pathName+"/flowData.csv");
+			if(csvFile.exists())
+				csvFile.delete();			
+			csvFile.createNewFile();
+			FileWriter csvWriter;
+			csvWriter = new FileWriter(csvFile);
+			csvWriter.write("#Time[s],Flow[1/s]\n");
+			csvWriter.close();
+			
+			csvFileGlbAvg = new File(pathName+"/flowData_glbAvg.csv");
+			if(csvFileGlbAvg.exists())
+				csvFileGlbAvg.delete();			
+			csvFileGlbAvg.createNewFile();
+			csvWriter = new FileWriter(csvFileGlbAvg);
+			csvWriter.write("#Time[s],Flow[1/s]\n");
 			csvWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -69,7 +84,11 @@ public class FlowAnalyzer implements CAEventHandler{
 
 	@Override
 	public void handleEvent(CAAgentLeaveEnvironmentEvent event) {
-		totalFlowPerStep+=1;
+		totalFlowPerSec+=1;
+		int eventTime = (int)event.getTime();
+		if (eventTime>steadyStateBegin && eventTime<steadyStateEnd)
+			avgFlowForSteadyState+=1;
+		//totalFlowPerTimeWindow+=1;
 	}
 
 
@@ -80,18 +99,40 @@ public class FlowAnalyzer implements CAEventHandler{
 
 	@Override
 	public void handleEvent(CAEngineStepPerformedEvent event) {
-		if ((int)event.getTime()>lastSec){
+		int eventSec = (int)event.getTime();
+		if (eventSec>lastSec){
 			try {
 				FileWriter csvWriter = new FileWriter(csvFile,true);
-				csvWriter.write(event.getTime()+","+totalFlowPerStep+"\n");
+				csvWriter.write(eventSec+","+totalFlowPerSec+"\n");
 				csvWriter.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}finally{
-				totalFlowPerStep = 0;
-				lastSec = (int)event.getTime();
+			} finally{
+				totalFlowPerSec = 0;
+				lastSec = eventSec;
 			}
+			if (eventSec == steadyStateEnd){
+				try {
+					FileWriter csvWriter = new FileWriter(csvFileGlbAvg,true);
+					avgFlowForSteadyState/=(steadyStateEnd-steadyStateBegin);
+					csvWriter.write(eventSec+","+avgFlowForSteadyState+"\n");
+					csvWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+//			//flow averaged over the time window
+//			if (eventSec%timeWindowSize == 0){
+//				try {
+//					FileWriter csvWriter = new FileWriter(csvFileMobAvg,true);
+//					csvWriter.write(eventSec+","+(totalFlowPerTimeWindow/timeWindowSize)+"\n");
+//					csvWriter.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				} finally{
+//					totalFlowPerTimeWindow = 0;
+//				}
+//			}
 		}
 	}
-
 }

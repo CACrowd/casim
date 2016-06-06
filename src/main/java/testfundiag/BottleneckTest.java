@@ -10,11 +10,11 @@ public class BottleneckTest {
 	
 	public static void main (String [] args){
 		setupCommonConstants();
-		double tic = 0.4;
-		double maxWidth = 5.2;
-		for (double w = tic; w<=maxWidth; w+=tic){
+		float tic = 0.4f;
+		float maxWidth = 5.2f;
+		for (float w = tic; Math.round(w*10)/10f<=maxWidth; w+=tic){
 			//configuration of the bottleneck scenario from W. Liao et Al. (PED 2014) [height of the bottleneck is approximated to 1.2] LC
-			BottleneckTestRunner runner = new BottleneckTestRunner(350, 20.0, 26.0, w, 1.2, 11.8);
+			BottleneckTestRunner runner = new BottleneckTestRunner(350, 20.0f, 16.0f, w, 1.2f, 11.8f);
 			runner.generateScenario();
 			runner.runSimulation();
 		}

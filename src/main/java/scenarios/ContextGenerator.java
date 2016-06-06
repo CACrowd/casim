@@ -44,7 +44,7 @@ public class ContextGenerator {
 		return context;
 	}
 	
-	public static Context createAndSaveBottleneckContext(String path, double sizeX, double sizeY, double bottleneckWidth, double bottleneckHeight, double bottleneckPosY) {
+	public static Context createAndSaveBottleneckContext(String path, float sizeX, float sizeY, float bottleneckWidth, float bottleneckHeight, float bottleneckPosY) {
 		Context context = getBottleneckContext(sizeX, sizeY, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		try {
 			context.saveConfiguration(path);
@@ -54,7 +54,7 @@ public class ContextGenerator {
 		return context;
 	}
 	
-	private static Context getBottleneckContext(double sizeX, double sizeY, double bottleneckWidth, double bottleneckHeight, double bottleneckPosY) {
+	private static Context getBottleneckContext(float sizeX, float sizeY, float bottleneckWidth, float bottleneckHeight, float bottleneckPosY) {
 		EnvironmentGrid environmentGrid = new EnvironmentGrid((int)(sizeY/Constants.CA_CELL_SIDE), (int)(sizeX/Constants.CA_CELL_SIDE));
 		EnvironmentGenerator.initBottleneckScenario(environmentGrid, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
