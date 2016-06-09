@@ -1,15 +1,16 @@
 package pedca.context;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import matsimconnector.environment.TransitionArea;
 import pedca.agents.Population;
+import pedca.environment.grid.DensityGrid;
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.FloorFieldsGrid;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.markers.MarkerConfiguration;
 import pedca.environment.network.CANetwork;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class Context {
 	private ArrayList<PedestrianGrid> pedestrianGrids;
@@ -57,6 +58,10 @@ public class Context {
 
 	public PedestrianGrid getPedestrianGrid(){
 		return pedestrianGrids.get(0);
+	}
+	
+	public DensityGrid getDensityGrid(){
+		return pedestrianGrids.get(0).getDensityGrid();
 	}
 	
 	//FOR MATSIM CONNECTOR

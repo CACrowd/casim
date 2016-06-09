@@ -16,12 +16,13 @@ public class Constants {
 	public static final double CA_CELL_SIDE = 0.4;
 	public static final double CA_STEP_DURATION = .3;
 	public static final Double PEDESTRIAN_SPEED = CA_CELL_SIDE/CA_STEP_DURATION;
+	public static boolean stopOnStairs;	
 	
 	/** this is for the generation of the fundamental diagram of the CA: pedestrian will be kept inside the
 	 * CAEnvironment until this time (in seconds). Keep to 0 if you want to run normal simulation.**/
 	public static int CA_TEST_END_TIME = 0; //1200;
 	
-	public static double SIMULATION_DURATION = 2200;
+	public static double SIMULATION_DURATION = 22000;
 	public static int SIMULATION_ITERATIONS = 10;
 
 	
@@ -53,7 +54,7 @@ public class Constants {
 	public static String INPUT_PATH = DEBUG_TEST_PATH+"/input";
 	public static String OUTPUT_PATH = DEBUG_TEST_PATH+"/output";
 	public static final String COORDINATE_SYSTEM = "EPSG:3395";
-	public static String ENVIRONMENT_FILE = "environmentGrid_Dag04.csv";
+	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
 	public static boolean BRAESS_WL = false;
 	public static boolean VIS = true;
 	public static boolean SAVE_FRAMES = false;

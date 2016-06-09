@@ -51,7 +51,11 @@ public class DensityGrid extends Grid<Double> {
 				deltaArea+=cellArea;
 			} 
 		}
-		double densityValue = get(position).get(0);
+		double densityValue;
+		if (get(position).get(0)!=null)
+			densityValue = get(position).get(0);
+		else
+			densityValue = 0;
 		double footprintArea = pedestrianFootprint.getArea();
 		densityValue = densityValue*footprintArea/(footprintArea-deltaArea);
 		return densityValue;

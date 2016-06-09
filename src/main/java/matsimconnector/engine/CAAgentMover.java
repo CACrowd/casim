@@ -17,16 +17,18 @@ public class CAAgentMover extends AgentMover {
 
 	private CAEngine engineCA;
 	private EventsManager eventManager;
-	private boolean stairs = true;
+//	private boolean stairs = true;
 
 	public CAAgentMover(CAEngine engineCA, Context context, EventsManager eventManager) {
 		super(context);
 		this.eventManager = eventManager;
 		this.engineCA = engineCA;
+		Constants.stopOnStairs = false;
 	}
 
 	public void step(double now){
-		stairs = !stairs;
+		Constants.stopOnStairs = !Constants.stopOnStairs;
+//		stairs = !stairs;
 		for(int index=0; index<getPopulation().size(); index++){
 			Pedestrian pedestrian = (Pedestrian)getPopulation().getPedestrian(index);
 			if (pedestrian.isArrived()){
@@ -36,10 +38,10 @@ public class CAAgentMover extends AgentMover {
 			} 
 			else{
 				GridPoint oldPosition = pedestrian.getRealPosition();
-				if (stairs && isOnStairs(pedestrian)){
-					eventManager.processEvent(new CAAgentMoveEvent(now, pedestrian, oldPosition, oldPosition));
-					continue;
-				}				
+//				if (stairs && isOnStairs(pedestrian)){
+//					eventManager.processEvent(new CAAgentMoveEvent(now, pedestrian, oldPosition, oldPosition));
+//					continue;
+//				}				
 				GridPoint newPosition = pedestrian.getRealNewPosition();
 				moveAgent(pedestrian, now);
 				if (Constants.VIS)
@@ -117,20 +119,19 @@ public class CAAgentMover extends AgentMover {
 		pedestrian.refreshDestination();
 	}	
 	
-	private boolean isOnStairs(Pedestrian pedestrian){
-		try{
-			Id<Link> currentLinkId = pedestrian.getVehicle().getDriver().getCurrentLinkId();
-			if (currentLinkId != null){
-				String linkId = currentLinkId.toString();
-				for (String stairId : Constants.stairsLinks){
-					if (stairId.equals(linkId))
-						return true;
-				}
-			}
-			return false;
-		}catch(NullPointerException e){
-			return false;
-		}
-		
-	}
+//	private boolean isOnStairs(Pedestrian pedestrian){
+//		try{
+//			Id<Link> currentLinkId = pedestrian.getVehicle().getDriver().getCurrentLinkId();
+//			if (currentLinkId != null){
+//				String linkId = currentLinkId.toString();
+//				for (String stairId : Constants.stairsLinks){
+//					if (stairId.equals(linkId))
+//						return true;
+//				}
+//			}
+//			return false;
+//		}catch(NullPointerException e){
+//			return false;
+//		}		
+//	}
 }

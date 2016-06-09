@@ -3,9 +3,11 @@ package matsimconnector.agents;
 import matsimconnector.environment.TransitionArea;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
+
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
+
 import pedca.agents.Agent;
 import pedca.context.Context;
 import pedca.environment.grid.GridPoint;
@@ -180,6 +182,11 @@ public class Pedestrian extends Agent {
 	
 	@Override
 	public Neighbourhood getNeighbourhood(){
+		if(stopOnStairs()){
+			Neighbourhood result = new Neighbourhood();
+			result.add(new GridPoint(position.getX(), position.getY()));
+			return result;
+		}
 		if (nextStepNeighbourhood != null && transitionArea == null){
 			Neighbourhood result = nextStepNeighbourhood;
 			nextStepNeighbourhood = null;
@@ -190,6 +197,27 @@ public class Pedestrian extends Agent {
 			return transitionArea.getNeighbourhood(getPosition());
 		}else
 			return super.getNeighbourhood();
+	}
+	
+	
+	private boolean stopOnStairs(){
+		return !Constants.stopOnStairs && isOnStairs();
+	}
+	
+	private boolean isOnStairs(){
+		try{
+			Id<Link> currentLinkId = this.getVehicle().getDriver().getCurrentLinkId();
+			if (currentLinkId != null){
+				String linkId = currentLinkId.toString();
+				for (String stairId : Constants.stairsLinks){
+					if (stairId.equals(linkId))
+						return true;
+				}
+			}
+			return false;
+		}catch(NullPointerException e){
+			return false;
+		}		
 	}
 	
 	protected boolean canSwap(GridPoint neighbour, PedestrianGrid pedestrianGrid) {

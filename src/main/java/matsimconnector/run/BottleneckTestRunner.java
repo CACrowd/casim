@@ -30,6 +30,7 @@ import org.matsim.core.network.NetworkWriter;
 import org.matsim.core.scenario.ScenarioUtils;
 
 import pedca.context.Context;
+import pedca.output.DensityAnalyzer;
 import pedca.output.FlowAnalyzer;
 import scenarios.ContextGenerator;
 
@@ -161,6 +162,7 @@ public class BottleneckTestRunner implements IterationStartsListener {
 //			}});
 		
 		controller.getEvents().addHandler(new FlowAnalyzer(outputDir));
+		controller.getEvents().addHandler(new DensityAnalyzer(outputDir, scenarioCA.getCAEnvironment(Id.create("0",CAEnvironment.class)).getContext()));
 		
 		if (Constants.VIS) {
 			dbg = new EventBasedVisDebuggerEngine(scenario);

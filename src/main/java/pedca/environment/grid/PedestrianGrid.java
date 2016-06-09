@@ -99,4 +99,8 @@ public class PedestrianGrid extends ActiveGrid<PhysicalObject>{
 	public boolean isWalkable(GridPoint shiftedPosition) {
 		return densityGrid.neighbourCondition(shiftedPosition.getY(),shiftedPosition.getX());
 	}
+	
+	public DensityGrid getDensityGrid(){
+		return this.densityGrid;
+	}
 }

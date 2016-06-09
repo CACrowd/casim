@@ -61,7 +61,6 @@ public class PgStationNetworkGenerator extends NetworkGenerator {
 		net.addNode(n14);
 		
 		generateLinksBetweenNodes(n10,n1,net,fac);
-		
 		generateLinksBetweenNodes(n11,n4,net,fac);
 		generateLinksBetweenNodes(n12,n2,net,fac);
 		generateLinksBetweenNodes(n2,n3,net,fac);
@@ -73,7 +72,7 @@ public class PgStationNetworkGenerator extends NetworkGenerator {
 		generateLinksBetweenNodes(n7,n8,net,fac);
 		generateLinksBetweenNodes(n13,n8,net,fac);
 		generateLinksBetweenNodes(n14,n9,net,fac);
-		
+				
 		connect(n1, net, fac, 's');
 		connect(n9,net,fac,'w');
 	}

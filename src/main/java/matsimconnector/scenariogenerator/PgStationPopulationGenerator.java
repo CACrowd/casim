@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class PgStationPopulationGenerator {
 	
-	protected static void createPopulation(Scenario sc, int populationSize) {
+	public static void createPopulation(Scenario sc, int populationSize) {
 		Network network = sc.getNetwork();
 		ArrayList <Link> initLinks = new ArrayList<Link>();
 		ArrayList <Link> destinationLinks = new ArrayList<Link>();

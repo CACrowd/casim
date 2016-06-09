@@ -1,8 +1,5 @@
 package pedca.environment.network;
 
-import matsimconnector.utility.Constants;
-import pedca.environment.grid.GridPoint;
-
 import java.io.Serializable;
 
 public class Coordinate implements Serializable {

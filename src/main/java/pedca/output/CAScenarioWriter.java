@@ -13,19 +13,19 @@ package pedca.output;
 //
 /****************************************************************************/
 
-import matsimconnector.scenario.CAEnvironment;
-import matsimconnector.scenario.CAScenario;
-import matsimconnector.utility.Constants;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import pedca.environment.grid.EnvironmentGrid;
-import pedca.environment.grid.GridPoint;
-import pedca.environment.network.Coordinate;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import matsimconnector.utility.Constants;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import pedca.environment.grid.EnvironmentGrid;
+import pedca.environment.grid.GridPoint;
+import pedca.environment.network.Coordinate;
 
 /**
  * Created by laemmel on 18/05/16.

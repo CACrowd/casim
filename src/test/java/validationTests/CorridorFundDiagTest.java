@@ -33,6 +33,22 @@ public class CorridorFundDiagTest {
 	    file.delete();
 	}
 	
+	public static void main(String [] args){
+		Constants.stairsLinks.add("HybridNode_0-->HybridNode_1");
+		Constants.stairsLinks.add("HybridNode_1-->HybridNode_0");
+		
+		String FD_PATH = ""+Constants.FD_TEST_PATH;
+		setupCommonConstants();
+		Constants.FD_TEST_PATH += "1Dir/";
+		Constants.ORIGIN_FLOWS = "w";
+		generateFD();
+		
+		Constants.FD_TEST_PATH = FD_PATH;
+		setupCommonConstants();
+		Constants.FD_TEST_PATH += "2Dir/";
+		Constants.ORIGIN_FLOWS = "we";
+		generateFD();
+	}
 	
 	private static void generateFD() {
 		for (double density = tic; density<=maxDensity;density+=tic){
@@ -43,8 +59,8 @@ public class CorridorFundDiagTest {
 	}
 	
 	private static void setupCommonConstants() {
-		Constants.CA_TEST_END_TIME = 2000;
-		Constants.SIMULATION_DURATION = 2200;
+		Constants.CA_TEST_END_TIME = 3600;
+		Constants.SIMULATION_DURATION = 3800;
 		Constants.FAKE_LINK_WIDTH = 3.2;   //width of the scenario. The final width of the corridor is 0.8m lower since border rows are filled with obstacles 
 		Constants.CA_LINK_LENGTH = scenarioLength;
 		pedca.utility.Constants.DENSITY_GRID_RADIUS = 10.;
@@ -52,7 +68,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	@Test
-	public void checkFD_1Dir() {		
+	public static void checkFD_1Dir() {		
 		try{
 			String FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
@@ -71,7 +87,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	@Test
-	public void checkFD_2Dir() {		
+	public static void checkFD_2Dir() {		
 		try{
 			String FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
@@ -94,7 +110,7 @@ public class CorridorFundDiagTest {
 		deleteDirectory(new File(Constants.FD_TEST_PATH));
 	}
 
-	private void compareValues(double[] avgValuesTest, File resTarget)
+	private static void compareValues(double[] avgValuesTest, File resTarget)
 			throws FileNotFoundException, IOException {
 		int[] countValues;
 		BufferedReader br;
@@ -132,7 +148,7 @@ public class CorridorFundDiagTest {
 		}
 	}
 
-	private void loadData(File res, double[] avgValuesTest) throws FileNotFoundException, IOException {
+	private static void loadData(File res, double[] avgValuesTest) throws FileNotFoundException, IOException {
 		BufferedReader br = new BufferedReader(new FileReader(res));
 		br.readLine();		//first line describes the labels
 		String line = br.readLine();
