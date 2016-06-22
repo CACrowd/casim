@@ -14,8 +14,10 @@ import matsimconnector.run.FunDiagSimRunner;
 import matsimconnector.utility.Constants;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class CorridorFundDiagTest {
 	
 	private static final double scenarioLength = 10.;
