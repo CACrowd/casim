@@ -14,18 +14,16 @@ import matsimconnector.run.FunDiagSimRunner;
 import matsimconnector.utility.Constants;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class CorridorFundDiagTest {
 	
 	private static final double scenarioLength = 10.;
 	private static double tic = 0.25;
 	private static double maxDensity = 1./Math.pow(Constants.CA_CELL_SIDE,2);
-	private static final double acceptedError = 0.01;
+	private static final double acceptedError = 0.05;
 	
-	public static void deleteDirectory(File file) {
+	public void deleteDirectory(File file) {
 	    File[] contents = file.listFiles();
 	    if (contents != null) {
 	        for (File f : contents) {
@@ -43,16 +41,16 @@ public class CorridorFundDiagTest {
 		setupCommonConstants();
 		Constants.FD_TEST_PATH += "1Dir/";
 		Constants.ORIGIN_FLOWS = "w";
-		generateFD();
+		new CorridorFundDiagTest().generateFD();
 		
 		Constants.FD_TEST_PATH = FD_PATH;
 		setupCommonConstants();
 		Constants.FD_TEST_PATH += "2Dir/";
 		Constants.ORIGIN_FLOWS = "we";
-		generateFD();
+		new CorridorFundDiagTest().generateFD();
 	}
 	
-	private static void generateFD() {
+	private void generateFD() {
 		for (double density = tic; density<=maxDensity;density+=tic){
 			FunDiagSimRunner runner = new FunDiagSimRunner(density, null);
 			runner.generateScenario();
@@ -70,7 +68,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	@Test
-	public static void checkFD_1Dir() {		
+	public void checkFD_1Dir() {		
 		try{
 			String FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
@@ -89,7 +87,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	@Test
-	public static void checkFD_2Dir() {		
+	public void checkFD_2Dir() {		
 		try{
 			String FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
