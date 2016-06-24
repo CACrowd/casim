@@ -22,6 +22,7 @@ public class CorridorFundDiagTest {
 	private static double tic = 0.25;
 	private static double maxDensity = 1./Math.pow(Constants.CA_CELL_SIDE,2);
 	private static final double acceptedError = 0.05;
+	private static String ORIGINAL_FD_PATH;
 	
 	public void deleteDirectory(File file) {
 	    File[] contents = file.listFiles();
@@ -52,6 +53,7 @@ public class CorridorFundDiagTest {
 	
 	private void generateFD() {
 		for (double density = tic; density<=maxDensity;density+=tic){
+			Constants.GLOBAL_DENSITY = density;
 			FunDiagSimRunner runner = new FunDiagSimRunner(density, null);
 			runner.generateScenario();
 			runner.runSimulation();
@@ -59,24 +61,23 @@ public class CorridorFundDiagTest {
 	}
 	
 	private static void setupCommonConstants() {
-		Constants.CA_TEST_END_TIME = 3600;
-		Constants.SIMULATION_DURATION = 3800;
+		Constants.CA_TEST_END_TIME = 2000;
+		Constants.SIMULATION_DURATION = 2300;
 		Constants.FAKE_LINK_WIDTH = 3.2;   //width of the scenario. The final width of the corridor is 0.8m lower since border rows are filled with obstacles 
 		Constants.CA_LINK_LENGTH = scenarioLength;
-		pedca.utility.Constants.DENSITY_GRID_RADIUS = 10.;
+		pedca.utility.Constants.DENSITY_GRID_RADIUS = 0;  //to consider only global density during the simulation
 		Constants.VIS = false;
 	}
 	
 	@Test
 	public void checkFD_1Dir() {		
 		try{
-			String FD_PATH = ""+Constants.FD_TEST_PATH;
+			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
 			Constants.FD_TEST_PATH += "1Dir/";
 			Constants.ORIGIN_FLOWS = "w";
 			generateFD();
 			File res = new File(Constants.FD_TEST_PATH+"fd_data.csv");
-			Constants.FD_TEST_PATH = FD_PATH;
 			double [] avgValuesTest = new double[(int)(maxDensity/tic)];
 			loadData(res, avgValuesTest);			
 			File resTarget = new File(Constants.RESOURCE_PATH+"/funDiag_1dir.csv");
@@ -89,13 +90,12 @@ public class CorridorFundDiagTest {
 	@Test
 	public void checkFD_2Dir() {		
 		try{
-			String FD_PATH = ""+Constants.FD_TEST_PATH;
+			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
 			Constants.FD_TEST_PATH += "2Dir/";
 			Constants.ORIGIN_FLOWS = "we";
 			generateFD();
 			File res = new File(Constants.FD_TEST_PATH+"fd_data.csv");
-			Constants.FD_TEST_PATH = FD_PATH;
 			double [] avgValuesTest = new double[(int)(maxDensity/tic)];
 			loadData(res, avgValuesTest);			
 			File resTarget = new File(Constants.RESOURCE_PATH+"/funDiag_2dir.csv");
@@ -106,8 +106,9 @@ public class CorridorFundDiagTest {
 	}
 	
 	@After
-	public void deleteFolder(){
+	public void clean(){
 		deleteDirectory(new File(Constants.FD_TEST_PATH));
+		Constants.FD_TEST_PATH = ""+ORIGINAL_FD_PATH;
 	}
 
 	private static void compareValues(double[] avgValuesTest, File resTarget)

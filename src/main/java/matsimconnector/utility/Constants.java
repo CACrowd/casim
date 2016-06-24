@@ -26,6 +26,12 @@ public class Constants {
 	public static int SIMULATION_ITERATIONS = 10;
 
 	
+	/**
+	 * global density value used to efficiently compute the test of the fundamental diagram. 
+	 * Used by pedca.environment.grid.DensityGrid only if pedca.utility.Constants.DENSITY_GRID_RADIUS==0
+	 * **/
+	public static double GLOBAL_DENSITY;
+	
 	/** name to use to add CAScenario to a matsim scenario as a scenario element **/ 
 	public static final String CASCENARIO_NAME = "CAScenario";
 	
