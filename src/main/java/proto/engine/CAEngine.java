@@ -20,6 +20,7 @@ import com.vividsolutions.jts.index.quadtree.Quadtree;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
 import matsimconnector.utility.Constants;
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import pedca.context.Context;
 import pedca.engine.SimulationEngine;
@@ -38,6 +39,8 @@ import java.util.*;
  * Created by laemmel on 05/05/16.
  */
 public class CAEngine {
+
+    private static final Logger log = Logger.getLogger(CAEngine.class);
 
 
     @Inject
@@ -71,9 +74,14 @@ public class CAEngine {
                 }
             }
         }
-        System.out.println(envelope);
-        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE) + 1;
-        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE) + 1;
+
+        log.debug(envelope);
+        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE) + 4;
+        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE) + 4;
+
+        double offsetX = -Constants.CA_CELL_SIDE;
+        double offsetY = -Constants.CA_CELL_SIDE;
+
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, envelope.getMinX(), envelope.getMinY());
         Quadtree quadtree = new Quadtree();
         for (int i = 0; i < rows; i++) {
@@ -81,7 +89,9 @@ public class CAEngine {
                 grid.setCellValue(i, j, -1);
                 GridPoint gp = new GridPoint(i, j);
                 Coordinate c = grid.gridPoint2Coordinate(gp);
-                Envelope e = new Envelope(c.getX(), c.getX() + Constants.CA_CELL_SIDE, c.getY(), c.getY() + Constants.CA_CELL_SIDE);
+                double x = c.getX();//-offsetX;
+                double y = c.getY();//-offsetY;
+                Envelope e = new Envelope(x, x + Constants.CA_CELL_SIDE, y, y + Constants.CA_CELL_SIDE);
                 quadtree.insert(e, gp);
             }
         }
@@ -92,7 +102,7 @@ public class CAEngine {
 
                 for (HybridSimProto.Polygon p : sub.getPolygonList()) {
                     for (HybridSimProto.Coordinate c : p.getCoordinateList()) {
-                        coords.add(new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()));
+                        coords.add(new com.vividsolutions.jts.geom.Coordinate(c.getX() - offsetX, c.getY() - offsetY));
 
                     }
 
@@ -106,6 +116,7 @@ public class CAEngine {
                 List<GridPoint> gps = quadtree.query(e);
                 for (GridPoint p : gps) {
                     Coordinate c = grid.gridPoint2Coordinate(p);
+
                     com.vividsolutions.jts.geom.Coordinate[] cc = {new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()),
                             new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY() + Constants.CA_CELL_SIDE),
                             new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY() + Constants.CA_CELL_SIDE),
@@ -114,6 +125,8 @@ public class CAEngine {
                     Polygon cPoly = gF.createPolygon(cc);
                     if (poly.contains(cPoly)) { //walkable
                         grid.setCellValue(p.getY(), p.getX(), 0);
+                    } else if (cPoly.intersects(poly)) { //semi walkable
+                        grid.setCellValue(p.getY(), p.getX(), 1);
                     }
 
                 }
@@ -122,9 +135,9 @@ public class CAEngine {
 
         for (HybridSimProto.Transition transition : request.getEnvironment().getTransitionList()) {
             LineString ls = gF.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{new com.vividsolutions.jts.geom.Coordinate(
-                    transition.getVert1().getX(), transition.getVert1().getY()), new com.vividsolutions.jts.geom.Coordinate(
-                    transition.getVert2().getX(), transition.getVert2().getY())});
-            Envelope te = ls.getEnvelopeInternal();
+                    transition.getVert1().getX() - offsetX, transition.getVert1().getY() - offsetY), new com.vividsolutions.jts.geom.Coordinate(
+                    transition.getVert2().getX() - offsetX, transition.getVert2().getY() - offsetY)});
+            Envelope te = ls.buffer(0.2).getEnvelopeInternal();
             List<GridPoint> gps = quadtree.query(te);
             for (GridPoint p : gps) {
                 Coordinate c = grid.gridPoint2Coordinate(p);

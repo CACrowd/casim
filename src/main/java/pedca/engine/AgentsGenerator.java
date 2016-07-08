@@ -1,7 +1,7 @@
 package pedca.engine;
 
 import matsimconnector.agents.Pedestrian;
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import org.apache.log4j.Logger;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 import pedca.agents.Agent;

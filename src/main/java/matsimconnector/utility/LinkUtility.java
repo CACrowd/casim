@@ -1,6 +1,6 @@
 package matsimconnector.utility;
 
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import matsimconnector.scenario.CAEnvironment;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;

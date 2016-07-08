@@ -3,7 +3,7 @@ package pedca.context;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import pedca.agents.Population;
 import pedca.environment.grid.DensityGrid;
 import pedca.environment.grid.EnvironmentGrid;

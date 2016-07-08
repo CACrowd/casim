@@ -1,6 +1,6 @@
 package pedca.environment.markers;
 
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.network.Coordinate;
 

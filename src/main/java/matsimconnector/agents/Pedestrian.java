@@ -1,6 +1,6 @@
 package matsimconnector.agents;
 
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
 

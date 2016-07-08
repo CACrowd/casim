@@ -85,13 +85,15 @@ public class CAServer {
 
 		@Override
 		public void simulatedTimeInerval(HybridSimProto.LeftClosedRightOpenTimeInterval request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-			for (double time = request.getFromTimeIncluding(); time < request.getToTimeExcluding(); time++) {
+            log.debug("simulateTimeInterval called");
+            for (double time = request.getFromTimeIncluding(); time < request.getToTimeExcluding(); time++) {
 				engine.doSimStep(time);
 			}
 		}
 
 		@Override
 		public void transferAgent(HybridSimProto.Agent request, StreamObserver<HybridSimProto.Boolean> responseObserver) {
+            log.debug("transferAgent called");
 
 		}
 
@@ -115,7 +117,11 @@ public class CAServer {
 			//TODO generate CA scenario; solve the upside-down issue
 
             engine.prepareSim(request);
-            System.out.println("");
+
+
+            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
             //onPrepareSim in (Proto)CAEngine
 		}
 	}

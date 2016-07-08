@@ -1,7 +1,7 @@
 package matsimconnector.engine;
 
 import matsimconnector.agents.Pedestrian;
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.utility.IdUtility;
 import org.matsim.api.core.v01.Id;

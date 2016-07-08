@@ -1,4 +1,4 @@
-package matsimconnector.environment;
+package connector.environment;
 
 import matsimconnector.agents.Pedestrian;
 import matsimconnector.utility.Constants;

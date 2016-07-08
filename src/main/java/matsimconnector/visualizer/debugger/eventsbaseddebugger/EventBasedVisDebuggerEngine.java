@@ -21,7 +21,7 @@
 package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
 import matsimconnector.agents.Pedestrian;
-import matsimconnector.environment.TransitionArea;
+import connector.environment.TransitionArea;
 import matsimconnector.events.*;
 import matsimconnector.events.debug.*;
 import matsimconnector.scenario.CAEnvironment;
