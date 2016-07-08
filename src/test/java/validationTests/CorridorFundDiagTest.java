@@ -90,11 +90,6 @@ public class CorridorFundDiagTest {
 
     @Test
     public void checkFD_1Dir() {
-
-
-
-
-
 		try{
 			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
@@ -109,8 +104,6 @@ public class CorridorFundDiagTest {
      	}catch(Exception e){
      		e.printStackTrace();
      	}
-
-
     }
 	
 	@Test
@@ -138,8 +131,8 @@ public class CorridorFundDiagTest {
 	}
 
 	private static void compareValues(double[] avgValuesTest, File resTarget)
-			throws FileNotFoundException, IOException {
-		int[] countValues;
+            throws IOException {
+        int[] countValues;
 		BufferedReader br;
 		String line;
 		br = new BufferedReader(new FileReader(resTarget));
@@ -175,8 +168,8 @@ public class CorridorFundDiagTest {
 		}
 	}
 
-	private static void loadData(File res, double[] avgValuesTest) throws FileNotFoundException, IOException {
-		BufferedReader br = new BufferedReader(new FileReader(res));
+    private static void loadData(File res, double[] avgValuesTest) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(res));
 		br.readLine();		//first line describes the labels
 		String line = br.readLine();
 		
