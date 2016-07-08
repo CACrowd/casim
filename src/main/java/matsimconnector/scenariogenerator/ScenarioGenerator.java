@@ -1,6 +1,7 @@
 package matsimconnector.scenariogenerator;
 
 import matsimconnector.utility.Constants;
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.PopulationWriter;
 import org.matsim.core.config.Config;
@@ -12,10 +13,13 @@ import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.network.NetworkWriter;
 import org.matsim.core.scenario.ScenarioUtils;
 import pedca.context.Context;
-import pedca.output.Log;
 import scenarios.ContextGenerator;
 
 public class ScenarioGenerator {
+
+	private static final Logger log = Logger.getLogger(ScenarioGenerator.class);
+
+
 	private static String inputDir = Constants.INPUT_PATH;
 	private static String outputDir = Constants.OUTPUT_PATH;
 
@@ -112,7 +116,7 @@ public class ScenarioGenerator {
 	}
 	
 	private static Context createCAScenario(boolean calcFundDiag) {
-		Log.log("CA Scenario generation");
+		log.info("CA Scenario generation");
 		if (calcFundDiag)
 			return ContextGenerator.createAndSaveBidCorridorContext(inputDir+"/CAScenario", CA_ROWS, CA_COLS);
 		return ContextGenerator.createContextWithResourceEnvironmentFile(inputDir+"/CAScenario");

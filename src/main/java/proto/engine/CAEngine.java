@@ -145,11 +145,11 @@ public class CAEngine {
         CAEnvironment env = new CAEnvironment("1", context);
         this.protoCAScenario.addCAEnvironment(env);
 
-//        try {
-//            new CAScenarioWriter(grid).write("src/main/js/grid.json");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            new CAScenarioWriter(grid).write("src/main/js/grid.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 //        try {
 //            grid.saveCSV("/Users/laemmel/tmp/");

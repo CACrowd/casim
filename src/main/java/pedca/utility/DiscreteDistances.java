@@ -1,9 +1,12 @@
 package pedca.utility;
 
+import org.apache.log4j.Logger;
 import pedca.environment.grid.GridPoint;
-import pedca.output.Log;
 
 public class DiscreteDistances {
+
+    private static final Logger log = Logger.getLogger(DiscreteDistances.class);
+
 	private int radius;
 	private Double[][] discreteDistances;
 	
@@ -25,8 +28,8 @@ public class DiscreteDistances {
 		try{
 			return discreteDistances[neighbour.getY()-center.getY()+radius][neighbour.getX()-center.getX()+radius];
 		}catch(IndexOutOfBoundsException e){
-			Log.warning("DiscreteDistances.getDistance() - neighbour out of the range of precalculated distances");
-			return Distances.EuclideanDistance(center, neighbour);
+            log.warn("DiscreteDistances.getDistance() - neighbour out of the range of precalculated distances");
+            return Distances.EuclideanDistance(center, neighbour);
 		}
 	}
 }

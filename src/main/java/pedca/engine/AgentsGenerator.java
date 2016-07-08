@@ -2,6 +2,7 @@ package pedca.engine;
 
 import matsimconnector.agents.Pedestrian;
 import matsimconnector.environment.TransitionArea;
+import org.apache.log4j.Logger;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 import pedca.agents.Agent;
 import pedca.agents.Population;
@@ -10,12 +11,15 @@ import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.Start;
-import pedca.output.Log;
+
 import pedca.utility.Lottery;
 
 import java.util.ArrayList;
 
 public class AgentsGenerator {
+
+    private static final Logger log = Logger.getLogger(AgentsGenerator.class);
+
 	private Context context;
 	private int pedestrianCounter;
 	
@@ -34,8 +38,8 @@ public class AgentsGenerator {
 		int howMany = start.toBeGenerated();
 		ArrayList<GridPoint> usedCells = getPedestrianGrid().getFreePositions(start.getCells());
 		if (howMany>usedCells.size()){
-			Log.warning("not enough space in start "+start.toString());
-		}
+            log.warn("not enough space in start " + start.toString());
+        }
 		else{
 			usedCells = Lottery.extractObjects(usedCells,howMany);
 		}

@@ -13,19 +13,25 @@ import java.util.StringTokenizer;
 import matsimconnector.run.FunDiagSimRunner;
 import matsimconnector.utility.Constants;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CorridorFundDiagTest {
-	
-	private static final double scenarioLength = 10.;
+
+
+    private static final double scenarioLength = 10.;
 	private static double tic = 0.25;
 	private static double maxDensity = 1./Math.pow(Constants.CA_CELL_SIDE,2);
 	private static final double acceptedError = 0.05;
 	private static String ORIGINAL_FD_PATH;
-	
-	public void deleteDirectory(File file) {
-	    File[] contents = file.listFiles();
+    private static Level LOG_LEVEL;
+
+    public void deleteDirectory(File file) {
+        File[] contents = file.listFiles();
 	    if (contents != null) {
 	        for (File f : contents) {
 	            deleteDirectory(f);
@@ -52,6 +58,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	private void generateFD() {
+
 		for (double density = tic; density<=maxDensity;density+=tic){
 			Constants.GLOBAL_DENSITY = density;
 			FunDiagSimRunner runner = new FunDiagSimRunner(density, null);
@@ -68,9 +75,26 @@ public class CorridorFundDiagTest {
 		pedca.utility.Constants.DENSITY_GRID_RADIUS = 0;  //to consider only global density during the simulation
 		Constants.VIS = false;
 	}
-	
-	@Test
-	public void checkFD_1Dir() {		
+
+
+    @BeforeClass
+    public static void disableVerboseLogging() {
+        LOG_LEVEL = Logger.getRootLogger().getLevel();
+        Logger.getRootLogger().setLevel(Level.WARN);
+    }
+
+    @AfterClass
+    public static void restoreLogLevel() {
+        Logger.getRootLogger().setLevel(LOG_LEVEL);
+    }
+
+    @Test
+    public void checkFD_1Dir() {
+
+
+
+
+
 		try{
 			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
@@ -85,7 +109,9 @@ public class CorridorFundDiagTest {
      	}catch(Exception e){
      		e.printStackTrace();
      	}
-	}
+
+
+    }
 	
 	@Test
 	public void checkFD_2Dir() {		

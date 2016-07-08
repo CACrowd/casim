@@ -1,13 +1,16 @@
 package pedca.engine;
 
+import org.apache.log4j.Logger;
 import pedca.agents.Agent;
 import pedca.agents.Population;
 import pedca.context.Context;
-import pedca.output.Log;
 
 public class AgentMover {
-	//private final Context context;
-	private final Population population;
+
+    private static final Logger log = Logger.getLogger(AgentMover.class);
+
+    //private final Context context;
+    private final Population population;
 	
 	public AgentMover(Context context){
 		//this.context = context;
@@ -18,8 +21,8 @@ public class AgentMover {
 		for(int index=0; index<population.size(); index++){
 			Agent pedestrian = population.getPedestrian(index);
 			if (pedestrian.isArrived()){
-				Log.log(pedestrian.toString()+" exited.");
-				moveToUniverse(pedestrian);
+                log.info(pedestrian.toString() + " exited.");
+                moveToUniverse(pedestrian);
 				index--;
 			}
 			else{

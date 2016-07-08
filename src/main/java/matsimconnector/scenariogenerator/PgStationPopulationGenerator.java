@@ -1,5 +1,6 @@
 package matsimconnector.scenariogenerator;
 
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -7,27 +8,30 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.gbl.MatsimRandom;
-import pedca.output.Log;
+
 
 import java.util.ArrayList;
 
 public class PgStationPopulationGenerator {
-	
-	public static void createPopulation(Scenario sc, int populationSize) {
-		Network network = sc.getNetwork();
+
+
+    private static final Logger log = Logger.getLogger(PgStationPopulationGenerator.class);
+
+    public static void createPopulation(Scenario sc, int populationSize) {
+        Network network = sc.getNetwork();
 		ArrayList <Link> initLinks = new ArrayList<Link>();
 		ArrayList <Link> destinationLinks = new ArrayList<Link>();
 		for (Node node : network.getNodes().values()){
 			if (isOriginNode(node)){
 				Link next = node.getOutLinks().values().iterator().next();
 				initLinks.add(next);
-				Log.log("originLink: "+next.getId().toString());
-			}
+                log.info("originLink: " + next.getId().toString());
+            }
 			if(isDestinationNode(node)){
 				Link next = node.getInLinks().values().iterator().next();
 				destinationLinks.add(next);
-				Log.log("destinationLink: "+next.getId().toString());
-			}
+                log.info("destinationLink: " + next.getId().toString());
+            }
 		}
 				
 		Population population = sc.getPopulation();

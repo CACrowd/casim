@@ -5,6 +5,7 @@ import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
 import matsimconnector.utility.LinkUtility;
 import matsimconnector.utility.MathUtility;
+import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.events.Event;
@@ -13,7 +14,6 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.api.experimental.events.EventsManager;
 import pedca.context.Context;
-import pedca.output.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class CAScenario {
-	
+
+	private static final Logger log = Logger.getLogger(CAScenario.class);
+
 	private boolean connected;
 	private Scenario matsimScenario;
 	private final Map<Id<CAEnvironment>,CAEnvironment> environments;
@@ -50,10 +52,10 @@ public class CAScenario {
 	
 	public void connect(Scenario matsimScenario){
 		if (this.connected) {
-			Log.warning("CA Scenario already connected!");
+			log.warn("CA Scenario already connected!");
 			return;
 		}
-		Log.log("Connecting CA scenario.");
+		log.warn("Connecting CA scenario.");
 		matsimScenario.addScenarioElement(Constants.CASCENARIO_NAME, this);
 		this.matsimScenario = matsimScenario;
 		Network scNet = matsimScenario.getNetwork();
@@ -83,7 +85,7 @@ public class CAScenario {
 				scNet.addNode(nodeCA);
 				plugNode(nodeCA,scNet, environmentCA);
 			}else{
-				Log.warning("Node already present in the network!");
+				log.warn("Node already present in the network!");
 			}
 		}
 		for (Link link : envNet.getLinks().values()) {
@@ -115,7 +117,7 @@ public class CAScenario {
 		modesToQ.add("walk");
 		modesToQ.add(Constants.TO_Q_LINK_MODE);
 		for (Node node : scNet.getNodes().values()){
-			Log.log(n.getCoord()+" "+node.getCoord());
+			log.warn(n.getCoord() + " " + node.getCoord());
 			if (node != n && MathUtility.EuclideanDistance(n.getCoord(),node.getCoord()) <= radius){
 				pivot = node;
 				break;

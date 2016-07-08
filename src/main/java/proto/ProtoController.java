@@ -45,6 +45,7 @@ public class ProtoController {
 
 
         CAServer server = injector.getInstance(CAServer.class);
+
         try {
             server.run();
         } catch (Exception e) {
