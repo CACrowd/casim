@@ -122,62 +122,11 @@
 
     });
 
-    //    d3.xml("network.xml", "application/xml", function (error, xml) {
-    //        var projection = d3.geo.projection(function (x, y) {
-    //            return [x, y];
-    //        }).precision(0).scale(1).translate([0, 0]);
-    //
-    //        var dict = {};
-    //        var geometries = Array.from(xml.documentElement.getElementsByTagName("node")).map(function (d) {
-    //            var x = d.attributes.getNamedItem("x").nodeValue;
-    //            var y = d.attributes.getNamedItem("y").nodeValue;
-    //            dict[d.attributes.getNamedItem("id").nodeValue] = [x, y];
-    //            return {type: "Point", coordinates: [x, y], geostyle: "nodes"}
-    //        });
-    //        geometries = geometries.concat(Array.from(xml.documentElement.getElementsByTagName("link")).map(function (d) {
-    //            var from = d.attributes.getNamedItem("from").nodeValue;
-    //            var to = d.attributes.getNamedItem("to").nodeValue;
-    //            var fromC = dict[from];
-    //            var toC = dict[to];
-    //
-    //            return {type: "LineString", coordinates: [fromC, toC], geostyle: "links"};
-    //        }));
-    //        var features = geometries.map(function (geom) {
-    //            return {type: "Feature", geometry: geom}
-    //        });
-    //        var featureCollection = {type: "FeatureCollection", features: features};
-    //        var path = d3.geo.path().projection(projection);
-    //
-    //        if (gScale == -1) {
-    //            var bounds = path.bounds(featureCollection),
-    //                    scale = 1.05 / Math.max((bounds[1][0] - bounds[0][0]) / width,
-    //                                    (bounds[1][1] - bounds[0][1]) / height),
-    //                    transl = [(width - scale * (bounds[1][0] + bounds[0][0])) / 2,
-    //                        (height - scale * (bounds[1][1] + bounds[0][1])) / 2];
-    //
-    //            gScale = scale;
-    //            gTransl = transl;
-    //        } else {
-    //            scale = gScale;
-    //            transl = gTransl;
-    //        }
-    //        projection.scale(scale).translate(transl);
-    //        path.projection(projection);//.pointRadius(.1);
-    //        g2.selectAll("path")
-    //                .data(features)
-    //                .enter().append("path")
-    //                .attr("d", path)
-    //                .attr("class", function (d) {
-    //                    return d.geometry.geostyle;
-    //                });
-    //    });
-
 
     // zoom and pan
     var zoom = d3.behavior.zoom()
             .on("zoom", function () {
                 g.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
-//                g2.attr("transform", "translate(" + d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
             });
     svg.call(zoom)
 </script>
