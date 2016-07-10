@@ -14,6 +14,7 @@ package proto.engine;
 /****************************************************************************/
 
 
+import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
 import pedca.environment.grid.EnvironmentGrid;
 import proto.HybridSimProto;
@@ -21,6 +22,7 @@ import proto.HybridSimProto;
 import java.util.*;
 
 /**
+ * Scanline algorithm to rasterize polygonal environment
  * Created by laemmel on 10/07/16.
  */
 public class Rasterizer {
@@ -38,11 +40,9 @@ public class Rasterizer {
     public void rasterize(HybridSimProto.Environment environment) {
 
         List<Edge> edgeTable = createEdgeTable(environment);
-        System.out.println(edgeTable.get(0).y0);
         Collections.sort(edgeTable, (o1, o2) -> o1.y0 < o2.y0 ? -1 : 1);
 
-        System.out.println(edgeTable.get(0).y0);
-        System.out.println(edgeTable.get(0).y0);
+
 
     }
 
@@ -92,6 +92,8 @@ public class Rasterizer {
         final double x0, x1, y0, y1;
         final double dx;
 
+        double currentX;
+
         final Kind kind;
 
         public Edge(double x0, double y0, double x1, double y1, Kind kind) {
@@ -108,7 +110,8 @@ public class Rasterizer {
                 this.y0 = y1;
             }
 
-            dx = (this.x1 - this.x0) / (this.y1 - this.y0);
+            dx = Constants.CA_CELL_SIDE * (this.x1 - this.x0) / (this.y1 - this.y0);
+            currentX = this.x0;
         }
 
         public Edge(Edge edge) {
@@ -118,6 +121,7 @@ public class Rasterizer {
             y1 = edge.y1;
             kind = edge.kind;
             dx = edge.dx;
+            currentX = this.x0;
         }
 
 
