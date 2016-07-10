@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class GridCell <T> {
 	private ArrayList <T> objects;
 
-	public GridCell (){
+	GridCell() {
 		objects = new ArrayList<T>();
 	}
 	
@@ -23,7 +23,7 @@ public class GridCell <T> {
 		try{
 			set(level, object);
 		}catch(IndexOutOfBoundsException e){
-			if (force==true){
+			if (force) {
 				int oldSize = objects.size();
 				for(int i=0;i<level-oldSize;i++)
 					objects.add(null);
@@ -61,8 +61,8 @@ public class GridCell <T> {
 	public int size(){
 		return objects.size();
 	}
-	
-	public ArrayList<T> getObjects() {
+
+	ArrayList<T> getObjects() {
 		return objects;
 	}
 	

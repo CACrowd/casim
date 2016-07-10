@@ -76,83 +76,103 @@ public class CAEngine {
         }
 
         log.debug(envelope);
-        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE) + 4;
-        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE) + 4;
-
-        double offsetX = -Constants.CA_CELL_SIDE;
-        double offsetY = -Constants.CA_CELL_SIDE;
+        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE);
+        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE);
 
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, envelope.getMinX(), envelope.getMinY());
-        Quadtree quadtree = new Quadtree();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 grid.setCellValue(i, j, -1);
-                GridPoint gp = new GridPoint(i, j);
-                Coordinate c = grid.gridPoint2Coordinate(gp);
-                double x = c.getX();//-offsetX;
-                double y = c.getY();//-offsetY;
-                Envelope e = new Envelope(x, x + Constants.CA_CELL_SIDE, y, y + Constants.CA_CELL_SIDE);
-                quadtree.insert(e, gp);
-            }
-        }
-        GeometryFactory gF = new GeometryFactory();
-        for (HybridSimProto.Room r : request.getEnvironment().getRoomList()) {
-            for (HybridSimProto.Subroom sub : r.getSubroomList()) {
-                List<com.vividsolutions.jts.geom.Coordinate> coords = new ArrayList<>();
-
-                for (HybridSimProto.Polygon p : sub.getPolygonList()) {
-                    for (HybridSimProto.Coordinate c : p.getCoordinateList()) {
-                        coords.add(new com.vividsolutions.jts.geom.Coordinate(c.getX() - offsetX, c.getY() - offsetY));
-
-                    }
-
-
-                }
-                com.vividsolutions.jts.geom.Coordinate[] coordsA = coords.toArray(new com.vividsolutions.jts.geom.Coordinate[0]);
-
-                Polygon poly = (Polygon) gF.createMultiPoint(coordsA).convexHull();
-
-                Envelope e = poly.getEnvelopeInternal();
-                List<GridPoint> gps = quadtree.query(e);
-                for (GridPoint p : gps) {
-                    Coordinate c = grid.gridPoint2Coordinate(p);
-
-                    com.vividsolutions.jts.geom.Coordinate[] cc = {new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()),
-                            new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY() + Constants.CA_CELL_SIDE),
-                            new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY() + Constants.CA_CELL_SIDE),
-                            new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY()),
-                            new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY())};
-                    Polygon cPoly = gF.createPolygon(cc);
-                    if (poly.contains(cPoly)) { //walkable
-                        grid.setCellValue(p.getY(), p.getX(), 0);
-                    } else if (cPoly.intersects(poly)) { //semi walkable
-                        grid.setCellValue(p.getY(), p.getX(), 1);
-                    }
-
-                }
             }
         }
 
-        for (HybridSimProto.Transition transition : request.getEnvironment().getTransitionList()) {
-            LineString ls = gF.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{new com.vividsolutions.jts.geom.Coordinate(
-                    transition.getVert1().getX() - offsetX, transition.getVert1().getY() - offsetY), new com.vividsolutions.jts.geom.Coordinate(
-                    transition.getVert2().getX() - offsetX, transition.getVert2().getY() - offsetY)});
-            Envelope te = ls.buffer(0.2).getEnvelopeInternal();
-            List<GridPoint> gps = quadtree.query(te);
-            for (GridPoint p : gps) {
-                Coordinate c = grid.gridPoint2Coordinate(p);
-                com.vividsolutions.jts.geom.Coordinate[] cc = {new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()),
-                        new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY() + Constants.CA_CELL_SIDE),
-                        new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY() + Constants.CA_CELL_SIDE),
-                        new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY()),
-                        new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY())};
-                Polygon cPoly = gF.createPolygon(cc);
-                if (ls.intersects(cPoly)) {
-                    grid.setCellValue(p.getY(), p.getX(), -2);
-                }
+        Rasterizer r = new Rasterizer(grid);
+        r.rasterize(request.getEnvironment());
 
-            }
-        }
+//        for (HybridSimProto.Room r : request.getEnvironment().getRoomList()) {
+//            for (HybridSimProto.Subroom sub : r.getSubroomList()) {
+//
+//                for (HybridSimProto.Polygon p : sub.getPolygonList()) {
+//
+//                    for (HybridSimProto.Coordinate c : p.getCoordinateList()) {
+//
+//
+//                    }
+//
+//
+//                }
+//
+//            }
+//        }
+
+
+//                GridPoint gp = new GridPoint(i, j);
+//                Coordinate c = grid.gridPoint2Coordinate(gp);
+//
+//                double x = c.getX();//-offsetX;
+//                double y = c.getY();//-offsetY;
+//                Envelope e = new Envelope(x, x + Constants.CA_CELL_SIDE, y, y + Constants.CA_CELL_SIDE);
+//                quadtree.insert(e, gp);
+//            }
+//        }
+//        GeometryFactory gF = new GeometryFactory();
+//        for (HybridSimProto.Room r : request.getEnvironment().getRoomList()) {
+//            for (HybridSimProto.Subroom sub : r.getSubroomList()) {
+//                List<com.vividsolutions.jts.geom.Coordinate> coords = new ArrayList<>();
+//
+//                for (HybridSimProto.Polygon p : sub.getPolygonList()) {
+//                    for (HybridSimProto.Coordinate c : p.getCoordinateList()) {
+//                        coords.add(new com.vividsolutions.jts.geom.Coordinate(c.getX() - offsetX, c.getY() - offsetY));
+//
+//                    }
+//
+//
+//                }
+//                com.vividsolutions.jts.geom.Coordinate[] coordsA = coords.toArray(new com.vividsolutions.jts.geom.Coordinate[0]);
+//
+//                Polygon poly = (Polygon) gF.createMultiPoint(coordsA).convexHull();
+//
+//                Envelope e = poly.getEnvelopeInternal();
+//                List<GridPoint> gps = quadtree.query(e);
+//                for (GridPoint p : gps) {
+//                    Coordinate c = grid.gridPoint2Coordinate(p);
+//
+//                    com.vividsolutions.jts.geom.Coordinate[] cc = {new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()),
+//                            new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY() + Constants.CA_CELL_SIDE),
+//                            new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY() + Constants.CA_CELL_SIDE),
+//                            new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY()),
+//                            new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY())};
+//                    Polygon cPoly = gF.createPolygon(cc);
+//                    if (poly.contains(cPoly)) { //walkable
+//                        grid.setCellValue(p.getY(), p.getX(), 0);
+//                    } else if (cPoly.intersects(poly)) { //semi walkable
+//                        grid.setCellValue(p.getY(), p.getX(), 1);
+//                    }
+//
+//                }
+//            }
+//        }
+//
+//        for (HybridSimProto.Transition transition : request.getEnvironment().getTransitionList()) {
+//            LineString ls = gF.createLineString(new com.vividsolutions.jts.geom.Coordinate[]{new com.vividsolutions.jts.geom.Coordinate(
+//                    transition.getVert1().getX() - offsetX, transition.getVert1().getY() - offsetY), new com.vividsolutions.jts.geom.Coordinate(
+//                    transition.getVert2().getX() - offsetX, transition.getVert2().getY() - offsetY)});
+//            Envelope te = ls.buffer(0.2).getEnvelopeInternal();
+//            List<GridPoint> gps = quadtree.query(te);
+//            for (GridPoint p : gps) {
+//                Coordinate c = grid.gridPoint2Coordinate(p);
+//                com.vividsolutions.jts.geom.Coordinate[] cc = {new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY()),
+//                        new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY() + Constants.CA_CELL_SIDE),
+//                        new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY() + Constants.CA_CELL_SIDE),
+//                        new com.vividsolutions.jts.geom.Coordinate(c.getX() + Constants.CA_CELL_SIDE, c.getY()),
+//                        new com.vividsolutions.jts.geom.Coordinate(c.getX(), c.getY())};
+//                Polygon cPoly = gF.createPolygon(cc);
+//                if (ls.intersects(cPoly)) {
+//                    grid.setCellValue(p.getY(), p.getX(), -2);
+//                }
+//
+//            }
+//        }
 
         Context context = new Context(grid, new MarkerConfiguration());
         CAEnvironment env = new CAEnvironment("1", context);

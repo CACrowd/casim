@@ -7,10 +7,10 @@ public class GridPoint implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int x;
 	private int y;
-	
-	public GridPoint(int x, int y){
-		setX(x);
-		setY(y);
+
+	public GridPoint(int col, int row) {
+		setX(col);
+		setY(row);
 	}
 
 	public int getX() {

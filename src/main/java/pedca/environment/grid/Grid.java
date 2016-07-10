@@ -13,7 +13,7 @@ public abstract class Grid <T>{
 	private double offsetX = 0.;
 	protected ArrayList<ArrayList<GridCell<T>>> cells;
 
-	public Grid(int rows, int cols, double offsetX, double offsetY) {
+    Grid(int rows, int cols, double offsetX, double offsetY) {
 
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
@@ -23,19 +23,20 @@ public abstract class Grid <T>{
 	public Grid (int rows,int cols){
 		this(rows, cols, 0, 0);
 	}
-	
-	public Grid(File file) throws IOException{
-		initEmptyGrid();
+
+    Grid(File file) throws IOException {
+        initEmptyGrid();
 		loadFromCSV(file);
 	}
-	
-	public Grid(String fileName) throws IOException{
-		initEmptyGrid();
+
+    Grid(String fileName) throws IOException {
+        initEmptyGrid();
 		loadFromCSV(fileName);
 	}
-	
-	protected void initEmptyGrid(){
-		cells = new ArrayList<ArrayList<GridCell<T>>> ();
+
+
+    private void initEmptyGrid() {
+        cells = new ArrayList<ArrayList<GridCell<T>>> ();
 	}
 	
 	private void initGrid(int rows, int cols) {
@@ -51,6 +52,13 @@ public abstract class Grid <T>{
 		return new Coordinate(gp.getX() * Constants.CA_CELL_SIDE + offsetX, gp.getY() * Constants.CA_CELL_SIDE + offsetY);
 	}
 
+    public GridPoint coordinate2GridPoint(Coordinate c) {
+        int col = (int) ((c.getX() - offsetX) / Constants.CA_CELL_SIDE);
+        int row = (int) ((c.getY() - offsetY) / Constants.CA_CELL_SIDE);
+        return new GridPoint(col, row);
+
+    }
+
 	public void add(int i,int j, T object){
 		get(i,j).add(object);
 	}
@@ -58,21 +66,21 @@ public abstract class Grid <T>{
 	public GridCell<T> get(GridPoint p) {
 		return cells.get(p.getY()).get(p.getX());
 	}
-	
-	public GridCell<T> get(int i,int j) {
-		return cells.get(i).get(j);
-	}
-	
-	protected void addRow(){
-		cells.add(new ArrayList<GridCell<T>>());
+
+    public GridCell<T> get(int row, int col) {
+        return cells.get(row).get(col);
+    }
+
+    void addRow() {
+        cells.add(new ArrayList<GridCell<T>>());
 	}
 	
 	private void addElementAt(int row){
 		cells.get(row).add(new GridCell<T>());
 	}
-	
-	protected void addElementAt(int row, T object){
-		GridCell <T> cell = new GridCell<T>();
+
+    void addElementAt(int row, T object) {
+        GridCell <T> cell = new GridCell<T>();
 		cell.add(object);
 		cells.get(row).add(cell);
 	}
@@ -106,11 +114,11 @@ public abstract class Grid <T>{
 	
 	public String toString(){
 		String res="";
-		for(int i=0;i<cells.size();i++){
-			for(int j=0;j<cells.get(i).size();j++)
-				res+=cells.get(i).get(j).toString()+" ";
-			res+="\n";
-		}
+        for (ArrayList<GridCell<T>> cell : cells) {
+            for (int j = 0; j < cell.size(); j++)
+                res += cell.get(j).toString() + " ";
+            res += "\n";
+        }
 		return res;
 	}
 	
@@ -119,9 +127,9 @@ public abstract class Grid <T>{
 	}
 	
 	protected abstract void loadFromCSV(File file) throws IOException;
-	
-	protected void loadFromCSV(String fileName) throws IOException{
-		File environmentFile = new File(fileName);
+
+    private void loadFromCSV(String fileName) throws IOException {
+        File environmentFile = new File(fileName);
 		loadFromCSV(environmentFile);
 	}
 	
