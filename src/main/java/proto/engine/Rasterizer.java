@@ -42,8 +42,71 @@ public class Rasterizer {
         List<Edge> edgeTable = createEdgeTable(environment);
         Collections.sort(edgeTable, (o1, o2) -> o1.y0 < o2.y0 ? -1 : 1);
 
+        LinkedList<Edge> activeEdgeTable = new LinkedList<>();
+        ListIterator<Edge> it = edgeTable.listIterator();
+        int row = 0;//scanline nr
+        int mxRow = this.grid.getRows();
 
+        for (; row <= mxRow; row++) {
 
+            updateAET(activeEdgeTable, row);
+            while (it.hasNext()) {
+                Edge e = it.next();
+                int eRow = this.grid.y2Row(e.y0);
+                if (eRow == row) {
+                    activeEdgeTable.add(e);
+                } else {
+                    it.previous();
+                    break;
+                }
+            }
+
+            Collections.sort(activeEdgeTable, (o1, o2) -> o1.currentX < o2.currentX ? -1 : 1);
+            setPixels(activeEdgeTable, row);
+
+        }
+
+    }
+
+    private void setPixels(LinkedList<Edge> activeEdgeTable, int row) {
+
+        if (activeEdgeTable.size() == 0) {
+            return;
+        }
+
+        Iterator<Edge> it = activeEdgeTable.iterator();
+        Edge first = it.next();
+        while (it.hasNext()) {
+            Edge next = it.next();
+            if (first != null) {
+                int col = this.grid.x2Col(first.currentX);
+                int nextCol = this.grid.x2Col(next.currentX);
+                if (nextCol != col) {
+                    for (int i = col; i < nextCol; i++) {
+
+                        this.grid.setCellValue(row, i, 0);
+                    }
+                    first = null;
+                } else {
+                    first = next;
+                }
+            } else {
+                first = next;
+            }
+        }
+    }
+
+    private void updateAET(LinkedList<Edge> activeEdgeTable, int row) {
+        Iterator<Edge> it = activeEdgeTable.iterator();
+        while (it.hasNext()) {
+            Edge e = it.next();
+            int toRow = this.grid.y2Row(e.y1);
+            if (toRow <= row) {
+                it.remove();
+            } else {
+                e.currentX += e.dx;
+            }
+        }
     }
 
     private List<Edge> createEdgeTable(HybridSimProto.Environment environment) {
