@@ -59,6 +59,14 @@ public abstract class Grid<T> {
 
     }
 
+    public double getOffsetX() {
+        return this.offsetX;
+    }
+
+    public double getOffsetY() {
+        return this.offsetY;
+    }
+
     public int y2Row(double y) {
         return (int) ((y - offsetY) / Constants.CA_CELL_SIDE);
     }

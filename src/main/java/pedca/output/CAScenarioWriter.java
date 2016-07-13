@@ -47,14 +47,15 @@ public class CAScenarioWriter {
         JSONArray array = new JSONArray();
 //        for (CAEnvironment env : sc.getEnvironments().values()) {
             for (int i = grid.getRows() - 1; i >= 0; i--) {
-                for (int j = 1; j < grid.getColumns(); j++) {
+                for (int j = 0; j < grid.getColumns(); j++) {
 
                     GridPoint gp = new GridPoint(j, i);
                     Coordinate coord = grid.gridPoint2Coordinate(gp);
                     JSONObject obj = new JSONObject();
                     obj.put("kind", grid.getCellValue(i, j));
-                    obj.put("x", coord.getX() - 100);
-                    obj.put("y", coord.getY() - 100);
+                    obj.put("x", coord.getX() - grid.getOffsetX());
+                    obj.put("y", coord.getY() - grid.getOffsetY());
+
 
 //                    obj.put("coordinate",coord);
                     obj.put("width", Constants.CA_CELL_SIDE);
