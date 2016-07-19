@@ -1,25 +1,25 @@
 package matsimconnector.scenario;
 
-import matsimconnector.network.HybridNetworkBuilder;
-import matsimconnector.utility.Constants;
-import matsimconnector.utility.IdUtility;
-import matsimconnector.utility.LinkUtility;
-import matsimconnector.utility.MathUtility;
-import org.apache.log4j.Logger;
-import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.events.Event;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.network.Node;
-import org.matsim.core.api.experimental.events.EventsManager;
-import pedca.context.Context;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import matsimconnector.network.HybridNetworkBuilder;
+import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
+import matsimconnector.utility.LinkUtility;
+import matsimconnector.utility.MathUtility;
+
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
+
+import pedca.context.Context;
 
 public class CAScenario {
 
@@ -55,7 +55,7 @@ public class CAScenario {
 			log.warn("CA Scenario already connected!");
 			return;
 		}
-		log.warn("Connecting CA scenario.");
+		log.debug("Connecting CA scenario.");
 		matsimScenario.addScenarioElement(Constants.CASCENARIO_NAME, this);
 		this.matsimScenario = matsimScenario;
 		Network scNet = matsimScenario.getNetwork();
@@ -117,8 +117,8 @@ public class CAScenario {
 		modesToQ.add("walk");
 		modesToQ.add(Constants.TO_Q_LINK_MODE);
 		for (Node node : scNet.getNodes().values()){
-			log.warn(n.getCoord() + " " + node.getCoord());
 			if (node != n && MathUtility.EuclideanDistance(n.getCoord(),node.getCoord()) <= radius){
+				log.debug("plugging nodes in the network: "+n.getCoord() + " " + node.getCoord());
 				pivot = node;
 				break;
 			}
@@ -132,7 +132,7 @@ public class CAScenario {
 		for(Link link : pivot.getOutLinks().values()){
 			scNet.removeLink(link.getId());
 			link.setFromNode(n);
-			link.setLength(link.getLength()+Constants.TRANSITION_LINK_LENGTH);
+			link.setLength(MathUtility.EuclideanDistance(link.getFromNode().getCoord(),link.getToNode().getCoord()));//link.getLength()+Constants.TRANSITION_LINK_LENGTH);
 			link.setAllowedModes(modesToQ);
 			scNet.addLink(link);
 			mapLinkToEnvironment(link, environmentCA);
@@ -150,7 +150,7 @@ public class CAScenario {
 		
 		Id <Link> toCAId = IdUtility.createLinkId(fromId, toId);
 		Link toCA = scNet.getFactory().createLink(toCAId, pivot, n);
-		LinkUtility.initLink(toCA, Constants.TRANSITION_LINK_LENGTH, 10, modesToCA);
+		LinkUtility.initLink(toCA, MathUtility.EuclideanDistance(toCA.getFromNode().getCoord(),toCA.getToNode().getCoord()), 10, modesToCA);
 		scNet.addLink(toCA);
 		mapLinkToEnvironment(toCA, environmentCA);
 	}

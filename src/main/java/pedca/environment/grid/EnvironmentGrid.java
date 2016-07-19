@@ -102,6 +102,11 @@ public class EnvironmentGrid extends Grid<Integer> {
 		bw.close();
 	}
 	
+	//aims at substituting "belongsToExit" for the new format of .csv environment files
+	public boolean belongsToFinalDestination(GridPoint cell){
+		return getCellValue(cell) == Constants.ENV_FINAL_DESTINATION;
+	}
+	
 	public boolean belongsToExit(GridPoint cell){
 		return (cell.getY()==0 || cell.getX()==0 || cell.getY() == getRows()-1 || cell.getX() == getColumns()-1) && isWalkable(cell);
 	}

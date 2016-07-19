@@ -9,8 +9,8 @@ import matsimconnector.engine.CATripRouterFactory;
 import matsimconnector.network.HybridNetworkBuilder;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
-import matsimconnector.scenariogenerator.PgStationNetworkGenerator;
-import matsimconnector.scenariogenerator.PgStationPopulationGenerator;
+import matsimconnector.scenariogenerator.NetworkGenerator;
+import matsimconnector.scenariogenerator.PopulationGenerator;
 import matsimconnector.utility.Constants;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
@@ -38,18 +38,18 @@ import scenarios.ContextGenerator;
 
 import com.google.inject.Provider;
 
-public class PGStationRunner implements IterationStartsListener {
+public class StatenIslandRunner implements IterationStartsListener {
 
 	private static EventBasedVisDebuggerEngine dbg;
 	private static String inputDir = Constants.INPUT_PATH;
 	private static String outputDir = Constants.OUTPUT_PATH;
-	private static int POPULATION_SIZE = 15000;
+	private static int POPULATION_SIZE = 5000;
 
 	public static void main(String[] args){
-		Constants.SIMULATION_ITERATIONS = 1;
+		Constants.SIMULATION_ITERATIONS = 100;
 		Constants.SIMULATION_DURATION = 16000;
 		Constants.VIS = true;
-		Constants.ENVIRONMENT_FILE = "ABMUS_PG_STATION_largeStairs.csv";
+		Constants.ENVIRONMENT_FILE = "stGeorge_Environment2.csv";
 		generateScenario();
 		runSimulation();
 	}
@@ -59,8 +59,8 @@ public class PGStationRunner implements IterationStartsListener {
 		Config c = ConfigUtils.createConfig();
 		Scenario scenario = ScenarioUtils.createScenario(c);
 		
-		Context contextCA = ContextGenerator.createContextWithResourceEnvironmentFile(inputDir+"/CAScenario");
-		PgStationNetworkGenerator.createNetwork(scenario, contextCA);
+		Context contextCA = ContextGenerator.createContextWithResourceEnvironmentFileV2(inputDir+"/CAScenario");
+		NetworkGenerator.createNetwork(scenario, contextCA);
 		
 		c.network().setInputFile(inputDir + "/network.xml.gz");
 		c.strategy().addParam("Module_1", "ReRoute");
@@ -111,7 +111,7 @@ public class PGStationRunner implements IterationStartsListener {
 		c.travelTimeCalculator().setTraveltimeBinSize(60);
 		c.planCalcScore().setBrainExpBeta(1);
 
-		PgStationPopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
+		PopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
 		
 		new ConfigWriter(c).write(inputDir+ "/config.xml");
 		new NetworkWriter(scenario.getNetwork()).write(c.network().getInputFile());
@@ -125,51 +125,6 @@ public class PGStationRunner implements IterationStartsListener {
 		CAScenario scenarioCA = new CAScenario(inputDir+"/CAScenario");
 		HybridNetworkBuilder.buildNetwork(scenarioCA.getCAEnvironment(Id.create("0", CAEnvironment.class)), scenarioCA);
 		scenarioCA.connect(scenario);
-
-		
-		////FOR THE ABMUS SCENARIO WITH SEPARATE FLOWS
-//		Network net = scenario.getNetwork();
-//		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_8"));
-//		net.removeLink(Id.createLinkId("HybridNode_9-->HybridNode_10"));
-//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_9"));
-//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_10"));
-//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_6"));
-//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_9"));
-//		net.removeLink(Id.createLinkId("HybridNode_6-->HybridNode_14"));
-//		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_6"));
-//		net.removeLink(Id.createLinkId("HybridNode_12-->HybridNode_13"));
-//		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_17"));
-//		net.removeLink(Id.createLinkId("HybridNode_17-->HybridNode_13"));
-//		net.removeLink(Id.createLinkId("HybridNode_13-->HybridNode_10"));
-//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_13"));
-//		net.removeLink(Id.createLinkId("HybridNode_14-->HybridNode_10"));
-//		net.removeLink(Id.createLinkId("HybridNode_10-->HybridNode_14"));
-//
-//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_22"));
-//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_21"));
-//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_22"));
-//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_19"));
-//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_21"));
-//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_19"));
-//		net.removeLink(Id.createLinkId("HybridNode_19-->HybridNode_23"));
-//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_21"));
-//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_23"));
-//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_1"));
-//		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_21"));
-//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_22"));
-//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_23"));
-//		net.removeLink(Id.createLinkId("HybridNode_20-->HybridNode_22"));
-//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_20"));
-//		net.removeLink(Id.createLinkId("HybridNode_26-->HybridNode_23"));
-//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_26"));
-//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_23"));
-//		net.removeLink(Id.createLinkId("HybridNode_23-->HybridNode_25"));
-//		net.removeLink(Id.createLinkId("HybridNode_24-->HybridNode_22"));
-//		net.removeLink(Id.createLinkId("HybridNode_22-->HybridNode_24"));
-//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_21"));
-//		net.removeLink(Id.createLinkId("HybridNode_21-->HybridNode_25"));
-//		net.removeLink(Id.createLinkId("HybridNode_25-->HybridNode_1"));
-//		net.removeLink(Id.createLinkId("HybridNode_1-->HybridNode_25"));
 		
 		c.controler().setWriteEventsInterval(1);
 		c.controler().setLastIteration(Constants.SIMULATION_ITERATIONS-1);
@@ -221,7 +176,7 @@ public class PGStationRunner implements IterationStartsListener {
 			controller.getEvents().addHandler(dbg);
 		}
 		
-		PGStationRunner runner = new PGStationRunner();
+		StatenIslandRunner runner = new StatenIslandRunner();
 		controller.addControlerListener(runner);
 		controller.run();
 	}

@@ -13,9 +13,11 @@ public class FinalDestination extends TacticalDestination {
 	private int rotation = -1;
 	private GridPoint environmentRef;
 	private TransitionArea transitionArea;
-
-	public FinalDestination(Coordinate coordinate, ArrayList<GridPoint> cells) {
+	private GridPoint environmentCenter;
+	
+	public FinalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, GridPoint environmentCenter) {
 		super(coordinate, cells, false);
+		this.environmentCenter = environmentCenter;
 		calculateRotationAndRef();
 	}
 
@@ -25,22 +27,26 @@ public class FinalDestination extends TacticalDestination {
 			GridPoint first = getCells().get(0);
 			GridPoint second = getCells().get(1);
 			GridPoint last = getCells().get(getCells().size()-1);
-			if (first.getX()==second.getX() && first.getX() == 0){
-				rotation = 0;
-				environmentRef = first;
+			if (first.getX()==second.getX()){
+				if (first.getX() <= environmentCenter.getX()){
+					rotation = 0;
+					environmentRef = first;
+				}
+				else{
+					rotation = 180;
+					environmentRef = last; 
+				}
 			}
-			else if(first.getX()==second.getX() && first.getX() != 0){ //equal x but at the end of the environment grid
-				rotation = 180;
-				environmentRef = last; 
+			else if(first.getY()==second.getY()){
+				if (first.getY() <= environmentCenter.getY()){
+					rotation = 90;
+					environmentRef = last;
+				}
+				else if(first.getY() != 0) {//equal y but at the end of the environment grid
+					rotation = 270;
+					environmentRef = first;
+				}
 			}
-			else if(first.getY()==second.getY() && first.getY() == 0){
-				rotation = 90;
-				environmentRef = last;
-			}
-			else if(first.getY()==second.getY() && first.getX() != 0) {//equal y but at the end of the environment grid
-				rotation = 270;
-				environmentRef = first;
-			}		
 		}else{
 			environmentRef = getCells().get(0); 
 			if(environmentRef.getX()==0)

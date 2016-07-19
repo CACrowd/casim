@@ -16,7 +16,6 @@ import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.PopulationWriter;
-import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.ConfigWriter;
@@ -52,7 +51,6 @@ public class FunDiagSimRunner implements IterationStartsListener {
 	}
 	
 	public void generateScenario() {
-		
 		int caRows = (int)Math.round((Constants.FAKE_LINK_WIDTH/ Constants.CA_CELL_SIDE));
 		int caCols = (int)Math.round((Constants.CA_LINK_LENGTH/ Constants.CA_CELL_SIDE));
 		//(CA_ROWS - 2) is due to the 2 rows of obstacles needed to build a corridor environment

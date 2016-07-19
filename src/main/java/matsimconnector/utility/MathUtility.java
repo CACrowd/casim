@@ -9,6 +9,10 @@ public class MathUtility {
 		return Math.sqrt(Math.pow(c1.getX()-c2.getX(),2)+Math.pow(c1.getY()-c2.getY(),2));
 	}
 	
+	public static double EuclideanDistance(Coordinate c1, Coordinate c2) {
+		return Math.sqrt(Math.pow(c1.getX()-c2.getX(),2)+Math.pow(c1.getY()-c2.getY(),2));
+	}
+	
 	public static void rotate(GridPoint point, double degrees){
 		rotate(point, degrees, 0, 0);
 	}
@@ -60,4 +64,6 @@ public class MathUtility {
 	public static double average(double x1, double x2){
 		return (x1+x2)/2;
 	}
+
+
 }

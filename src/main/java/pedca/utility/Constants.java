@@ -10,6 +10,7 @@ public class Constants {
 	//Constants for environment
 	public static final int ENV_OBSTACLE = -1;
 	public static final int ENV_TACTICAL_DESTINATION = -2;
+	public static final int ENV_FINAL_DESTINATION = -3;
 	public static final int ENV_STAIRS_BORDER = -4;
 	public static final int ENV_WALKABLE_CELL = 0;
 	public static final double MAX_FF_VALUE = Double.POSITIVE_INFINITY;

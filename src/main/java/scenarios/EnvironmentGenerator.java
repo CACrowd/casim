@@ -1,15 +1,19 @@
 package scenarios;
 
-import matsimconnector.utility.MathUtility;
+import java.util.ArrayList;
+import java.util.List;
+
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
-import pedca.environment.markers.*;
+import pedca.environment.markers.Destination;
+import pedca.environment.markers.FinalDestination;
+import pedca.environment.markers.MarkerConfiguration;
+import pedca.environment.markers.Start;
+import pedca.environment.markers.TacticalDestination;
 import pedca.environment.network.Coordinate;
 import pedca.utility.Constants;
 import pedca.utility.NeighbourhoodUtility;
-
-import java.util.ArrayList;
 
 public class EnvironmentGenerator {
 
@@ -64,12 +68,14 @@ public class EnvironmentGenerator {
 	
 	public static Destination getCorridorEastDestination(EnvironmentGrid environment){
 		ArrayList <GridPoint>cells = generateColumn(new GridPoint(environment.getColumns()-1,0),new GridPoint(environment.getColumns()-1,environment.getRows()-1));
-		return new FinalDestination(generateCoordinates(cells),cells);
+		GridPoint environmentCenter = new GridPoint(environment.getColumns()/2,environment.getRows()/2);
+		return new FinalDestination(generateCoordinates(cells),cells, environmentCenter);
 	}
 
 	public static Destination getCorridorWestDestination(EnvironmentGrid environment){
 		ArrayList <GridPoint>cells = generateColumn(new GridPoint(0,0),new GridPoint(0,environment.getRows()-1));
-		return new FinalDestination(generateCoordinates(cells),cells);
+		GridPoint environmentCenter = new GridPoint(environment.getColumns()/2,environment.getRows()/2);
+		return new FinalDestination(generateCoordinates(cells),cells, environmentCenter);
 	}
 	
 	public static Start getCorridorEastStart(EnvironmentGrid environment){
@@ -118,8 +124,64 @@ public class EnvironmentGenerator {
 		return result;
 	}
 
+	public static MarkerConfiguration searchFinalDestinations(EnvironmentGrid environmentGrid) {
+		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
+		GridPoint environmentCenter = new GridPoint(environmentGrid.getColumns()/2,environmentGrid.getRows()/2);
+		boolean found = false;
+		ArrayList<GridPoint> cells = null;
+		for (int i=0;i<environmentGrid.getRows();i+=1){
+			for (int j=0;j<environmentGrid.getColumns();j+=1){
+				GridPoint cell = new GridPoint(j, i);
+				if(environmentGrid.belongsToFinalDestination(cell) && !found){
+					found = true;
+					cells = new ArrayList<GridPoint>();
+					cells.add(cell);
+				}else if(environmentGrid.belongsToFinalDestination(cell) && found){
+					cells.add(cell);
+				}else if (found){
+					//skip vertical markers or any other FinalDestination marker drawn in only 1 cell
+					if (cells.size()>1)
+						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+					found = false;
+				}
+			}
+			if (found){
+				//skip vertical markers or any other FinalDestination marker drawn in only 1 cell
+				if (cells.size()>1) 
+					markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+				found = false;
+			}
+		}
+		cells = null;
+		for (int j=0;j<environmentGrid.getColumns();j+=1){
+			for (int i=0;i<environmentGrid.getRows();i+=1){
+				GridPoint cell = new GridPoint(j, i);
+				if(environmentGrid.belongsToFinalDestination(cell) && !found){
+					found = true;
+					cells = new ArrayList<GridPoint>();
+					cells.add(cell);
+				}else if(environmentGrid.belongsToFinalDestination(cell) && found){
+					cells.add(cell);
+				}else if (found){
+					//skip horizontal markers or any other FinalDestination marker drawn in only 1 cell
+					if (cells.size()>1)
+						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+					found = false;
+				}
+			}
+			if (found){
+				//skip horizontal markers or any other FinalDestination marker drawn in only 1 cell
+				if (cells.size()>1)
+					markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+				found = false;
+			}
+		}
+		return markerConfiguration;
+	}
+	
 	public static MarkerConfiguration generateBorderDestinations(EnvironmentGrid environmentGrid) {
 		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
+		GridPoint environmentCenter = new GridPoint(environmentGrid.getColumns()/2,environmentGrid.getRows()/2);
 		boolean found = false;
 		ArrayList<GridPoint> cells = null;
 		for (int i=0;i<environmentGrid.getRows();i+=environmentGrid.getRows()-1){
@@ -133,13 +195,13 @@ public class EnvironmentGenerator {
 					cells.add(cell);
 				}else if (found){
 					if (j>1) //skip corner
-						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells));
+						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
 					found = false;
 				}
 			}
 			if (found){
 				if (cells.size()>1) //skip corner for the moment
-					markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells));
+					markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
 				found = false;
 			}
 		}
@@ -156,14 +218,14 @@ public class EnvironmentGenerator {
 				}else if (found){
 					if (i==1){ //add corner if it has not been added before
 						if	(!markerConfiguration.getDestinations().get(markerConfiguration.getDestinations().size()-1).getCells().contains(cells.get(0)))
-							markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells));
+							markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
 					}else
-						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells));
+						markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
 					found = false;
 				}
 			}
 			if (found){
-				markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells));
+				markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
 				found = false;
 			}
 		}
@@ -172,15 +234,29 @@ public class EnvironmentGenerator {
 	
 	public static void addTacticalDestinations(MarkerConfiguration markerConfiguration, EnvironmentGrid environmentGrid){
 		ArrayList<GridPoint> consideredCells = new ArrayList<GridPoint>();
-		ArrayList<GridPoint> cells = null;
+		ArrayList<GridPoint> destinationCells = null;
 		for (int i=0;i<environmentGrid.getRows();i++){
 			for (int j=0;j<environmentGrid.getColumns();j++){
 				GridPoint cell = new GridPoint(j, i);
 				if (environmentGrid.belongsToTacticalDestination(cell) && !consideredCells.contains(cell)){
-					cells = new ArrayList<GridPoint>();
-					cells.add(cell);
-					consideredCells.add(cell);
-					Neighbourhood neighbourhood = NeighbourhoodUtility.calculateVonNeumannNeighbourhood(cell);
+					destinationCells = new ArrayList<GridPoint>();
+					List<GridPoint> visitList = new ArrayList<GridPoint>();
+					visitList.add(cell);
+					while(!visitList.isEmpty()){
+						GridPoint currentCell = visitList.get(0);
+						visitList.remove(0);
+ 						destinationCells.add(currentCell);
+						consideredCells.add(currentCell);
+						Neighbourhood neighbourhood = NeighbourhoodUtility.calculateVonNeumannNeighbourhood(currentCell);
+						for (GridPoint neighbour : neighbourhood.getObjects()){
+							if (!destinationCells.contains(neighbour) && environmentGrid.belongsToTacticalDestination(neighbour)){
+								visitList.add(neighbour);
+							}
+						}
+					
+					}
+					
+					/**
 					GridPoint difference = null;
 					for (GridPoint neighbour : neighbourhood.getObjects()){
 						if (!neighbour.equals(cell) && environmentGrid.belongsToTacticalDestination(neighbour)){
@@ -196,8 +272,10 @@ public class EnvironmentGenerator {
 							consideredCells.add(cell);
 							neighbour = MathUtility.gridPointDifference(cell, difference);
 						}while (environmentGrid.belongsToTacticalDestination(neighbour));
-					}
-					TacticalDestination tacticalDestination = new TacticalDestination(generateCoordinates(cells), cells, environmentGrid.isStairsBorder(cells.get(0)));
+					}**/
+					
+					
+					TacticalDestination tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
 					markerConfiguration.addDestination(tacticalDestination);
 				}
 			}
