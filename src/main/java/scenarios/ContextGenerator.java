@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class ContextGenerator {
 	
-	public static Context createContextWithResourceEnvironmentFileV2(String path){
+	public static Context createContextWithResourceEnvironmentFileV2(String envFileName){
 		EnvironmentGrid environmentGrid = null;
 		MarkerConfiguration markerConfiguration = null;
 		try {
-			File environmentFile = new File(Constants.RESOURCE_PATH+"/"+ Constants.ENVIRONMENT_FILE);
+			File environmentFile = new File(Constants.RESOURCE_PATH+"/"+ envFileName);
 			environmentGrid = new EnvironmentGrid(environmentFile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -24,11 +24,6 @@ public class ContextGenerator {
 		markerConfiguration = EnvironmentGenerator.searchFinalDestinations(environmentGrid);
 		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);
 		Context context = new Context(environmentGrid, markerConfiguration);
-		try {
-			context.saveConfiguration(path);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return context;
 	}
 	

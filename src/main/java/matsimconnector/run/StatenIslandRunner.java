@@ -1,22 +1,24 @@
 package matsimconnector.run;
 
+import java.io.IOException;
+
 import matsimconnector.congestionpricing.MSACongestionHandler;
 import matsimconnector.congestionpricing.MSAMarginalCongestionPricingContolerListener;
 import matsimconnector.congestionpricing.MSATollDisutilityCalculatorFactory;
 import matsimconnector.congestionpricing.MSATollHandler;
 import matsimconnector.engine.CAMobsimFactory;
 import matsimconnector.engine.CATripRouterFactory;
-import matsimconnector.network.HybridNetworkBuilder;
-import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
 import matsimconnector.scenariogenerator.NetworkGenerator;
 import matsimconnector.scenariogenerator.PopulationGenerator;
 import matsimconnector.utility.Constants;
+import matsimconnector.utility.IdUtility;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.PopulationWriter;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
@@ -34,6 +36,7 @@ import org.matsim.core.network.NetworkWriter;
 import org.matsim.core.scenario.ScenarioUtils;
 
 import pedca.context.Context;
+import pedca.environment.network.Coordinate;
 import scenarios.ContextGenerator;
 
 import com.google.inject.Provider;
@@ -44,12 +47,15 @@ public class StatenIslandRunner implements IterationStartsListener {
 	private static String inputDir = Constants.INPUT_PATH;
 	private static String outputDir = Constants.OUTPUT_PATH;
 	private static int POPULATION_SIZE = 5000;
+	private static String[] environmentFiles = {"stGeorge_1F_1.csv","WhiteHall_2F_4.csv"};
+	private static double[] envRotation = {0,0};//135, 45};
+	
 
 	public static void main(String[] args){
-		Constants.SIMULATION_ITERATIONS = 100;
+		Constants.SIMULATION_ITERATIONS = 30;
 		Constants.SIMULATION_DURATION = 16000;
 		Constants.VIS = true;
-		Constants.ENVIRONMENT_FILE = "stGeorge_Environment2.csv";
+		Constants.ORIGIN_FLOWS[0] = "2n";
 		generateScenario();
 		runSimulation();
 	}
@@ -59,8 +65,18 @@ public class StatenIslandRunner implements IterationStartsListener {
 		Config c = ConfigUtils.createConfig();
 		Scenario scenario = ScenarioUtils.createScenario(c);
 		
-		Context contextCA = ContextGenerator.createContextWithResourceEnvironmentFileV2(inputDir+"/CAScenario");
-		NetworkGenerator.createNetwork(scenario, contextCA);
+		Context[] contextCAs = new Context[environmentFiles.length];
+		for (int i = 0;i<contextCAs.length;i++){		
+			contextCAs[i] = ContextGenerator.createContextWithResourceEnvironmentFileV2(environmentFiles[i]);
+			contextCAs[i].environmentOrigin = new Coordinate(i*150, i*200);
+			contextCAs[i].environmentRotation = envRotation[i];
+			try {
+				contextCAs[i].saveConfiguration(inputDir+"/CAScenario/input"+i);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			NetworkGenerator.createNetwork(scenario, contextCAs[i]);
+		}		
 		
 		c.network().setInputFile(inputDir + "/network.xml.gz");
 		c.strategy().addParam("Module_1", "ReRoute");
@@ -122,9 +138,16 @@ public class StatenIslandRunner implements IterationStartsListener {
 	public static void runSimulation() {
 		Config c = ConfigUtils.loadConfig(inputDir+"/config.xml");
 		Scenario scenario = ScenarioUtils.loadScenario(c);
-		CAScenario scenarioCA = new CAScenario(inputDir+"/CAScenario");
-		HybridNetworkBuilder.buildNetwork(scenarioCA.getCAEnvironment(Id.create("0", CAEnvironment.class)), scenarioCA);
+		CAScenario scenarioCA = new CAScenario(inputDir+"/CAScenario", environmentFiles.length);
+		scenarioCA.initNetworks();
+		//HybridNetworkBuilder.buildNetwork(scenarioCA.getCAEnvironment(Id.create("0", CAEnvironment.class)), scenarioCA);
 		scenarioCA.connect(scenario);
+		
+		cleanNetwork(scenario.getNetwork());
+		
+		new NetworkWriter(scenario.getNetwork()).write(c.network().getInputFile());
+		
+//		System.exit(0);
 		
 		c.controler().setWriteEventsInterval(1);
 		c.controler().setLastIteration(Constants.SIMULATION_ITERATIONS-1);
@@ -180,6 +203,50 @@ public class StatenIslandRunner implements IterationStartsListener {
 		controller.addControlerListener(runner);
 		controller.run();
 	}
+
+	private static void cleanNetwork(Network net) {
+		net.removeLink(IdUtility.createLinkId(0, 19, 23));
+		net.removeLink(IdUtility.createLinkId(0, 23, 19));
+		net.removeLink(IdUtility.createLinkId(0, 24, 22));
+		net.removeLink(IdUtility.createLinkId(0, 25, 23));
+		
+		net.removeLink(IdUtility.createLinkId(0, 16, 26));
+		net.removeLink(IdUtility.createLinkId(0, 18, 26));
+		net.removeLink(IdUtility.createLinkId(0, 19, 26));
+		net.removeLink(IdUtility.createLinkId(0, 20, 26));
+		
+		net.removeLink(IdUtility.createLinkId(0, 16, 18));
+		net.removeLink(IdUtility.createLinkId(0, 16, 19));
+		net.removeLink(IdUtility.createLinkId(0, 16, 20));
+		net.removeLink(IdUtility.createLinkId(0, 18, 16));
+		net.removeLink(IdUtility.createLinkId(0, 18, 20));
+		net.removeLink(IdUtility.createLinkId(0, 18, 19));
+		net.removeLink(IdUtility.createLinkId(0, 18, 22));
+		net.removeLink(IdUtility.createLinkId(0, 19, 16));
+		net.removeLink(IdUtility.createLinkId(0, 19, 18));
+		net.removeLink(IdUtility.createLinkId(0, 19, 20));
+		net.removeLink(IdUtility.createLinkId(0, 20, 18));
+		net.removeLink(IdUtility.createLinkId(0, 20, 19));
+		net.removeLink(IdUtility.createLinkId(0, 20, 16));
+		
+		net.removeLink(IdUtility.createLinkId(0, 20, 22));
+		net.removeLink(IdUtility.createLinkId(0, 22, 20));
+		net.removeLink(IdUtility.createLinkId(0, 22, 18));
+		net.removeLink(IdUtility.createLinkId(0, 22, 14));
+		net.removeLink(IdUtility.createLinkId(0, 20, 14));
+		net.removeLink(IdUtility.createLinkId(0, 24, 22));
+
+		net.removeLink(IdUtility.createLinkId(1, 15, 22));
+		net.removeLink(IdUtility.createLinkId(1, 22, 25));
+		net.removeLink(IdUtility.createLinkId(1, 25, 22));
+		net.removeLink(IdUtility.createLinkId(1, 27, 30));
+		net.removeLink(IdUtility.createLinkId(1, 28, 30));
+		net.removeLink(IdUtility.createLinkId(1, 28, 25));
+		net.removeLink(IdUtility.createLinkId(1, 29, 26));
+		net.removeLink(IdUtility.createLinkId(1, 29, 30));
+		
+	}
+
 
 	@Override
 	public void notifyIterationStarts(IterationStartsEvent event) {

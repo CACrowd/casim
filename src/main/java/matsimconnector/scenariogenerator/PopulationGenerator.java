@@ -68,9 +68,9 @@ public class PopulationGenerator {
 
 	private static Id<Link> getDestinationLinkId(Link originLink, ArrayList<Link> destinationLinks) {
 		String originNodeId = originLink.getFromNode().getId().toString();
-		if (originNodeId.endsWith("n"))
+		if (originNodeId.endsWith("2n"))
 			for (Link link : destinationLinks)
-				if (link.getFromNode().getId().toString().endsWith("s"))
+				if (link.getFromNode().getId().toString().endsWith("n")&&!link.getFromNode().getId().toString().endsWith("2n")) //s"))
 					return link.getFromNode().getInLinks().values().iterator().next().getId();
 		if (originNodeId.endsWith("s"))
 			for (Link link : destinationLinks)
@@ -89,8 +89,8 @@ public class PopulationGenerator {
 
 	private static boolean isOriginNode(Node node) {
 		boolean result = false;
-		for (int i=0;!result&&i<Constants.ORIGIN_FLOWS.length();i++){
-			result=node.getId().toString().endsWith(""+Constants.ORIGIN_FLOWS.charAt(i));
+		for (int i=0;!result&&i<Constants.ORIGIN_FLOWS.length;i++){
+			result=node.getId().toString().endsWith(""+Constants.ORIGIN_FLOWS[i]);
 		}				
 		return result;
 		//return node.getId().toString().endsWith("n")||node.getId().toString().endsWith("s")||node.getId().toString().endsWith("w")||node.getId().toString().endsWith("e");

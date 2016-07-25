@@ -5,7 +5,6 @@ import static org.hamcrest.number.IsCloseTo.closeTo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -22,7 +21,9 @@ import org.junit.Test;
 
 public class CorridorFundDiagTest {
 
-
+	private static String [] origin1Dir = {"w"};
+	private static String [] origins2Dir = {"w", "e"};
+	
     private static final double scenarioLength = 10.;
 	private static double tic = 0.25;
 	private static double maxDensity = 1./Math.pow(Constants.CA_CELL_SIDE,2);
@@ -47,13 +48,13 @@ public class CorridorFundDiagTest {
 		String FD_PATH = ""+Constants.FD_TEST_PATH;
 		setupCommonConstants();
 		Constants.FD_TEST_PATH += "1Dir/";
-		Constants.ORIGIN_FLOWS = "w";
+		Constants.ORIGIN_FLOWS = origin1Dir;
 		new CorridorFundDiagTest().generateFD();
 		
 		Constants.FD_TEST_PATH = FD_PATH;
 		setupCommonConstants();
 		Constants.FD_TEST_PATH += "2Dir/";
-		Constants.ORIGIN_FLOWS = "we";
+		Constants.ORIGIN_FLOWS = origins2Dir;
 		new CorridorFundDiagTest().generateFD();
 	}
 	
@@ -94,7 +95,7 @@ public class CorridorFundDiagTest {
 			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
 			Constants.FD_TEST_PATH += "1Dir/";
-			Constants.ORIGIN_FLOWS = "w";
+			Constants.ORIGIN_FLOWS = origin1Dir;
 			generateFD();
 			File res = new File(Constants.FD_TEST_PATH+"fd_data.csv");
 			double [] avgValuesTest = new double[(int)(maxDensity/tic)];
@@ -112,7 +113,8 @@ public class CorridorFundDiagTest {
 			ORIGINAL_FD_PATH = ""+Constants.FD_TEST_PATH;
 			setupCommonConstants();
 			Constants.FD_TEST_PATH += "2Dir/";
-			Constants.ORIGIN_FLOWS = "we";
+			Constants.ORIGIN_FLOWS = null; 
+			Constants.ORIGIN_FLOWS = origins2Dir;
 			generateFD();
 			File res = new File(Constants.FD_TEST_PATH+"fd_data.csv");
 			double [] avgValuesTest = new double[(int)(maxDensity/tic)];

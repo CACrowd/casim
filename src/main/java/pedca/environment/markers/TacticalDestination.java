@@ -12,11 +12,20 @@ public class TacticalDestination extends Destination {
 	private boolean isStairsBorder;
 	private double width;
 	private final Coordinate coordinate;
+	
+	//to model turnstiles or other doors implying delays to walk through - if 0 means that the object is just a set of normal walkable cells
+	private final float additionalTimeToPass;
+	
 
 	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
+		this(coordinate, cells, isStairsBorder, 0);
+	}
+	
+	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, float additionalTimeToPass){
 		super(cells);
 		this.coordinate = coordinate;
 		this.isStairsBorder = isStairsBorder;
+		this.additionalTimeToPass = additionalTimeToPass;
 		calculateWidth();
 	}
 

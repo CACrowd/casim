@@ -54,7 +54,7 @@ public class MarkerConfiguration {
 	}
 
 	public void saveConfiguration(String path) throws IOException{
-		path = path+"/input/markers";
+		path = path+"/markers";
 		FileUtility.deleteDirectory(new File(path));
 		new File(path+"/starts").mkdirs();
 		new File(path+"/destinations").mkdirs();
@@ -88,7 +88,7 @@ public class MarkerConfiguration {
 	}
 	
 	public void loadConfiguration(String path) throws IOException, ClassNotFoundException{
-		path = path+"/input/markers";
+		path = path+"/markers";
 		int countFiles = new File(path+"/starts").listFiles().length;
 		FileInputStream streamIn; 
 		ObjectInputStream ois;

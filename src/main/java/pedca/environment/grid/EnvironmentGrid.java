@@ -21,7 +21,7 @@ public class EnvironmentGrid extends Grid<Integer> {
 	}
 	
 	public EnvironmentGrid(String path) throws IOException{
-		super(path+"/input/environment/environmentGrid.csv");
+		super(path+"/environment/environmentGrid.csv");
 	}
 	
 	public void setCellValue(int row, int col, int value){
@@ -84,9 +84,9 @@ public class EnvironmentGrid extends Grid<Integer> {
 	
 	@Override
 	public void saveCSV(String path) throws IOException {
-		path = path+"/input/environment/";
+		path = path+"/environment";
 		new File(path).mkdirs();
-		File file = new File(path+"environmentGrid.csv");
+		File file = new File(path+"/environmentGrid.csv");
 		if (!file.exists()) {
 			file.createNewFile();
 		} 

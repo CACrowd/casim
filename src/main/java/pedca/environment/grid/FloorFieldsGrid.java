@@ -63,7 +63,7 @@ public class FloorFieldsGrid extends Grid<Double> {
 					newvalue+=1;
 				if((nvalue==Constants.MAX_FF_VALUE || nvalue>newvalue)){
 					setCellValue(fieldLevel,new GridPoint(x,y), newvalue);
-					if (!environment.belongsToTacticalDestination(neighbour))
+					if ((pivotValue == 0) || (!environment.belongsToTacticalDestination(pivot) || environment.belongsToTacticalDestination(neighbour)))
 						L.add(neighbour);
 				}	
 			}
@@ -88,7 +88,7 @@ public class FloorFieldsGrid extends Grid<Double> {
 
 	@Override
 	public void saveCSV(String path) throws IOException {
-		path = path+"/input/environment/floorFields";
+		path = path+"/environment/floorFields";
 		new File(path).mkdirs();
 		for(int level=0;level<this.levels;level++){
 			File file = new File(path+"/floorField_"+level+".csv");
@@ -98,7 +98,7 @@ public class FloorFieldsGrid extends Grid<Double> {
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			
-			for(int i=0;i<getRows();i++){
+			for(int i=getRows()-1;i>=0;i--){
 				String line="";
 				for(int j=0;j<getColumns();j++)
 					line+=getCellValue(level, new GridPoint(j,i))+",";

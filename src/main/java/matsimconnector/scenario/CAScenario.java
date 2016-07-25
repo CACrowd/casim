@@ -35,6 +35,12 @@ public class CAScenario {
 		this.linkToEnvironment = new HashMap<Link, CAEnvironment>();
 	}
 	
+	public CAScenario(String path, int nEnvironments){
+		this();
+		for (int i=0;i<nEnvironments;i++)
+			loadConfiguration(path+"/input"+i);
+	}
+	
 	public CAScenario(String path){
 		this();
 		loadConfiguration(path);
@@ -46,8 +52,9 @@ public class CAScenario {
 	}
 	
 	public void initNetworks(){
+		int index = 0;
 		for (CAEnvironment environmentCA : environments.values())
-			HybridNetworkBuilder.buildNetwork(environmentCA,this);
+			HybridNetworkBuilder.buildNetwork(environmentCA,this, index++);
 	}
 	
 	public void connect(Scenario matsimScenario){

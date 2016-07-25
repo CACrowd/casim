@@ -58,7 +58,7 @@ public abstract class Grid<T> {
         return new GridPoint(col, row);
 
     }
-
+    
     public double getOffsetX() {
         return this.offsetX;
     }

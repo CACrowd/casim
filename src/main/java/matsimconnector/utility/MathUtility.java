@@ -57,6 +57,10 @@ public class MathUtility {
 		return new GridPoint(gp1.getX()-gp2.getX(), gp1.getY()-gp2.getY());
 	}
 	
+	public static Coordinate sum(Coordinate c1, Coordinate c2){
+		return new Coordinate(c1.getX()+c2.getX(), c1.getY()+c2.getY());
+	}
+	
 	public static GridPoint gridPointSum(GridPoint gp1, GridPoint gp2){
 		return new GridPoint(gp1.getX()+gp2.getX(), gp1.getY()+gp2.getY());
 	}

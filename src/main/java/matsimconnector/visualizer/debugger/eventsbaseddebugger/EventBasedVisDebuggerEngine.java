@@ -20,29 +20,48 @@
 
 package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import matsimconnector.agents.Pedestrian;
-import connector.environment.TransitionArea;
-import matsimconnector.events.*;
-import matsimconnector.events.debug.*;
+import matsimconnector.events.CAAgentChangeLinkEvent;
+import matsimconnector.events.CAAgentConstructEvent;
+import matsimconnector.events.CAAgentEnterEnvironmentEvent;
+import matsimconnector.events.CAAgentExitEvent;
+import matsimconnector.events.CAAgentLeaveEnvironmentEvent;
+import matsimconnector.events.CAAgentMoveEvent;
+import matsimconnector.events.CAAgentMoveToOrigin;
+import matsimconnector.events.CAEngineStepPerformedEvent;
+import matsimconnector.events.CAEventHandler;
+import matsimconnector.events.debug.ForceReDrawEvent;
+import matsimconnector.events.debug.ForceReDrawEventHandler;
+import matsimconnector.events.debug.LineEvent;
+import matsimconnector.events.debug.LineEventHandler;
+import matsimconnector.events.debug.RectEvent;
+import matsimconnector.events.debug.RectEventHandler;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.MathUtility;
+
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
+
 import pedca.environment.grid.EnvironmentGrid;
-import pedca.environment.grid.Grid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.network.Coordinate;
 import pedca.utility.FileUtility;
-
-import java.io.File;
-import java.util.*;
+import connector.environment.TransitionArea;
 
 public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHandler, ForceReDrawEventHandler, RectEventHandler {
 
@@ -106,14 +125,22 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     }
 
     private void drawNodesAndLinks() {
-        Map<String, Node> nodes = new HashMap<>();
         for (Node n : sc.getNetwork().getNodes().values()) {
             this.vis.addCircleStatic(n.getCoord().getX(), n.getCoord().getY(), .2f, 0, 0, 0, 255, 0);
+            this.vis.addTextStatic(n.getCoord().getX(), n.getCoord().getY()-.3, ""+ n.getId().toString(), 100);
         }
         for (Link l : sc.getNetwork().getLinks().values()) {
 
             Node from = l.getFromNode();
             Node to = l.getToNode();
+            
+            double textXdiff = to.getCoord().getX() - from.getCoord().getX();
+            double textYdiff = to.getCoord().getY() - from.getCoord().getY();
+            
+            double textX = (from.getCoord().getX()+to.getCoord().getX())/2 + textXdiff/3;
+            double textY = (from.getCoord().getY()+to.getCoord().getY())/2 + textYdiff/3;
+            
+            this.vis.addTextStatic(textX, textY, ""+ l.getId().toString(), 150);
 
             if (from != null && to != null) {
                 boolean isStairs = false;
@@ -132,39 +159,41 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     }
 
     private void drawCAEnvironments() {
-
-
         caEnvs.forEach(this::drawCAEnvironment);
-
     }
 
     public void drawCAEnvironment(CAEnvironment environmentCA) {
-        drawObjects(environmentCA.getContext().getEnvironmentGrid());
+        Coordinate origin = MathUtility.sum(environmentCA.getContext().environmentOrigin,new Coordinate(10+environmentCA.getContext().getColumns()*Constants.CA_CELL_SIDE,0));
+		drawObjects(environmentCA.getContext().getEnvironmentGrid(), origin);
         for (PedestrianGrid pedestrianGrid : environmentCA.getContext().getPedestrianGrids())
-            drawPedestrianGridBorders(pedestrianGrid);
+            drawPedestrianGridBorders(pedestrianGrid, origin);
     }
 
-    private void drawObjects(EnvironmentGrid environmentGrid) {
+    private void drawObjects(EnvironmentGrid environmentGrid, Coordinate origin) {
         for (int y = 0; y < environmentGrid.getRows(); y++)
             for (int x = 0; x < environmentGrid.getColumns(); x++)
                 if (environmentGrid.getCellValue(y, x) == pedca.utility.Constants.ENV_OBSTACLE)
-                    drawObstacle(environmentGrid, new GridPoint(x, y));
+                    drawObstacle(environmentGrid, new GridPoint(x, y), origin);
                 else if (environmentGrid.belongsToTacticalDestination(new GridPoint(x, y)))
-                    drawTacticalDestinationCell(environmentGrid, new GridPoint(x, y));
+                    drawTacticalDestinationCell(environmentGrid, new GridPoint(x, y), origin);
     }
 
-    private void drawTacticalDestinationCell(Grid grid, GridPoint gridPoint) {
+    private void drawTacticalDestinationCell(EnvironmentGrid grid, GridPoint gridPoint, Coordinate origin) {
         Coordinate bottomLeft = grid.gridPoint2Coordinate(gridPoint);
+        bottomLeft.setX(bottomLeft.getX()+origin.getX());
+        bottomLeft.setY(bottomLeft.getY()+origin.getY());
         this.vis.addRectStatic(bottomLeft.getX(), bottomLeft.getY() + Constants.CA_CELL_SIDE, Constants.CA_CELL_SIDE, Constants.CA_CELL_SIDE, 150, 150, 255, 150, 0, true);
 
     }
 
-    private void drawObstacle(Grid grid, GridPoint gridPoint) {
+    private void drawObstacle(EnvironmentGrid grid, GridPoint gridPoint, Coordinate origin) {
         Coordinate bottomLeft = grid.gridPoint2Coordinate(gridPoint);
+        bottomLeft.setX(bottomLeft.getX()+origin.getX());
+        bottomLeft.setY(bottomLeft.getY()+origin.getY());
         this.vis.addRectStatic(bottomLeft.getX(), bottomLeft.getY() + Constants.CA_CELL_SIDE, Constants.CA_CELL_SIDE, Constants.CA_CELL_SIDE, 80, 80, 80, 192, 0, true);
     }
 
-    private void drawPedestrianGridBorders(PedestrianGrid pedestrianGrid) {
+    private void drawPedestrianGridBorders(PedestrianGrid pedestrianGrid, Coordinate origin) {
         LineProperty lp = new LineProperty();
         lp.r = 0;
         lp.g = 0;
@@ -188,9 +217,9 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
             c0 = c1;
             c1 = it.next();
             if (pedestrianGrid instanceof TransitionArea)
-                this.vis.addDashedLineStatic(c0.getX(), c0.getY(), c1.getX(), c1.getY(), 0, lp.g, lp.b, lp.a, 0, .3, 0.15);
+                this.vis.addDashedLineStatic(c0.getX()+origin.getX(), c0.getY()+origin.getY(), c1.getX()+origin.getX(), c1.getY()+origin.getY(), 0, lp.g, lp.b, lp.a, 0, .3, 0.15);
             else
-                this.vis.addLineStatic(c0.getX(), c0.getY(), c1.getX(), c1.getY(), lp.r, lp.g, lp.b, lp.a, 0);
+                this.vis.addLineStatic(c0.getX()+origin.getX(), c0.getY()+origin.getY(), c1.getX()+origin.getX(), c1.getY()+origin.getY(), lp.r, lp.g, lp.b, lp.a, 0);
         }
     }
 
@@ -218,11 +247,14 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
         this.nrAgents++;
 
-        double from_x = MathUtility.convertGridCoordinate(event.getFrom_x());
-        double from_y = MathUtility.convertGridCoordinate(event.getFrom_y());
-        double to_x = MathUtility.convertGridCoordinate(event.getTo_x());
-        double to_y = MathUtility.convertGridCoordinate(event.getTo_y());
+        Coordinate origin = MathUtility.sum(event.getPedestrian().getContext().environmentOrigin,new Coordinate(10+event.getPedestrian().getContext().getColumns()*Constants.CA_CELL_SIDE,0));
 
+        double from_x = MathUtility.convertGridCoordinate(event.getFrom_x())+origin.getX();
+        double from_y = MathUtility.convertGridCoordinate(event.getFrom_y())+origin.getY();
+        double to_x = MathUtility.convertGridCoordinate(event.getTo_x())+origin.getX();
+        double to_y = MathUtility.convertGridCoordinate(event.getTo_y())+origin.getY();
+
+        
 		/*
         GridPoint deltaPos = DirectionUtility.convertHeadingToGridPoint(event.getDirection());
 		double to_x_triangle = MathUtility.convertGridCoordinate(event.getFrom_x()+deltaPos.getX());

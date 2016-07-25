@@ -6,7 +6,11 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 
 public class IdUtility {
-	private static String nodeIdPrefix = "HybridNode_";
+	private static String nodeIdPrefix = "HN_x_";
+	
+	public static Id<Link> createLinkId(int environmentCAId, int fromCANodeId, int toCANodeId) {
+		return createLinkId(createNodeId(fromCANodeId,environmentCAId), createNodeId(toCANodeId,environmentCAId));
+	}
 	
 	public static Id<Link> createLinkId(Id<Node> fromId, Id<Node> toId) {
 		return Id.create(fromId.toString() + "-->"+toId.toString(),Link.class);
@@ -14,6 +18,10 @@ public class IdUtility {
 	
 	public static Id<Node> createNodeId(int CANodeId) {
 		return Id.create(nodeIdPrefix+CANodeId,Node.class);
+	}
+	
+	public static Id<Node> createNodeId(int CANodeId, int environmentCAId) {
+		return Id.create(nodeIdPrefix.substring(0, nodeIdPrefix.lastIndexOf('_')-1)+environmentCAId+"_"+CANodeId,Node.class);
 	}
 	
 	public static int nodeIdToDestinationId(Id<Node> nodeId){

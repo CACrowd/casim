@@ -11,7 +11,7 @@ public class Constants {
 	public static final String CAR_LINK_MODE = "car";
 	public static final String TO_Q_LINK_MODE = "CA->Q";
 	public static final String TO_CA_LINK_MODE = "Q->CA";
-	public static String ORIGIN_FLOWS = "n";	//each char denote one origin of flow (e.g. "e" stays for "east")
+	public static String[] ORIGIN_FLOWS = {"n"};	//each char denote one origin of flow (e.g. "e" stays for "east")
 		
 	public static final double CA_CELL_SIDE = 0.4;
 	public static final double CA_STEP_DURATION = .3;
