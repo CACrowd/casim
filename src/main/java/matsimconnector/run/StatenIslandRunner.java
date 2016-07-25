@@ -16,7 +16,6 @@ import matsimconnector.utility.IdUtility;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
 
-import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.PopulationWriter;
@@ -46,7 +45,7 @@ public class StatenIslandRunner implements IterationStartsListener {
 	private static EventBasedVisDebuggerEngine dbg;
 	private static String inputDir = Constants.INPUT_PATH;
 	private static String outputDir = Constants.OUTPUT_PATH;
-	private static int POPULATION_SIZE = 5000;
+	private static int POPULATION_SIZE = 2000;
 	private static String[] environmentFiles = {"stGeorge_1F_1.csv","WhiteHall_2F_4.csv"};
 	private static double[] envRotation = {135, 45};
 	
@@ -80,7 +79,7 @@ public class StatenIslandRunner implements IterationStartsListener {
 		
 		c.network().setInputFile(inputDir + "/network.xml.gz");
 		c.strategy().addParam("Module_1", "ReRoute");
-		c.strategy().addParam("ModuleProbability_1", ".05");
+		c.strategy().addParam("ModuleProbability_1", ".1");
 		c.strategy().addParam("ModuleDisableAfterIteration_1", "10");
 		c.strategy().addParam("Module_2", "ChangeExpBeta");
 		c.strategy().addParam("ModuleProbability_2", ".9");
@@ -237,6 +236,8 @@ public class StatenIslandRunner implements IterationStartsListener {
 		net.removeLink(IdUtility.createLinkId(0, 24, 22));
 
 		net.removeLink(IdUtility.createLinkId(1, 15, 22));
+		net.removeLink(IdUtility.createLinkId(1, 16, 18));
+		net.removeLink(IdUtility.createLinkId(1, 17, 18));
 		net.removeLink(IdUtility.createLinkId(1, 22, 25));
 		net.removeLink(IdUtility.createLinkId(1, 25, 22));
 		net.removeLink(IdUtility.createLinkId(1, 27, 30));

@@ -12,9 +12,9 @@ import pedca.context.Context;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.DelayedDestination;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
-import pedca.environment.markers.TacticalDestination;
 import pedca.utility.NeighbourhoodUtility;
 import connector.environment.TransitionArea;
 
@@ -57,8 +57,8 @@ public class Pedestrian extends Agent {
 	private void perceptIfFinalDestination(double now) {
 		if (timeToCrossDestination == 0 && getStaticFFValue(getPosition())==0. && transitionArea == null){
 			destinationReached = true;
-			if(destination instanceof TacticalDestination && ((TacticalDestination)destination).hasDelayToCross())
-				timeToCrossDestination = ((TacticalDestination)destination).waitingTimeForCrossing() + 1;
+			if(destination instanceof DelayedDestination)
+				timeToCrossDestination = ((DelayedDestination)destination).waitingTimeForCrossing()+1;
 			if (now < Constants.CA_TEST_END_TIME){
 				calculateNextStepNeighbourhood();
 			}

@@ -6,6 +6,7 @@ import java.util.List;
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.DelayedDestination;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
 import pedca.environment.markers.MarkerConfiguration;
@@ -282,7 +283,7 @@ public class EnvironmentGenerator {
 					
 					TacticalDestination tacticalDestination;
 					if (environmentGrid.belongsToDelayedDestination(cell))
-						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 3);
+						tacticalDestination = new DelayedDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 6);
 					else
 						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
 					markerConfiguration.addDestination(tacticalDestination);

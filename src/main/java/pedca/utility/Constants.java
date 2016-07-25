@@ -13,6 +13,7 @@ public class Constants {
 	public static final int ENV_FINAL_DESTINATION = -3;
 	public static final int ENV_STAIRS_BORDER = -4;
 	public static final int ENV_DELAYED_DESTINATION = -5;   //destination with additional time to cross it
+	public static final int ENV_CONSTRAINED_DESTINATION = -6;
 	public static final int ENV_WALKABLE_CELL = 0;
 	public static final double MAX_FF_VALUE = Double.POSITIVE_INFINITY;
 	
@@ -27,6 +28,7 @@ public class Constants {
 	public static final double SHADOWS_PROBABILITY = 1.;
 
 	public static final int STEP_FOR_BIDIRECTIONAL_SWAPPING = 2;
+
 
 
 	public static double DENSITY_GRID_RADIUS = 1.2;
