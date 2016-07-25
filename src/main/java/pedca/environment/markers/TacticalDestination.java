@@ -14,25 +14,48 @@ public class TacticalDestination extends Destination {
 	private final Coordinate coordinate;
 	
 	//to model turnstiles or other doors implying delays to walk through - if 0 means that the object is just a set of normal walkable cells
-	private final float additionalTimeToPass;
+	private final float stepToCross;
+	private float currentStepToCross;
 	
 
 	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
 		this(coordinate, cells, isStairsBorder, 0);
 	}
 	
-	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, float additionalTimeToPass){
+	public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, float flowCapacity){
 		super(cells);
 		this.coordinate = coordinate;
 		this.isStairsBorder = isStairsBorder;
-		this.additionalTimeToPass = additionalTimeToPass;
+		if (flowCapacity == 0)
+			this.stepToCross = 0;
+		else
+			this.stepToCross = (1/flowCapacity)/Constants.STEP_DURATION;
+		currentStepToCross = 0;
 		calculateWidth();
 	}
 
-	public Coordinate getCoordinate() {
-		return coordinate;
+	public boolean isStairsBorder() {
+		return isStairsBorder;
+	}
+
+	/**
+	 * returns the time (in steps) needed by pedestrians to cross the destination, to design doors or turnstiles. 
+	 */
+	public int waitingTimeForCrossing(){
+		int result = (int)currentStepToCross;
+		currentStepToCross+=stepToCross;
+		return result;
 	}
 	
+	public boolean hasDelayToCross() {
+		return stepToCross>0;
+	}
+
+	public void step() {
+		if (currentStepToCross > 0)
+			--currentStepToCross;		
+	}
+
 	/**
 	 * TODO: till now the width is calculated by only considering
 	 * cases where the destination represent a perfectly horizontal 
@@ -50,8 +73,10 @@ public class TacticalDestination extends Destination {
 		return getLevel();
 	}
 
-	public boolean isStairsBorder() {
-		return isStairsBorder;
+	public Coordinate getCoordinate() {
+		return coordinate;
 	}
+
+
 	
 }

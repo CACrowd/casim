@@ -13,9 +13,9 @@ public class Constants {
 	public static final String TO_CA_LINK_MODE = "Q->CA";
 	public static String[] ORIGIN_FLOWS = {"n"};	//each char denote one origin of flow (e.g. "e" stays for "east")
 		
-	public static final double CA_CELL_SIDE = 0.4;
-	public static final double CA_STEP_DURATION = .3;
-	public static final Double PEDESTRIAN_SPEED = CA_CELL_SIDE/CA_STEP_DURATION;
+	public static final float CA_CELL_SIDE = 0.4f;
+	public static final float CA_STEP_DURATION = .3f;
+	public static final Float PEDESTRIAN_SPEED = CA_CELL_SIDE/CA_STEP_DURATION;
 	public static boolean stopOnStairs;	
 	
 	/** this is for the generation of the fundamental diagram of the CA: pedestrian will be kept inside the
@@ -37,7 +37,7 @@ public class Constants {
 	
 	public static Double FLOPW_CAP_PER_METER_WIDTH = 1.2;
 	
-	public static final Double TRANSITION_AREA_LENGTH = CA_CELL_SIDE*5;
+	public static final Float TRANSITION_AREA_LENGTH = CA_CELL_SIDE*5;
 	public static Double FAKE_LINK_WIDTH = 10.;  // 1.2;
 	public static Double CA_LINK_LENGTH = 10.;
 	public static final Double TRANSITION_LINK_LENGTH = TRANSITION_AREA_LENGTH/2.;

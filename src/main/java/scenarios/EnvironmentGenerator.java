@@ -46,6 +46,12 @@ public class EnvironmentGenerator {
 			}
 		}
 		
+		//tactical destination related to the bottleneck
+		for(int x = wallWest+1;x<wallEast;x++){
+			environment.setCellValue(wallBottom, x, Constants.ENV_TACTICAL_DESTINATION);
+		}
+		
+		
 	}	
 	
 	public static void initCorridorWithWalls(EnvironmentGrid environment, boolean rotate90Degrees){
@@ -274,8 +280,11 @@ public class EnvironmentGenerator {
 						}while (environmentGrid.belongsToTacticalDestination(neighbour));
 					}**/
 					
-					
-					TacticalDestination tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
+					TacticalDestination tacticalDestination;
+					if (environmentGrid.belongsToDelayedDestination(cell))
+						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 3);
+					else
+						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
 					markerConfiguration.addDestination(tacticalDestination);
 				}
 			}

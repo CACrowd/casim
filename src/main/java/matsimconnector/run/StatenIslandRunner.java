@@ -48,7 +48,7 @@ public class StatenIslandRunner implements IterationStartsListener {
 	private static String outputDir = Constants.OUTPUT_PATH;
 	private static int POPULATION_SIZE = 5000;
 	private static String[] environmentFiles = {"stGeorge_1F_1.csv","WhiteHall_2F_4.csv"};
-	private static double[] envRotation = {0,0};//135, 45};
+	private static double[] envRotation = {135, 45};
 	
 
 	public static void main(String[] args){

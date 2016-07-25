@@ -112,7 +112,12 @@ public class EnvironmentGrid extends Grid<Integer> {
 	}
 	
 	public boolean belongsToTacticalDestination(GridPoint cell){
-		return getCellValue(cell) == Constants.ENV_TACTICAL_DESTINATION || getCellValue(cell) == Constants.ENV_STAIRS_BORDER;
+		int cellValue = getCellValue(cell);
+		return cellValue == Constants.ENV_TACTICAL_DESTINATION || cellValue == Constants.ENV_STAIRS_BORDER || cellValue == Constants.ENV_DELAYED_DESTINATION;
+	}
+	
+	public boolean belongsToDelayedDestination(GridPoint cell){
+		return getCellValue(cell) == Constants.ENV_DELAYED_DESTINATION;
 	}
 
 	public boolean isStairsBorder(GridPoint cell) {

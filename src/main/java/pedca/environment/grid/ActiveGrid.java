@@ -12,7 +12,7 @@ public abstract class ActiveGrid<T> extends Grid<T> {
 		step = 0;
 	}
 	
-	public void update(){
+	public void step(){
 		updateGrid();
 		step++;
 	}

@@ -48,12 +48,13 @@ public class CAAgentMover extends AgentMover {
 					eventManager.processEvent(new CAAgentMoveEvent(now, pedestrian, oldPosition, newPosition));
 				if(!pedestrian.isWaitingToSwap() && pedestrian.isEnteringEnvironment()){
 					moveToCA(pedestrian, now);
-				}else if (!pedestrian.isWaitingToSwap()&& pedestrian.isFinalDestinationReached() && !pedestrian.hasLeftEnvironment()){
+				}else if (!pedestrian.isWaitingToSwap() && pedestrian.isDestinationReached() && !pedestrian.isCrossingDestination() && !pedestrian.hasLeftEnvironment()){
 					Id<Link> nextLinkId = pedestrian.getVehicle().getDriver().chooseNextLinkId();
 					if (engineCA.getCALink(nextLinkId) != null){
 						changeLinkInsideEnvironment(pedestrian, now);
 					}
 					else if(now>= Constants.CA_TEST_END_TIME){
+						//TODO check if the outlink can host pedestrians coming from the CA environment
 						moveToQ(pedestrian, now);
 					}
 				}	
@@ -112,10 +113,10 @@ public class CAAgentMover extends AgentMover {
 			
 		eventManager.processEvent(new CAAgentChangeLinkEvent(time, pedestrian, currentLinkId.toString(), nextLinkId.toString()));
 		
-		//TODO CHANGE THE COLOR OF THE AGENT LC
+		// CHANGE THE COLOR OF THE AGENT LC
 		//eventManager.processEvent(new CAAgentLeaveEnvironmentEvent(time, pedestrian));
 		
-		//TODO CHANGE THE DESTINATION OF THE AGENT
+		// CHANGE THE DESTINATION OF THE AGENT
 		pedestrian.refreshDestination();
 	}	
 	

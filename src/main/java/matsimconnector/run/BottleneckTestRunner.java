@@ -122,7 +122,8 @@ public class BottleneckTestRunner implements IterationStartsListener {
 		CAScenario scenarioCA = new CAScenario(inputDir+"/CAScenario");
 		HybridNetworkBuilder.buildNetwork(scenarioCA.getCAEnvironment(Id.create("0", CAEnvironment.class)), scenarioCA);
 		scenarioCA.connect(scenario);
-				
+		new NetworkWriter(scenario.getNetwork()).write(c.network().getInputFile());
+		
 		c.controler().setWriteEventsInterval(1);
 		c.controler().setLastIteration(0);
 		c.qsim().setEndTime(Constants.SIMULATION_DURATION);

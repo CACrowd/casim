@@ -1,6 +1,5 @@
 package matsimconnector.agents;
 
-import connector.environment.TransitionArea;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
 
@@ -15,25 +14,29 @@ import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
+import pedca.environment.markers.TacticalDestination;
 import pedca.utility.NeighbourhoodUtility;
+import connector.environment.TransitionArea;
 
 public class Pedestrian extends Agent {
 
 	private Id<Pedestrian> Id;
 	private QVehicle vehicle; 
 	private TransitionArea transitionArea;
-	private boolean finalDestinationReached;
+	private boolean destinationReached;
 	private FinalDestination originMarker;
 	private Neighbourhood nextStepNeighbourhood;
 	
-	public Double lastTimeCheckAtExit = null;		
-	
+	public Double lastTimeCheckAtExit = null;
+	private int timeToCrossDestination;		
+
 	public Pedestrian(Agent agent, QVehicle vehicle, TransitionArea transitionArea){
 		this(agent.getID(),agent.getPosition(), agent.getDestination(), agent.getContext());
 		this.vehicle = vehicle;
-		finalDestinationReached = false;
+		destinationReached = false;
 		this.transitionArea = transitionArea;
 		this.originMarker = transitionArea.getReferenceDestination();
+		this.timeToCrossDestination = 0;
 		enterTransitionArea(getPosition());
 	}
 	
@@ -44,19 +47,23 @@ public class Pedestrian extends Agent {
 	
 	@Override
 	public void percept(){
-		if (finalDestinationReached && transitionArea!=null && getStaticFFValue(getPosition())==0.){
+		if (destinationReached && transitionArea!=null && getStaticFFValue(getPosition())==0.){
 			exit();
 		}
+		if (timeToCrossDestination > 0)
+			--timeToCrossDestination;
 	}
 	
 	private void perceptIfFinalDestination(double now) {
-		if (getStaticFFValue(getPosition())==0. && transitionArea == null){
-			finalDestinationReached = true;
+		if (timeToCrossDestination == 0 && getStaticFFValue(getPosition())==0. && transitionArea == null){
+			destinationReached = true;
+			if(destination instanceof TacticalDestination && ((TacticalDestination)destination).hasDelayToCross())
+				timeToCrossDestination = ((TacticalDestination)destination).waitingTimeForCrossing() + 1;
 			if (now < Constants.CA_TEST_END_TIME){
 				calculateNextStepNeighbourhood();
 			}
-		}else if(transitionArea == null){
-			finalDestinationReached = false;
+		}else if(transitionArea == null && timeToCrossDestination == 0){
+			destinationReached = false;
 		}
 	}
 
@@ -68,7 +75,7 @@ public class Pedestrian extends Agent {
 			updateHeading();
 			setPosition(getNewPosition());
 		}else {
-			if (!isWaitingToSwap() && finalDestinationReached && !getNewPosition().equals(getPosition()))
+			if (!isWaitingToSwap() && destinationReached && !getNewPosition().equals(getPosition()))
 				lastTimeCheckAtExit = now;
 			super.move();
 			perceptIfFinalDestination(now);
@@ -84,7 +91,7 @@ public class Pedestrian extends Agent {
 	}
 
 	public double getTransitionAreaFieldValue(GridPoint gridPoint){
-		return transitionArea.getSFFValue(gridPoint,finalDestinationReached);
+		return transitionArea.getSFFValue(gridPoint,destinationReached);
 	}
 	
 	public void setTransitionArea(TransitionArea transitionArea){
@@ -109,15 +116,15 @@ public class Pedestrian extends Agent {
 	}
 	
 	public boolean isEnteringEnvironment(){
-		return transitionArea != null && getStaticFFValue(getPosition())==0. && !finalDestinationReached;
+		return transitionArea != null && getStaticFFValue(getPosition())==0. && !destinationReached;
 	}
 	
-	public boolean isFinalDestinationReached(){
-		return finalDestinationReached;
+	public boolean isDestinationReached(){
+		return destinationReached;
 	}
 	
 	public boolean hasLeftEnvironment(){
-		return finalDestinationReached && transitionArea != null;
+		return destinationReached && transitionArea != null;
 	}
 	
 	public void moveToUniverse(){
@@ -147,7 +154,7 @@ public class Pedestrian extends Agent {
 		Id<Link> linkId = vehicle.getDriver().getCurrentLinkId();
 		int destinationId = IdUtility.linkIdToDestinationId(linkId);
 		this.destination = context.getMarkerConfiguration().getDestination(destinationId);
-		this.finalDestinationReached = false;
+		this.destinationReached = false;
 	}
 	
 	public void moveToEnvironment(){
@@ -182,7 +189,8 @@ public class Pedestrian extends Agent {
 	
 	@Override
 	public Neighbourhood getNeighbourhood(){
-		if(stopOnStairs()){
+		//has to yield position
+		if(stopOnStairs() || timeToCrossDestination > 0){
 			Neighbourhood result = new Neighbourhood();
 			result.add(new GridPoint(position.getX(), position.getY()));
 			return result;
@@ -199,9 +207,16 @@ public class Pedestrian extends Agent {
 			return super.getNeighbourhood();
 	}
 	
-	
 	private boolean stopOnStairs(){
 		return !Constants.stopOnStairs && isOnStairs();
+	}
+	
+	public boolean isCrossingDestination() {
+		return timeToCrossDestination > 1;
+	}
+	
+	public int getTimeToCrossDest(){
+		return timeToCrossDestination;
 	}
 	
 	private boolean isOnStairs(){
@@ -221,8 +236,8 @@ public class Pedestrian extends Agent {
 	}
 	
 	protected boolean canSwap(GridPoint neighbour, PedestrianGrid pedestrianGrid) {
-		if (finalDestinationReached && pedestrianGrid.containsPedestrian(neighbour) && transitionArea == null){
-		 	return ((Pedestrian)pedestrianGrid.getPedestrian(neighbour)).finalDestinationReached;
+		if (destinationReached && pedestrianGrid.containsPedestrian(neighbour) && transitionArea == null){
+		 	return ((Pedestrian)pedestrianGrid.getPedestrian(neighbour)).destinationReached;
 		}			
 		return super.canSwap(neighbour, pedestrianGrid);
 	}

@@ -71,6 +71,7 @@ public class ContextGenerator {
 		EnvironmentGrid environmentGrid = new EnvironmentGrid((int)(sizeY/Constants.CA_CELL_SIDE), (int)(sizeX/Constants.CA_CELL_SIDE));
 		EnvironmentGenerator.initBottleneckScenario(environmentGrid, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
+		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);
 		return new Context(environmentGrid, markerConfiguration);
 	}
 	
