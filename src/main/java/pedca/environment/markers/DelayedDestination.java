@@ -17,8 +17,13 @@ public class DelayedDestination extends TacticalDestination {
 
 	/**
 	 * returns the time (in steps) needed by pedestrians to cross the destination, to design doors or turnstiles. 
+	 * @Input simulation time
 	 */
-	public int waitingTimeForCrossing(){
+	public int waitingTimeForCrossing(double time){
 		return stepToCross;
-	}	
+	}
+	
+	public void step(double time){
+		//DO NOTHING
+	}
 }

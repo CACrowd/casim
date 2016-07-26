@@ -4,6 +4,8 @@ import pedca.context.Context;
 
 import java.io.IOException;
 
+import matsimconnector.utility.Constants;
+
 public class SimulationEngine {
 	private int step;
 	private final int finalStep;
@@ -37,7 +39,7 @@ public class SimulationEngine {
 		agentUpdater.step();
 		conflictSolver.step();
 		agentMover.step();		
-		activeObjectsUpdater.step();
+		activeObjectsUpdater.step(step*Constants.CA_STEP_DURATION);
 		step++;
 	}
 	
@@ -48,7 +50,7 @@ public class SimulationEngine {
 		agentUpdater.step();
 		conflictSolver.step();
 		agentMover.step(time);		
-		activeObjectsUpdater.step();
+		activeObjectsUpdater.step(time);
 		step++;
 	}
 	

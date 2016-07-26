@@ -58,7 +58,7 @@ public class Pedestrian extends Agent {
 		if (timeToCrossDestination == 0 && getStaticFFValue(getPosition())==0. && transitionArea == null){
 			destinationReached = true;
 			if(destination instanceof DelayedDestination)
-				timeToCrossDestination = ((DelayedDestination)destination).waitingTimeForCrossing()+1;
+				timeToCrossDestination = ((DelayedDestination)destination).waitingTimeForCrossing(now)+1;
 			if (now < Constants.CA_TEST_END_TIME){
 				calculateNextStepNeighbourhood();
 			}

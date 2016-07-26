@@ -22,13 +22,15 @@ public class ConstrainedFlowDestination extends DelayedDestination {
 		currentStepToCross = 0;
 	}
 	
-	public int waitingTimeForCrossing(){
+	@Override
+	public int waitingTimeForCrossing(double time){
 		int result = (int)currentStepToCross;
 		currentStepToCross+=stepToCross;
 		return result;
 	}
 
-	public void step() {
+	@Override
+	public void step(double time) {
 		if (currentStepToCross > 0)
 			--currentStepToCross;		
 	}

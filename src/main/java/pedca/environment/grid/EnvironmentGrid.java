@@ -113,11 +113,15 @@ public class EnvironmentGrid extends Grid<Integer> {
 	
 	public boolean belongsToTacticalDestination(GridPoint cell){
 		int cellValue = getCellValue(cell);
-		return cellValue == Constants.ENV_TACTICAL_DESTINATION || (cellValue <= Constants.ENV_STAIRS_BORDER && cellValue >= Constants.ENV_CONSTRAINED_DESTINATION);
+		return cellValue == Constants.ENV_TACTICAL_DESTINATION || (cellValue <= Constants.ENV_STAIRS_BORDER && cellValue >= Constants.ENV_SCHEDULED_DESTINATION);
 	}
 	
 	public boolean belongsToDelayedDestination(GridPoint cell){
 		return getCellValue(cell) == Constants.ENV_DELAYED_DESTINATION;
+	}
+	
+	public boolean belongsToScheduledDestination(GridPoint cell){
+		return getCellValue(cell) == Constants.ENV_SCHEDULED_DESTINATION;
 	}
 	
 	public boolean belongsToConstrainedFlowDestination(GridPoint cell){

@@ -161,6 +161,8 @@ public class NetworkGenerator {
 		if ((nodeShift[0] == 0 && nodeShift[1] == 0) || direction != 's'){
 			Node firstNode;
 			if (direction == 'n' && (nodeShift[0] == 0 && nodeShift[1] == 0))
+				firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+			else if (direction == 'n')
 				firstNode = fac.createNode(Id.create("n_2"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
 			else
 				firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));

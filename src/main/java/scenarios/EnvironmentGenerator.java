@@ -6,10 +6,12 @@ import java.util.List;
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.neighbourhood.Neighbourhood;
+import pedca.environment.markers.ConstrainedFlowDestination;
 import pedca.environment.markers.DelayedDestination;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
 import pedca.environment.markers.MarkerConfiguration;
+import pedca.environment.markers.ScheduledDestination;
 import pedca.environment.markers.Start;
 import pedca.environment.markers.TacticalDestination;
 import pedca.environment.network.Coordinate;
@@ -284,7 +286,14 @@ public class EnvironmentGenerator {
 					TacticalDestination tacticalDestination;
 					if (environmentGrid.belongsToDelayedDestination(cell))
 						tacticalDestination = new DelayedDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 6);
-					else
+					else if(environmentGrid.belongsToConstrainedFlowDestination(cell)){
+						tacticalDestination = new ConstrainedFlowDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 3);
+					}
+					else if(environmentGrid.belongsToScheduledDestination(cell)){
+						double[] scheduleTimes = {600., 1200};
+						tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleTimes);
+						
+					}else
 						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
 					markerConfiguration.addDestination(tacticalDestination);
 				}
