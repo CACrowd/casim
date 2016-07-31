@@ -91,11 +91,11 @@ public class CAEngine {
         CAEnvironment env = new CAEnvironment("1", context);
         this.protoCAScenario.addCAEnvironment(env);
 
-//        try {
-//            new CAScenarioWriter(grid).write("src/main/js/grid.json");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            new CAScenarioWriter(grid).write("src/main/js/grid.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 //        try {
 //            grid.saveCSV("/Users/laemmel/tmp/");
@@ -115,12 +115,12 @@ public class CAEngine {
                     for (int i = 1; i < p.getCoordinateList().size(); i++) {
                         HybridSimProto.Coordinate c1 = p.getCoordinate(i - 1);
                         HybridSimProto.Coordinate c2 = p.getCoordinate(i);
-                        int row1 = grid.y2Row(c1.getY());
-                        int row2 = grid.y2Row(c2.getY());
-                        if (row1 == row2) {
-                            continue; //ignore horizontal segments
-                        }
-                        Edge e = new Edge(c1.getX(), c1.getY(), c2.getX(), c2.getY(), Rasterizer.Kind.WALL);
+//                        int row1 = grid.y2Row(c1.getY());
+//                        int row2 = grid.y2Row(c2.getY());
+//                        if (row1 == row2) {
+//                            continue; //ignore horizontal segments
+//                        }
+                        Edge e = new Edge(c1.getX(), c1.getY(), c2.getX(), c2.getY(), Rasterizer.EdgeType.WALL);
                         edgeTable.add(e);
 
 
@@ -132,9 +132,9 @@ public class CAEngine {
         for (HybridSimProto.Transition tr : environment.getTransitionList()) {
             Edge edge;
             if (tr.getSubroom2Id() != -1) {
-                edge = new Edge(tr.getVert1().getX(), tr.getVert1().getY(), tr.getVert2().getX(), tr.getVert2().getY(), Rasterizer.Kind.TRANSITION_INTERNAL);
+                edge = new Edge(tr.getVert1().getX(), tr.getVert1().getY(), tr.getVert2().getX(), tr.getVert2().getY(), Rasterizer.EdgeType.TRANSITION_INTERNAL);
             } else {
-                edge = new Edge(tr.getVert1().getX(), tr.getVert1().getY(), tr.getVert2().getX(), tr.getVert2().getY(), Rasterizer.Kind.TRANSITION);
+                edge = new Edge(tr.getVert1().getX(), tr.getVert1().getY(), tr.getVert2().getX(), tr.getVert2().getY(), Rasterizer.EdgeType.TRANSITION);
             }
             edgeTable.add(edge);
         }

@@ -26,10 +26,10 @@ public final class Edge {
 
     private double currentX;
 
-    private final Rasterizer.Kind kind;
+    private final Rasterizer.EdgeType edgeType;
 
-    public Edge(double x0, double y0, double x1, double y1, Rasterizer.Kind kind) {
-        this.kind = kind;
+    public Edge(double x0, double y0, double x1, double y1, Rasterizer.EdgeType edgeType) {
+        this.edgeType = edgeType;
         if (y0 < y1) {
             this.x0 = x0;
             this.y0 = y0;
@@ -46,15 +46,6 @@ public final class Edge {
         currentX = this.x0;
     }
 
-//     public Edge(Edge edge) {
-//         x0 = edge.x0;
-//         x1 = edge.x1;
-//         y0 = edge.y0;
-//         y1 = edge.y1;
-//         kind = edge.kind;
-//         dx = edge.dx;
-//         currentX = this.x0;
-//     }
 
     public double getY0() {
         return this.y0;
@@ -80,8 +71,8 @@ public final class Edge {
         return this.x1;
     }
 
-    public Rasterizer.Kind getKind() {
-        return this.kind;
+    public Rasterizer.EdgeType getEdgeType() {
+        return this.edgeType;
     }
 }
 

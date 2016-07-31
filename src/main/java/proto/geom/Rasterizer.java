@@ -27,11 +27,9 @@ import java.util.*;
 public class Rasterizer {
 
 
-    private static final Double EPSILON = 0.00001;
-
     private static final Logger log = Logger.getLogger(Rasterizer.class);
 
-    public enum Kind {TRANSITION, TRANSITION_INTERNAL, WALL}
+    public enum EdgeType {TRANSITION, TRANSITION_INTERNAL, WALL}
 
     private final EnvironmentGrid grid;
 
@@ -39,9 +37,9 @@ public class Rasterizer {
         this.grid = grid;
     }
 
-    public void rasterize(List<Edge> edgeTable) {
+    public void rasterize(Collection<Edge> edges) {
 
-        traceEdges(edgeTable);
+        LinkedList<Edge> edgeTable = new LinkedList<>(edges);
 
         cleanUpET(edgeTable);
 
@@ -70,12 +68,16 @@ public class Rasterizer {
 
         }
 
+        traceEdges(edges);
 
     }
 
-    private void traceEdges(List<Edge> edgeTable) {
+    private void traceEdges(Collection<Edge> edgeTable) {
 
         for (Edge e : edgeTable) {
+            if (e.getEdgeType() == EdgeType.WALL) {
+                continue;
+            }
             double x0 = e.getX0();
             double x1 = e.getX1();
             double y0 = e.getY0();
@@ -84,37 +86,58 @@ public class Rasterizer {
             double dx = Constants.CA_CELL_SIDE * (x1 - x0) / (y1 - y0);
             double dy = Constants.CA_CELL_SIDE * (y1 - y0) / (x1 - x0);
 
-            int colorCode = getColorCode(e.getKind());
+            int colorCode = getColorCode(e.getEdgeType());
 
-            if (Math.abs(dx) < Math.abs(dy)) {
+            if (Math.abs(dx) <= Math.abs(dy)) {
                 int frRow = grid.y2Row(y0);
                 int toRow = grid.y2Row(y1);
                 double currentX = x0;
+                int oldRow = frRow;
+                int oldCol = -1;
                 for (int row = frRow; row <= toRow; row++) {
                     int col = grid.x2Col(currentX);
 
-                    if (col == 185) {
-                        System.out.println("Gotcha!");
-                    }
+
                     grid.setCellValue(row, col, colorCode);
+                    if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
+                        if (oldCol != col && oldRow != row) {
+                            grid.setCellValue(oldRow, col, colorCode);
+
+                        }
+                    }
+                    oldRow = row;
+                    oldCol = col;
+
                     currentX += dx;
                 }
+
+//                if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
+//
+//                }
             } else {
                 if (x1 < x0) {
                     double tmp = x1;
                     x1 = x0;
                     x0 = tmp;
                     tmp = y1;
-//                    y1 = y0;
                     y0 = tmp;
-//                    dy *= -1;
                 }
                 int frCol = grid.x2Col(x0);
                 int toCol = grid.x2Col(x1);
                 double currentY = y0;
+                int oldRow = -1;
+                int oldCol = frCol;
                 for (int col = frCol; col <= toCol; col++) {
                     int row = grid.y2Row(currentY);
                     grid.setCellValue(row, col, colorCode);
+                    if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
+                        if (oldCol != col && oldRow != row) {
+                            grid.setCellValue(row, oldCol, colorCode);
+
+                        }
+                    }
+                    oldRow = row;
+                    oldCol = col;
                     currentY += dy;
                 }
             }
@@ -125,7 +148,7 @@ public class Rasterizer {
         Iterator<Edge> it = edgeTable.iterator();
         while (it.hasNext()) {
             Edge next = it.next();
-            if (next.getKind() == Kind.TRANSITION_INTERNAL) {
+            if (next.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
                 it.remove();
             } else {
                 int row1 = this.grid.y2Row(next.getY0());
@@ -166,25 +189,6 @@ public class Rasterizer {
         }
     }
 
-    private boolean haveCommonCoordinate(Edge first, Edge second) {
-        if (almostEqual(first.getX0(), second.getX0()) && almostEqual(first.getY0(), second.getY0())) {
-            return true;
-        }
-        if (almostEqual(first.getX0(), second.getX1()) && almostEqual(first.getY0(), second.getY1())) {
-            return true;
-        }
-        if (almostEqual(first.getX1(), second.getX0()) && almostEqual(first.getY1(), second.getY0())) {
-            return true;
-        }
-
-        return almostEqual(first.getX1(), second.getX1()) && almostEqual(first.getY1(), second.getY1());
-
-    }
-
-    private boolean almostEqual(double a, double b) {
-        return Math.abs(a - b) < EPSILON;
-    }
-
     private void updateAET(LinkedList<Edge> activeEdgeTable, int row) {
         Iterator<Edge> it = activeEdgeTable.iterator();
         while (it.hasNext()) {
@@ -198,9 +202,8 @@ public class Rasterizer {
         }
     }
 
-
-    public static int getColorCode(Kind kind) {
-        switch (kind) {
+    public static int getColorCode(EdgeType edgeType) {
+        switch (edgeType) {
             case WALL:
                 return 0;
             case TRANSITION:
@@ -208,7 +211,7 @@ public class Rasterizer {
             case TRANSITION_INTERNAL:
                 return -2;
             default:
-                throw new RuntimeException("Unknown Cell-Type:" + kind);
+                throw new RuntimeException("Unknown Cell-Type:" + edgeType);
         }
     }
 
