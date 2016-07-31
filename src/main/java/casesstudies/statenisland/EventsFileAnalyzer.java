@@ -50,6 +50,12 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
     private final Id<Link> stGeorgeOrig3 = Id.createLinkId("HN_0_37-->HN_0_25");
     private final Id<Link> stGeorgeOrig4 = Id.createLinkId("HN_0_37-->HN_0_30");
 
+
+    private final Id<Link> whitehallDest = Id.createLinkId("l70");
+    private final Id<Link> whitehallOrig1 = Id.createLinkId("HN_1_43-->HN_1_38");
+    private final Id<Link> whitehallOrig2 = Id.createLinkId("HN_1_33-->HN_1_38");
+    private final Id<Link> whitehallOrig3 = Id.createLinkId("HN_1_33-->HN_1_34");
+
 //    private final Scenario sc;
 //
 //    public EventsFileAnalyzer(Scenario sc) {
@@ -57,7 +63,9 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 //    }
 
     private final Map<Id<Vehicle>, Double> depStGeorge = new HashMap<>();
+    private final Map<Id<Vehicle>, Double> depWhitehall = new HashMap<>();
     private int stGeorgeCnt = 0;
+    private int whitehallCnt = 0;
 
 
     public static void main(String[] args) {
@@ -79,7 +87,8 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 
         log.info("Walking time analysis (from leaving the waiting area to entering the ferry link");
         log.info("St George Terminal: total departures:" + analyzer.stGeorgeCnt + " average(travel time) = " + analyzer.stGeorge.getMean() + "s var(travel time) = " + analyzer.stGeorge.getVar() + "s sd(travel time) = " + Math.sqrt(analyzer.stGeorge.getVar()) + "s");
-        
+        log.info("Whitehall Terminal: total departures:" + analyzer.whitehallCnt + " average(travel time) = " + analyzer.whitehall.getMean() + "s var(travel time) = " + analyzer.whitehall.getVar() + "s sd(travel time) = " + Math.sqrt(analyzer.whitehall.getVar()) + "s");
+
 
     }
 
@@ -87,12 +96,17 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
     public void handleEvent(LinkEnterEvent event) {
         if (event.getLinkId() == stGeorgeDest) {
             Double time = depStGeorge.get(event.getVehicleId());
-//            System.out.println(time);
             double tt = event.getTime() - time;
             stGeorge.addVar(tt);
             stGeorgeCnt++;
         }
 
+        if (event.getLinkId() == whitehallDest) {
+            Double time = depWhitehall.get(event.getVehicleId());
+            double tt = event.getTime() - time;
+            whitehall.addVar(tt);
+            whitehallCnt++;
+        }
 
 
     }
@@ -107,6 +121,10 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
         if (event.getLinkId() == stGeorgeOrig1 || event.getLinkId() == stGeorgeOrig2 || event.getLinkId() == stGeorgeOrig3 || event.getLinkId() == stGeorgeOrig4) {
             Id<Vehicle> pId = event.getVehicleId();
             depStGeorge.put(pId, event.getTime());
+        }
+        if (event.getLinkId() == whitehallOrig1 || event.getLinkId() == whitehallOrig2 || event.getLinkId() == whitehallOrig3) {
+            Id<Vehicle> pId = event.getVehicleId();
+            depWhitehall.put(pId, event.getTime());
         }
 
     }
