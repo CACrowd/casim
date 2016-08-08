@@ -42,6 +42,8 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 
     private final Variance stGeorge = new Variance();
     private final Variance whitehall = new Variance();
+    private final Variance aStGeorge = new Variance();
+    private final Variance aWhitehall = new Variance();
 
     private final Id<Link> stGeorgeDest = Id.createLinkId("l71");
     private final Id<Link> stGeorgeOrig1 = Id.createLinkId("HN_0_37-->HN_0_26");
@@ -102,15 +104,15 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 
 //        analyzer.stGeorgeDepTime = 31020;
 //        analyzer.whitehallDepTime = 32940;
-        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/3600peds/it.29/";
+//        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/3600peds/it.29/";
 
 
 //        analyzer.stGeorgeDepTime = 30900;
 //        analyzer.whitehallDepTime = 32820;
-//        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/2600peds/it.29/";
+        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/2600peds/it.29/";
 
 
-        String it = "0";
+        String it = "29";
 
 
 //        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/resultsStressScenario/it.0/";
@@ -174,7 +176,34 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
         int aStGeorge75idx = (int) Math.ceil(0.75 * analyzer.arrStGeorgeTTs.size());
         int aStGeorge95idx = (int) Math.ceil(0.95 * analyzer.arrStGeorgeTTs.size());
         int aStGeorge99idx = (int) Math.ceil(0.05 * analyzer.arrStGeorgeTTs.size());
+        double aStGeorge5perc = analyzer.arrStGeorgeTTs.get(aStGeorge5idx);
+        double aStGeorge75perc = analyzer.arrStGeorgeTTs.get(aStGeorge75idx);
+        double aStGeorge95perc = analyzer.arrStGeorgeTTs.get(aStGeorge95idx);
+        double aStGeorge99perc = analyzer.arrStGeorgeTTs.get(aStGeorge99idx);
 
+        int aWhitehall5idx = (int) Math.ceil(0.05 * analyzer.arrWhitehallTTs.size());
+        int aWhitehall75idx = (int) Math.ceil(0.75 * analyzer.arrWhitehallTTs.size());
+        int aWhitehall95idx = (int) Math.ceil(0.95 * analyzer.arrWhitehallTTs.size());
+        int aWhitehall99idx = (int) Math.ceil(0.05 * analyzer.arrWhitehallTTs.size());
+        double aWhitehall5perc = analyzer.arrWhitehallTTs.get(aWhitehall5idx);
+        double aWhitehall75perc = analyzer.arrWhitehallTTs.get(aWhitehall75idx);
+        double aWhitehall95perc = analyzer.arrWhitehallTTs.get(aWhitehall95idx);
+        double aWhitehall99perc = analyzer.arrWhitehallTTs.get(aWhitehall99idx);
+        log.info("St George Terminal disembarkment: total arrivals:" + analyzer.arrStGeorgeTTs.size()
+                + " min(travel time) = " + analyzer.arrStGeorgeTTs.get(0) + "s max(travel time) = "
+                + analyzer.arrStGeorgeTTs.get(analyzer.arrStGeorgeTTs.size() - 1) + "s average(travel time) = "
+                + analyzer.aStGeorge.getMean() + "s var(travel time) = " + analyzer.aStGeorge.getVar()
+                + " sd(travel time) = " + Math.sqrt(analyzer.aStGeorge.getVar()) + "s 75th perc (travel time) = "
+                + aStGeorge75perc + " 95th perc (travel time) = " + aStGeorge95perc
+                + " 99th perc (travel time) = " + aStGeorge99perc);
+
+        log.info("Whitehall Terminal disembarkment: total arrivals:" + analyzer.arrWhitehallTTs.size()
+                + " min(travel time) = " + analyzer.arrWhitehallTTs.get(0) + "s max(travel time) = "
+                + analyzer.arrWhitehallTTs.get(analyzer.arrWhitehallTTs.size() - 1) + "s average(travel time) = "
+                + analyzer.aWhitehall.getMean() + "s var(travel time) = " + analyzer.aWhitehall.getVar()
+                + " sd(travel time) = " + Math.sqrt(analyzer.aWhitehall.getVar()) + "s 75th perc (travel time) = "
+                + aWhitehall75perc + " 95th perc (travel time) = " + aWhitehall95perc
+                + " 99th perc (travel time) = " + aWhitehall99perc);
 
     }
 
@@ -227,6 +256,13 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 
         }
 
+        if (event.getLinkId() == stGeorgeArrival) {
+            Id<Vehicle> pId = event.getVehicleId();
+            double time = arrStGeorge.get(pId);
+//            System.out.println(event.getTime() - stGeorgeArrTime);
+            arrStGeorgeTTs.add(event.getTime() - stGeorgeArrTime);
+            aStGeorge.addVar(event.getTime() - stGeorgeArrTime);
+        }
 
     }
 
@@ -247,19 +283,12 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
         }
 
 
-        if (event.getLinkId() == stGeorgeArrival) {
-            Id<Vehicle> pId = event.getVehicleId();
-            double time = arrStGeorge.get(pId);
-            System.out.println(event.getTime() - stGeorgeArrTime);
-            arrStGeorgeTTs.add(event.getTime() - stGeorgeArrTime);
-        }
-
-
         if (event.getLinkId() == whitehallArrival) {
             Id<Vehicle> pId = event.getVehicleId();
             double time = arrWhitehall.get(pId);
 //            System.out.println(event.getTime()-whitehallArrTime);
             arrWhitehallTTs.add(event.getTime() - whitehallArrTime);
+            aWhitehall.addVar(event.getTime() - whitehallArrTime);
         }
 
 
