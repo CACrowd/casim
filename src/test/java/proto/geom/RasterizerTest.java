@@ -14,7 +14,6 @@ package proto.geom;
 /****************************************************************************/
 
 import matsimconnector.utility.Constants;
-import org.junit.Before;
 import org.junit.Test;
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.output.CAScenarioWriter;
@@ -81,11 +80,11 @@ public class RasterizerTest {
     @Test
     public void testSimpleTriangle() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 5, Rasterizer.Kind.WALL);
+        Edge e0 = new Edge(0, 0, 0, 5, Rasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(0, 5, 5, 4, Rasterizer.Kind.WALL);
+        Edge e1 = new Edge(0, 5, 5, 4, Rasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(5, 4, 0, 0, Rasterizer.Kind.WALL);
+        Edge e2 = new Edge(5, 4, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e2);
 
         int rows = (int) (5 / Constants.CA_CELL_SIDE) + 1;
@@ -121,25 +120,28 @@ public class RasterizerTest {
     @Test
     public void testConcaveWithHole() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 10, Rasterizer.Kind.WALL);
+        Edge e0 = new Edge(0, 0, 0, 10, Rasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(0, 10, 2.5, 7, Rasterizer.Kind.WALL);
+        Edge e1 = new Edge(0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2.5, 7, 4, 9, Rasterizer.Kind.WALL);
+        Edge e2 = new Edge(2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(4, 9, 6, 0, Rasterizer.Kind.WALL);
+        Edge e3 = new Edge(4, 9, 6, 0, Rasterizer.EdgeType.WALL);
         et.add(e3);
-        Edge e4 = new Edge(6, 0, 0, 0, Rasterizer.Kind.TRANSITION);
+        Edge e4 = new Edge(6, 0, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e4);
 
-        Edge e5 = new Edge(2.5, 1, 4.5, 1, Rasterizer.Kind.TRANSITION);
+        Edge e5 = new Edge(2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
         et.add(e5);
-        Edge e6 = new Edge(2.5, 1, 2.5, 5, Rasterizer.Kind.WALL);
+        Edge e6 = new Edge(2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
         et.add(e6);
-        Edge e7 = new Edge(2.5, 5, 4, 4, Rasterizer.Kind.WALL);
+        Edge e7 = new Edge(2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
         et.add(e7);
-        Edge e8 = new Edge(4, 4, 4.5, 1, Rasterizer.Kind.WALL);
+        Edge e8 = new Edge(4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
         et.add(e8);
+
+        Edge tr = new Edge(2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        et.add(tr);
 
         int rows = (int) (10 / Constants.CA_CELL_SIDE) + 1;
         int cols = (int) (6 / Constants.CA_CELL_SIDE) + 1;
@@ -151,16 +153,20 @@ public class RasterizerTest {
         }
         Rasterizer r = new Rasterizer(grid);
         r.rasterize(et);
+
+
+        try {
+            new CAScenarioWriter(grid).write("src/main/js/grid.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         for (int row = 0; row < grid.getRows(); row++) {
             for (int col = 0; col < grid.getColumns(); col++) {
                 assertThat(grid.getCellValue(row, col), is(equalTo(REF_CONCAVE_WITH_HOLES[25 - row][col])));
             }
         }
-//        try {
-//            new CAScenarioWriter(grid).write("src/main/js/grid.json");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
 
     }
 
