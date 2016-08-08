@@ -15,7 +15,6 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkFactory;
 import org.matsim.api.core.v01.network.Node;
-import org.matsim.core.network.NetworkImpl;
 
 import pedca.context.Context;
 import pedca.environment.markers.Destination;
@@ -144,9 +143,9 @@ public class NetworkGenerator {
 			net.addNode(orDestNode);
 			connect(orDestNode, east, net, fac, 'e', nodeShift);
 		}
-		((NetworkImpl)net).setCapacityPeriod(1);
-		((NetworkImpl)net).setEffectiveCellSize(.26);
-		((NetworkImpl)net).setEffectiveLaneWidth(.71);		
+		net.setCapacityPeriod(1);
+		net.setEffectiveCellSize(.26);
+		net.setEffectiveLaneWidth(.71);
 	}
 
 	private static void connect(Node orDestNode, ArrayList<Node> nodes, Network net, NetworkFactory fac, char direction, double[] nodeShift) {
