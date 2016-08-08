@@ -22,7 +22,7 @@ public class Constants {
 	public static final double FRICTION_PROBABILITY = 0.;
 
 	public static final double CELL_SIZE = matsimconnector.utility.Constants.CA_CELL_SIDE;
-	public static final float STEP_DURATION = matsimconnector.utility.Constants.CA_STEP_DURATION;
+	public static final double STEP_DURATION = matsimconnector.utility.Constants.CA_STEP_DURATION;
 
 	public static final int SHADOWS_LIFE = 2;
 

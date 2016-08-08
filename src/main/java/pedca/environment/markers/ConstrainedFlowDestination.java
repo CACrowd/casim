@@ -18,7 +18,7 @@ public class ConstrainedFlowDestination extends DelayedDestination {
 		if (flowCapacity == 0)
 			this.stepToCross = 0;
 		else
-			this.stepToCross = (1/flowCapacity)/Constants.STEP_DURATION;
+			this.stepToCross = (float) ((1 / flowCapacity) / Constants.STEP_DURATION);
 		currentStepToCross = 0;
 	}
 	
