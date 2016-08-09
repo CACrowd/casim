@@ -13,9 +13,9 @@ package org.cacrowd.casim.proto.geom;
 //
 /****************************************************************************/
 
-import matsimconnector.utility.Constants;
+import org.cacrowd.casim.matsimconnector.utility.Constants;
+import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.junit.Test;
-import pedca.environment.grid.EnvironmentGrid;
 
 import java.util.LinkedList;
 

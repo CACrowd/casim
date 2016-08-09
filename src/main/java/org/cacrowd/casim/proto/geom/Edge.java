@@ -13,7 +13,7 @@ package org.cacrowd.casim.proto.geom;
 //
 /****************************************************************************/
 
-import matsimconnector.utility.Constants;
+import org.cacrowd.casim.matsimconnector.utility.Constants;
 
 /**
  * Created by laemmel on 12/07/16.

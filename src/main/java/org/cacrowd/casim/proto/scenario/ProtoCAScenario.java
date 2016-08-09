@@ -13,7 +13,7 @@ package org.cacrowd.casim.proto.scenario;
 //
 /****************************************************************************/
 
-import matsimconnector.scenario.CAEnvironment;
+import org.cacrowd.casim.matsimconnector.scenario.CAEnvironment;
 import org.matsim.api.core.v01.Id;
 
 import java.util.HashMap;

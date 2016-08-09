@@ -1,7 +1,7 @@
 package org.cacrowd.casim.scenarios;
 
-import pedca.context.Context;
-import pedca.engine.SimulationEngine;
+import org.cacrowd.casim.pedca.context.Context;
+import org.cacrowd.casim.pedca.engine.SimulationEngine;
 
 public class Controller {
 

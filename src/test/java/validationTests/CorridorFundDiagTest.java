@@ -1,9 +1,9 @@
 package validationTests;
 
-import matsimconnector.run.FunDiagSimRunner;
-import matsimconnector.utility.Constants;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.matsimconnector.run.FunDiagSimRunner;
+import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -51,8 +51,8 @@ public class CorridorFundDiagTest {
 		Constants.SIMULATION_DURATION = 2300;
         Constants.FAKE_LINK_WIDTH = 3.2;   //width of the scenario. The final width of the corridor is 0.8m lower since border rows are filled with obstacles
         Constants.CA_LINK_LENGTH = scenarioLength;
-		pedca.utility.Constants.DENSITY_GRID_RADIUS = 0;  //to consider only global density during the simulation
-		Constants.VIS = false;
+        org.cacrowd.casim.pedca.utility.Constants.DENSITY_GRID_RADIUS = 0;  //to consider only global density during the simulation
+        Constants.VIS = false;
 	}
 
     @BeforeClass

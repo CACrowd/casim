@@ -14,9 +14,9 @@ package org.cacrowd.casim.proto.geom;
 /****************************************************************************/
 
 
-import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
-import pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.matsimconnector.utility.Constants;
+import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 
 import java.util.*;
 
@@ -221,26 +221,26 @@ public class Rasterizer {
             return false;
         }
 
-//        if (grid.getCellValue(row,col) == pedca.utility.Constants.ENV_OBSTACLE) {
+//        if (grid.getCellValue(row,col) == Constants.ENV_OBSTACLE) {
 //            return true;
 //        }
 
         if (col == 0) {
             return false;
         }
-        if (grid.getCellValue(row, col - 1) == pedca.utility.Constants.ENV_OBSTACLE) {
+        if (grid.getCellValue(row, col - 1) == org.cacrowd.casim.pedca.utility.Constants.ENV_OBSTACLE) {
             return true;
         }
         if (col == grid.getColumns()) {
             return false;
         }
-        if (grid.getCellValue(row, col + 1) == pedca.utility.Constants.ENV_OBSTACLE) {
+        if (grid.getCellValue(row, col + 1) == org.cacrowd.casim.pedca.utility.Constants.ENV_OBSTACLE) {
             return true;
         }
         if (row == 0) {
             return false;
         }
-        if (grid.getCellValue(row - 1, col) == pedca.utility.Constants.ENV_OBSTACLE) {
+        if (grid.getCellValue(row - 1, col) == org.cacrowd.casim.pedca.utility.Constants.ENV_OBSTACLE) {
             return true;
         }
 
@@ -248,7 +248,7 @@ public class Rasterizer {
             return false;
         }
 
-        return grid.getCellValue(row + 1, col) == pedca.utility.Constants.ENV_OBSTACLE;
+        return grid.getCellValue(row + 1, col) == org.cacrowd.casim.pedca.utility.Constants.ENV_OBSTACLE;
 
     }
 

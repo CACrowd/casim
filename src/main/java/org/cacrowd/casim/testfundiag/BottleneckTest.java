@@ -1,7 +1,7 @@
 package org.cacrowd.casim.testfundiag;
 
-import matsimconnector.run.BottleneckTestRunner;
-import matsimconnector.utility.Constants;
+import org.cacrowd.casim.matsimconnector.run.BottleneckTestRunner;
+import org.cacrowd.casim.matsimconnector.utility.Constants;
 
 import java.io.File;
 
@@ -32,7 +32,7 @@ public class BottleneckTest {
 	
 	private static void setupCommonConstants() {
 		Constants.SIMULATION_DURATION = 2200;
-		pedca.utility.Constants.DENSITY_GRID_RADIUS = 1.2;
+		org.cacrowd.casim.pedca.utility.Constants.DENSITY_GRID_RADIUS = 1.2;
 		Constants.ORIGIN_FLOWS[0] = "s";
 		Constants.FLOPW_CAP_PER_METER_WIDTH = 30.;
 		Constants.VIS = false;
