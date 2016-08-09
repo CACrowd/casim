@@ -14,7 +14,7 @@ package proto.engine;
 /****************************************************************************/
 
 import com.google.inject.Inject;
-import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.geom.Envelope;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
@@ -30,7 +30,10 @@ import proto.geom.Rasterizer;
 import proto.scenario.ProtoCAScenario;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by laemmel on 05/05/16.
@@ -73,10 +76,10 @@ public class CAEngine {
         }
 
         log.debug(envelope);
-        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE) + 2;
-        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE) + 2;
+        int rows = (int) (envelope.getHeight() / Constants.CA_CELL_SIDE) + 3;
+        int cols = (int) (envelope.getWidth() / Constants.CA_CELL_SIDE) + 3;
 
-        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, envelope.getMinX(), envelope.getMinY());
+        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, envelope.getMinX() - Constants.CA_CELL_SIDE, envelope.getMinY() - Constants.CA_CELL_SIDE);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 grid.setCellValue(i, j, -1);

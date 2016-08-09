@@ -16,9 +16,7 @@ package proto.geom;
 import matsimconnector.utility.Constants;
 import org.junit.Test;
 import pedca.environment.grid.EnvironmentGrid;
-import pedca.output.CAScenarioWriter;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -143,11 +141,11 @@ public class RasterizerTest {
         r.rasterize(et);
 
 
-        try {
-            new CAScenarioWriter(grid).write("src/main/js/grid.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new CAScenarioWriter(grid).write("src/main/js/grid.json");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         for (int row = 0; row < grid.getRows(); row++) {
             for (int col = 0; col < grid.getColumns(); col++) {

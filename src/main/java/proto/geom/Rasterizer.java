@@ -191,9 +191,9 @@ public class Rasterizer {
 
     private void closeTransition(int col, int row, int colorCode) {
         if (!connectsToWall(col, row)) {
-            if (col == 0 && row == 24) {
-                System.out.println("Gotcha!");
-            }
+//            if (col == 0 && row == 24) {
+//                System.out.println("Gotcha!");
+//            }
             if (connectsToWall(col - 1, row)) {
                 grid.setCellValue(row, col - 1, colorCode);
                 return;

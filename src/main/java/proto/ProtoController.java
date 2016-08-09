@@ -18,7 +18,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import matsimconnector.utility.Constants;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
-import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import proto.engine.CAEngine;
@@ -64,7 +63,7 @@ public class ProtoController {
 
     public static void main(String[] args) {
 
-//        Logger.getRootLogger().setLevel(Level.INFO);
+        Logger.getRootLogger().setLevel(Level.INFO);
 
         new ProtoController();
 
