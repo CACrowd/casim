@@ -10,22 +10,28 @@
  * (at your option) any later version.
  */
 
-package org.cacrowd.casim.proto.engine;
+package org.cacrowd.casim.proto.eventshandling;
 
 
-import org.cacrowd.casim.matsimconnector.scenario.CAEnvironment;
-import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.engine.AgentMover;
+import org.apache.log4j.Logger;
+import org.matsim.api.core.v01.events.Event;
+import org.matsim.core.events.handler.BasicEventHandler;
 
 /**
  * Created by laemmel on 09/08/16.
  */
-public class CAAgentMoverProto implements AgentMover {
-    public CAAgentMoverProto(CAEngine caEngine, Context context, CAEnvironment env) {
+public class AllEventsHandler implements BasicEventHandler {
+
+    private static final Logger log = Logger.getLogger(AllEventsHandler.class);
+
+    @Override
+    public void reset(int iteration) {
+
     }
 
     @Override
-    public void step(double time) {
-        throw new RuntimeException("Implement me!");
+    public void handleEvent(Event event) {
+        log.info(event);
+
     }
 }

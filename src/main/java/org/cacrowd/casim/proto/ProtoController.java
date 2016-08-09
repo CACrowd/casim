@@ -21,8 +21,11 @@ import org.apache.log4j.Logger;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import org.cacrowd.casim.proto.engine.CAEngine;
+import org.cacrowd.casim.proto.eventshandling.AllEventsHandler;
 import org.cacrowd.casim.proto.grpc.CAServer;
 import org.cacrowd.casim.proto.scenario.ProtoCAScenario;
+import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.events.EventsManagerImpl;
 
 /**
  * Created by laemmel on 20/05/16.
@@ -36,11 +39,15 @@ public class ProtoController {
 
 
         ProtoCAScenario protoCAScenario = new ProtoCAScenario();
+        EventsManager em = new EventsManagerImpl();
+        em.addHandler(new AllEventsHandler());
+
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(ProtoCAScenario.class).toInstance(protoCAScenario);
                 bind(CAEngine.class).toInstance(new CAEngine());
+                bind(EventsManager.class).toInstance(em);
             }
         });
 

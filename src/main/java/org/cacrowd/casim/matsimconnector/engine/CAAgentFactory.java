@@ -45,9 +45,9 @@ public class CAAgentFactory {
 		Id<Link> linkId = vehicle.getDriver().chooseNextLinkId();
 		return IdUtility.linkIdToDestinationId(linkId);
 	}
-	
-	protected void addAgentsGenerator(Id<CAEnvironment> environmentId, AgentsGenerator agentGenerator){
-		this.generators.put(environmentId,agentGenerator);
-	}
+
+    public void addAgentsGenerator(Id<CAEnvironment> environmentId, AgentsGenerator agentGenerator) {
+        this.generators.put(environmentId, agentGenerator);
+    }
 	
 }

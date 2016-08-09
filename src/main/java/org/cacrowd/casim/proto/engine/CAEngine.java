@@ -16,6 +16,7 @@ package org.cacrowd.casim.proto.engine;
 import com.google.inject.Inject;
 import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.matsimconnector.engine.CAAgentFactory;
 import org.cacrowd.casim.matsimconnector.scenario.CAEnvironment;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.context.Context;
@@ -50,6 +51,9 @@ public class CAEngine {
     @Inject
     private EventsManager env;
 
+    @Inject
+    private CAAgentFactory agentFactory;
+
 
     private Map<Id<CAEnvironment>, SimulationEngine> enginesCA = new HashMap<>();
     private double simCATime;
@@ -59,9 +63,9 @@ public class CAEngine {
         //Log.log("------> BEGINNING STEPS AT "+time);
         for (; this.simCATime < time; this.simCATime += stepDuration) {
             for (SimulationEngine engine : this.enginesCA.values()) {
-                double currentTime = System.currentTimeMillis();
+//                double currentTime = System.currentTimeMillis();
                 engine.doSimStep(this.simCATime);
-                double afterTime = System.currentTimeMillis();
+//                double afterTime = System.currentTimeMillis();
 //				qSim.getEventsManager().processEvent(new CAEngineStepPerformedEvent(this.simCATime, (float)(afterTime-currentTime), engine.getAgentGenerator().getContext().getPopulation().size()));
             }
         }
@@ -73,6 +77,8 @@ public class CAEngine {
 
         generateCAEngines();
 
+        initGenerators();
+
 
         //on prepare
 
@@ -83,6 +89,12 @@ public class CAEngine {
 //            e.printStackTrace();
 //        }
 //        System.out.println("done");
+    }
+
+    private void initGenerators() {
+        for (Id<CAEnvironment> key : this.enginesCA.keySet()) {
+            agentFactory.addAgentsGenerator(key, this.enginesCA.get(key).getAgentGenerator());
+        }
     }
 
     private void generateCAEngines() {

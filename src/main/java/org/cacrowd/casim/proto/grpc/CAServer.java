@@ -30,6 +30,7 @@ public class CAServer {
     private Server server;
     private int port = 9000;
 
+    private double simTime = -1;
 
     @Inject
     private CAEngine engine;
@@ -86,9 +87,14 @@ public class CAServer {
         @Override
         public void simulatedTimeInerval(HybridSimProto.LeftClosedRightOpenTimeInterval request, StreamObserver<HybridSimProto.Empty> responseObserver) {
             log.debug("simulateTimeInterval called");
-            for (double time = request.getFromTimeIncluding(); time < request.getToTimeExcluding(); time++) {
-                engine.doSimStep(time);
-            }
+
+
+            engine.doSimStep(request.getToTimeExcluding());
+
+
+            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
         }
 
         @Override
