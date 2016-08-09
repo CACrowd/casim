@@ -16,6 +16,7 @@ import org.cacrowd.casim.environment.TransitionArea;
 import org.cacrowd.casim.matsimconnector.agents.Pedestrian;
 import org.cacrowd.casim.matsimconnector.events.*;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
+import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -25,25 +26,28 @@ import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CALink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CAQLink;
 
-public class CAAgentMover extends AgentMover {
+public class CAAgentMover implements AgentMover {
 
-	private CAEngine engineCA;
-	private EventsManager eventManager;
+    private final Population population;
+    private CAEngine engineCA;
+    private EventsManager eventManager;
 //	private boolean stairs = true;
 
 	public CAAgentMover(CAEngine engineCA, Context context, EventsManager eventManager) {
-		super(context);
-		this.eventManager = eventManager;
+        this.population = context.getPopulation();
+        this.eventManager = eventManager;
 		this.engineCA = engineCA;
 		Constants.stopOnStairs = false;
 	}
 
-	public void step(double now){
-		Constants.stopOnStairs = !Constants.stopOnStairs;
+
+    @Override
+    public void step(double now) {
+        Constants.stopOnStairs = !Constants.stopOnStairs;
 //		stairs = !stairs;
-		for(int index=0; index<getPopulation().size(); index++){
-			Pedestrian pedestrian = (Pedestrian)getPopulation().getPedestrian(index);
-			if (pedestrian.isArrived()){
+        for (int index = 0; index < population.size(); index++) {
+            Pedestrian pedestrian = (Pedestrian) population.getPedestrian(index);
+            if (pedestrian.isArrived()){
 				//Log.log(pedestrian.toString()+" Exited.");
 				delete(pedestrian);
 				index--;
@@ -85,8 +89,8 @@ public class CAAgentMover extends AgentMover {
 	
 	private void delete(Pedestrian pedestrian) {
 		pedestrian.moveToUniverse();
-		getPopulation().remove(pedestrian);
-	}
+        population.remove(pedestrian);
+    }
 
 	private void moveToCA(Pedestrian pedestrian, double time) {
 		//Log.log(pedestrian.toString() + " Moving inside Pedestrian Grid");
@@ -130,8 +134,8 @@ public class CAAgentMover extends AgentMover {
 		
 		// CHANGE THE DESTINATION OF THE AGENT
 		pedestrian.refreshDestination();
-	}	
-	
+    }
+
 //	private boolean isOnStairs(Pedestrian pedestrian){
 //		try{
 //			Id<Link> currentLinkId = pedestrian.getVehicle().getDriver().getCurrentLinkId();

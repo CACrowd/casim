@@ -31,4 +31,8 @@ public class ProtoCAScenario {
     public void addCAEnvironment(CAEnvironment env) {
         this.environments.put(env.getId(), env);
     }
+
+    public Map<Id<CAEnvironment>, CAEnvironment> getEnvironments() {
+        return environments;
+    }
 }

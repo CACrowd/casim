@@ -27,6 +27,7 @@ import org.cacrowd.casim.proto.geom.Edge;
 import org.cacrowd.casim.proto.geom.Rasterizer;
 import org.cacrowd.casim.proto.scenario.ProtoCAScenario;
 import org.matsim.api.core.v01.Id;
+import org.matsim.core.api.experimental.events.EventsManager;
 import proto.HybridSimProto;
 
 import java.io.IOException;
@@ -46,6 +47,9 @@ public class CAEngine {
     @Inject
     private ProtoCAScenario protoCAScenario;
 
+    @Inject
+    private EventsManager env;
+
 
     private Map<Id<CAEnvironment>, SimulationEngine> enginesCA = new HashMap<>();
     private double simCATime;
@@ -64,6 +68,38 @@ public class CAEngine {
     }
 
     public void prepareSim(HybridSimProto.Scenario request) {
+
+        initEnvironment(request);
+
+        generateCAEngines();
+
+
+        //on prepare
+
+
+//        try {
+//            grid.saveCSV("/Users/laemmel/tmp/");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("done");
+    }
+
+    private void generateCAEngines() {
+        for (CAEnvironment env : this.protoCAScenario.getEnvironments().values()) {
+            createAndAddEngine(env);
+        }
+    }
+
+    private void createAndAddEngine(CAEnvironment env) {
+        SimulationEngine engine = new SimulationEngine(env.getContext());
+
+        //TODO: extract CAAgentMover from matsimconnector or replace
+        engine.setAgentMover(new CAAgentMoverProto(this, env.getContext(), env));
+        this.enginesCA.put(env.getId(), engine);
+    }
+
+    private void initEnvironment(HybridSimProto.Scenario request) {
         Envelope envelope = new Envelope();
         for (HybridSimProto.Room r : request.getEnvironment().getRoomList()) {
             for (HybridSimProto.Subroom sub : r.getSubroomList()) {
@@ -99,13 +135,6 @@ public class CAEngine {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        try {
-//            grid.saveCSV("/Users/laemmel/tmp/");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("done");
     }
 
 
