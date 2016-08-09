@@ -1,22 +1,14 @@
-/* *********************************************************************** *
- * project: org.matsim.*
- * RunWithDifferntRandomSeeds.java
- *                                                                         *
- * *********************************************************************** *
- *                                                                         *
- * copyright       : (C) 2015 by the members listed in the COPYING,        *
- *                   LICENSE and WARRANTY file.                            *
- * email           : info at matsim dot org                                *
- *                                                                         *
- * *********************************************************************** *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *   See also COPYING, LICENSE and WARRANTY file                           *
- *                                                                         *
- * *********************************************************************** */
+/*
+ * casim, cellular automaton simulation for multi-destination pedestrian
+ * crowds; see www.cacrowd.org
+ * Copyright (C) 2016 CACrowd and contributors
+ *
+ * This file is part of casim.
+ * casim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ */
 
 package org.cacrowd.casim.matsimconnector.run;
 
