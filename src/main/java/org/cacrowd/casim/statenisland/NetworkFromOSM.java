@@ -1,4 +1,4 @@
-package casesstudies.statenisland;
+package org.cacrowd.casim.statenisland;
 /****************************************************************************/
 // casim, cellular automaton simulation for multi-destination pedestrian
 // crowds; see https://github.com/CACrowd/casim
@@ -21,7 +21,6 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
 import org.matsim.core.utils.geometry.CoordinateTransformation;
 import org.matsim.core.utils.geometry.transformations.GeotoolsTransformation;
-import proto.HybridSimProto;
 
 /**
  * Created by laemmel on 05/07/16.

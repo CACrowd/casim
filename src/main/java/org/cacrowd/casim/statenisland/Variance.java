@@ -1,4 +1,4 @@
-package casesstudies.statenisland;
+package org.cacrowd.casim.statenisland;
 /****************************************************************************/
 // casim, cellular automaton simulation for multi-destination pedestrian
 // crowds; see https://github.com/CACrowd/casim

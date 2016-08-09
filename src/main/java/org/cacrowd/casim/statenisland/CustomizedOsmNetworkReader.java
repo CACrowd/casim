@@ -18,7 +18,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package casesstudies.statenisland;
+package org.cacrowd.casim.statenisland;
 
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
@@ -91,23 +91,19 @@ public class CustomizedOsmNetworkReader implements MatsimSomeReader {
     private final static String TAG_MATSIM_TRANSPORT_MODE = "m_tra_mode";
     private static final String TAG_MATSIM_LANES = "m_lanes";
     private final static String[] ALL_TAGS = new String[]{TAG_LANES, TAG_HIGHWAY, TAG_MAXSPEED, TAG_JUNCTION, TAG_ONEWAY, TAG_MATSIM_FLOWCAPACITY, TAG_MATSIM_FREESPEED, TAG_MATSIM_MIN_WIDTH, TAG_MATSIM_TRANSPORT_MODE};
-
-
+    /*package*/ final Map<String, OsmHighwayDefaults> highwayDefaults = new HashMap<String, OsmHighwayDefaults>();
+    /*package*/ final List<OsmFilter> hierarchyLayers = new ArrayList<OsmFilter>();
     private final Map<Long, OsmNode> nodes = new HashMap<Long, OsmNode>();
     private final Map<Long, OsmWay> ways = new HashMap<Long, OsmWay>();
     private final Set<String> unknownHighways = new HashSet<String>();
     private final Set<String> unknownMaxspeedTags = new HashSet<String>();
     private final Set<String> unknownLanesTags = new HashSet<String>();
-    private long id = 0;
-    /*package*/ final Map<String, OsmHighwayDefaults> highwayDefaults = new HashMap<String, OsmHighwayDefaults>();
     private final Network network;
     private final CoordinateTransformation transform;
+    private long id = 0;
     private boolean keepPaths = false;
     private boolean scaleMaxSpeed = false;
-
     private boolean slowButLowMemory = false;
-
-    /*package*/ final List<OsmFilter> hierarchyLayers = new ArrayList<OsmFilter>();
 
     /**
      * Creates a new Reader to convert OSM data into a MATSim network.
@@ -658,14 +654,34 @@ public class CustomizedOsmNetworkReader implements MatsimSomeReader {
         }
     }
 
+    private static class StringCache {
+
+        private static ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<String, String>(10000);
+
+        /**
+         * Returns the cached version of the given String. If the strings was
+         * not yet in the cache, it is added and returned as well.
+         *
+         * @param string
+         * @return cached version of string
+         */
+        public static String get(final String string) {
+            String s = cache.putIfAbsent(string, string);
+            if (s == null) {
+                return string;
+            }
+            return s;
+        }
+    }
+
     private class OsmXmlParser extends MatsimXmlParser {
 
-        private OsmWay currentWay = null;
-        private final Map<Long, OsmNode> nodes;
-        private final Map<Long, OsmWay> ways;
         /*package*/ final Counter nodeCounter = new Counter("node ");
         /*package*/ final Counter wayCounter = new Counter("way ");
+        private final Map<Long, OsmNode> nodes;
+        private final Map<Long, OsmWay> ways;
         private final CoordinateTransformation transform;
+        private OsmWay currentWay = null;
         private boolean loadNodes = true;
         private boolean loadWays = true;
         private boolean mergeNodes = false;
@@ -777,26 +793,6 @@ public class CustomizedOsmNetworkReader implements MatsimSomeReader {
             }
         }
 
-    }
-
-    private static class StringCache {
-
-        private static ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<String, String>(10000);
-
-        /**
-         * Returns the cached version of the given String. If the strings was
-         * not yet in the cache, it is added and returned as well.
-         *
-         * @param string
-         * @return cached version of string
-         */
-        public static String get(final String string) {
-            String s = cache.putIfAbsent(string, string);
-            if (s == null) {
-                return string;
-            }
-            return s;
-        }
     }
 
 }
