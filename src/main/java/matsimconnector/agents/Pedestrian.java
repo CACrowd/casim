@@ -2,11 +2,10 @@ package matsimconnector.agents;
 
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
-
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-
 import pedca.agents.Agent;
 import pedca.context.Context;
 import pedca.environment.grid.GridPoint;
@@ -16,18 +15,16 @@ import pedca.environment.markers.DelayedDestination;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.FinalDestination;
 import pedca.utility.NeighbourhoodUtility;
-import connector.environment.TransitionArea;
 
 public class Pedestrian extends Agent {
 
+	public Double lastTimeCheckAtExit = null;
 	private Id<Pedestrian> Id;
-	private QVehicle vehicle; 
+	private QVehicle vehicle;
 	private TransitionArea transitionArea;
 	private boolean destinationReached;
 	private FinalDestination originMarker;
 	private Neighbourhood nextStepNeighbourhood;
-	
-	public Double lastTimeCheckAtExit = null;
 	private int timeToCrossDestination;		
 
 	public Pedestrian(Agent agent, QVehicle vehicle, TransitionArea transitionArea){

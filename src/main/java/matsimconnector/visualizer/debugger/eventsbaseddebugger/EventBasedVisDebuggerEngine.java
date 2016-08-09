@@ -20,48 +20,28 @@
 
 package matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import matsimconnector.agents.Pedestrian;
-import matsimconnector.events.CAAgentChangeLinkEvent;
-import matsimconnector.events.CAAgentConstructEvent;
-import matsimconnector.events.CAAgentEnterEnvironmentEvent;
-import matsimconnector.events.CAAgentExitEvent;
-import matsimconnector.events.CAAgentLeaveEnvironmentEvent;
-import matsimconnector.events.CAAgentMoveEvent;
-import matsimconnector.events.CAAgentMoveToOrigin;
-import matsimconnector.events.CAEngineStepPerformedEvent;
-import matsimconnector.events.CAEventHandler;
-import matsimconnector.events.debug.ForceReDrawEvent;
-import matsimconnector.events.debug.ForceReDrawEventHandler;
-import matsimconnector.events.debug.LineEvent;
-import matsimconnector.events.debug.LineEventHandler;
-import matsimconnector.events.debug.RectEvent;
-import matsimconnector.events.debug.RectEventHandler;
+import matsimconnector.events.*;
+import matsimconnector.events.debug.*;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.MathUtility;
-
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-
 import pedca.environment.grid.EnvironmentGrid;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.network.Coordinate;
 import pedca.utility.FileUtility;
-import connector.environment.TransitionArea;
+
+import java.io.File;
+import java.util.*;
 
 public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHandler, ForceReDrawEventHandler, RectEventHandler {
 

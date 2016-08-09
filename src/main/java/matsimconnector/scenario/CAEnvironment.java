@@ -1,7 +1,7 @@
 package matsimconnector.scenario;
 
 
-import connector.environment.TransitionArea;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -42,12 +42,12 @@ public class CAEnvironment {
 		return context.getNetwork();
 	}
 	
-	public void setNetwork(Network network){
-		this.network = network;
-	}
-	
 	public Network getNetwork(){
 		return network;
+	}
+
+	public void setNetwork(Network network) {
+		this.network = network;
 	}
 	
 	public void addTransitionArea(Id<Link> linkId, TransitionArea transitionArea){

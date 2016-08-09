@@ -1,9 +1,9 @@
 package matsimconnector.engine;
 
 import matsimconnector.agents.Pedestrian;
-import connector.environment.TransitionArea;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.utility.IdUtility;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;

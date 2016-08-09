@@ -2,12 +2,12 @@ package org.matsim.core.mobsim.qsim.qnetsimengine;
 
 import matsimconnector.engine.CAAgentFactory;
 import matsimconnector.engine.CAEngine;
-import connector.environment.TransitionArea;
 import matsimconnector.scenario.CAEnvironment;
 import matsimconnector.scenario.CAScenario;
 import matsimconnector.utility.Constants;
 import matsimconnector.utility.IdUtility;
 import matsimconnector.utility.LinkUtility;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;

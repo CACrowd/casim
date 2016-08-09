@@ -1,4 +1,4 @@
-package scenarios;
+package org.cacrowd.casim.scenarios;
 
 import pedca.context.Context;
 import pedca.engine.SimulationEngine;

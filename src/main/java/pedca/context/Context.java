@@ -1,13 +1,6 @@
 package pedca.context;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import org.cacrowd.casim.environment.TransitionArea;
 import pedca.agents.Population;
 import pedca.environment.grid.DensityGrid;
 import pedca.environment.grid.EnvironmentGrid;
@@ -16,18 +9,19 @@ import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.markers.MarkerConfiguration;
 import pedca.environment.network.CANetwork;
 import pedca.environment.network.Coordinate;
-import connector.environment.TransitionArea;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class Context {
+	public Coordinate environmentOrigin = new Coordinate(0, 0);    //shift of this context with respect to the coordinate system of the scenario
+	public double environmentRotation = 0;    //only for visualization purposes
 	private ArrayList<PedestrianGrid> pedestrianGrids;
 	private EnvironmentGrid environmentGrid;
 	private FloorFieldsGrid floorFieldsGrid;
 	private MarkerConfiguration markerConfiguration;
 	private Population population;
 	private CANetwork network;
-	
-	public Coordinate environmentOrigin = new Coordinate(0,0);	//shift of this context with respect to the coordinate system of the scenario
-	public double environmentRotation = 0;	//only for visualization purposes
 
 	public Context(EnvironmentGrid environmentGrid, MarkerConfiguration markerConfiguration){
 		initializeGrids(environmentGrid, markerConfiguration);

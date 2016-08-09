@@ -1,9 +1,9 @@
-package testfundiag;
-
-import java.io.File;
+package org.cacrowd.casim.testfundiag;
 
 import matsimconnector.run.BottleneckTestRunner;
 import matsimconnector.utility.Constants;
+
+import java.io.File;
 
 public class BottleneckTest {
 	

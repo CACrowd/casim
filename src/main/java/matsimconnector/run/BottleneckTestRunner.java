@@ -1,5 +1,6 @@
 package matsimconnector.run;
 
+import com.google.inject.Provider;
 import matsimconnector.engine.CAMobsimFactory;
 import matsimconnector.engine.CATripRouterFactory;
 import matsimconnector.network.HybridNetworkBuilder;
@@ -10,7 +11,7 @@ import matsimconnector.scenariogenerator.PopulationGenerator;
 import matsimconnector.utility.Constants;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
-
+import org.cacrowd.casim.scenarios.ContextGenerator;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.NetworkWriter;
@@ -28,13 +29,9 @@ import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.scenario.ScenarioUtils;
-
 import pedca.context.Context;
 import pedca.output.DensityAnalyzer;
 import pedca.output.FlowAnalyzer;
-import scenarios.ContextGenerator;
-
-import com.google.inject.Provider;
 
 public class BottleneckTestRunner implements IterationStartsListener {
 

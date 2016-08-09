@@ -1,7 +1,6 @@
 package matsimconnector.run;
 
-import java.util.ArrayList;
-
+import com.google.inject.Provider;
 import matsimconnector.engine.CAMobsimFactory;
 import matsimconnector.engine.CATripRouterFactory;
 import matsimconnector.network.HybridNetworkBuilder;
@@ -12,7 +11,7 @@ import matsimconnector.scenariogenerator.PopulationGenerator;
 import matsimconnector.utility.Constants;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
-
+import org.cacrowd.casim.scenarios.ContextGenerator;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.NetworkWriter;
@@ -30,19 +29,17 @@ import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.scenario.ScenarioUtils;
-
 import pedca.context.Context;
 import pedca.output.FundamentalDiagramWriter;
-import scenarios.ContextGenerator;
 
-import com.google.inject.Provider;
+import java.util.ArrayList;
 
 public class FunDiagSimRunner implements IterationStartsListener {
 
+	private static EventBasedVisDebuggerEngine dbg;
 	private String inputDir;
 	private String outputDir;
 	private double globalDensity;
-	private static EventBasedVisDebuggerEngine dbg;
 	
 	public FunDiagSimRunner(double globalDensity, ArrayList<Double> travelTimes){
 		this.inputDir = Constants.FD_TEST_PATH+globalDensity+"/input";

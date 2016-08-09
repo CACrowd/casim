@@ -2,6 +2,7 @@ package matsimconnector.scenariogenerator;
 
 import matsimconnector.utility.Constants;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.scenarios.ContextGenerator;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.NetworkWriter;
 import org.matsim.api.core.v01.population.PopulationWriter;
@@ -13,20 +14,16 @@ import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.scenario.ScenarioUtils;
 import pedca.context.Context;
-import scenarios.ContextGenerator;
 
 public class ScenarioGenerator {
 
 	private static final Logger log = Logger.getLogger(ScenarioGenerator.class);
-
-
-	private static String inputDir = Constants.INPUT_PATH;
-	private static String outputDir = Constants.OUTPUT_PATH;
-
 	private static final Double ENTRANCE_WIDTH = Constants.FAKE_LINK_WIDTH;
 	private static final Double CA_LENGTH = Constants.CA_LINK_LENGTH;
 	private static final int CA_ROWS = (int)Math.round((ENTRANCE_WIDTH/ Constants.CA_CELL_SIDE));
 	private static final int CA_COLS = (int)Math.round((CA_LENGTH/ Constants.CA_CELL_SIDE));
+	private static String inputDir = Constants.INPUT_PATH;
+	private static String outputDir = Constants.OUTPUT_PATH;
 	private static Double TOTAL_DENSITY = 4.;
 	private static int POPULATION_SIZE = 2000;
 

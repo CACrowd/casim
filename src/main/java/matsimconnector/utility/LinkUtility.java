@@ -1,7 +1,7 @@
 package matsimconnector.utility;
 
-import connector.environment.TransitionArea;
 import matsimconnector.scenario.CAEnvironment;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QCALink;

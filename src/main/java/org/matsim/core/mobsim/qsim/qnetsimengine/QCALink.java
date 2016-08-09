@@ -2,9 +2,9 @@ package org.matsim.core.mobsim.qsim.qnetsimengine;
 
 import matsimconnector.agents.Pedestrian;
 import matsimconnector.engine.CAAgentFactory;
-import connector.environment.TransitionArea;
 import matsimconnector.events.CAAgentConstructEvent;
 import matsimconnector.scenario.CAEnvironment;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.LinkLeaveEvent;
@@ -82,6 +82,12 @@ public class QCALink extends AbstractQLink {
 		throw new RuntimeException("not implemented") ;
 	}
 
+	@Override
+	public void recalcTimeVariantAttributes() {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("not implemented");
+	}
+
 	class CALane extends QLaneI {
 		@Override
 		boolean isAcceptingFromUpstream() {
@@ -90,9 +96,9 @@ public class QCALink extends AbstractQLink {
 		@Override
 		void addFromUpstream(QVehicle veh) {
 			double now = context.getSimTimer().getTimeOfDay() ;
-			
+
 			Pedestrian pedestrian = agentFactoryCA.buildPedestrian(environmentCA.getId(),veh,transitionArea);
-			
+
 //			qNetwork.simEngine.getMobsim().getEventsManager().processEvent(new LinkEnterEvent(
 //					now, veh.getId(), getLink().getId()));
 			// now done by QNode
@@ -172,7 +178,7 @@ public class QCALink extends AbstractQLink {
 		boolean hasGreenForToLink(Id<Link> toLinkId) {
 			throw new RuntimeException("not implemented") ;
 		}
-		
+
 		// === time-dependent link characteristics (not needed) ===
 		@Override
 		void changeUnscaledFlowCapacityPerSecond(double val) {
@@ -199,12 +205,6 @@ public class QCALink extends AbstractQLink {
 		}
 
 
-	}
-
-	@Override
-	public void recalcTimeVariantAttributes() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("not implemented") ;
 	}
 
 }

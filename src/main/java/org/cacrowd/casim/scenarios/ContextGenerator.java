@@ -1,4 +1,4 @@
-package scenarios;
+package org.cacrowd.casim.scenarios;
 
 import matsimconnector.utility.Constants;
 import pedca.context.Context;

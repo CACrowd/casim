@@ -1,4 +1,4 @@
-package connector.environment;
+package org.cacrowd.casim.environment;
 
 import matsimconnector.agents.Pedestrian;
 import matsimconnector.utility.Constants;

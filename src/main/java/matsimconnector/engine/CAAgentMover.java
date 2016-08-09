@@ -1,9 +1,9 @@
 package matsimconnector.engine;
 
 import matsimconnector.agents.Pedestrian;
-import connector.environment.TransitionArea;
 import matsimconnector.events.*;
 import matsimconnector.utility.Constants;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.api.experimental.events.EventsManager;

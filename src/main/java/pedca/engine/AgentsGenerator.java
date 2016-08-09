@@ -1,8 +1,8 @@
 package pedca.engine;
 
 import matsimconnector.agents.Pedestrian;
-import connector.environment.TransitionArea;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.environment.TransitionArea;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 import pedca.agents.Agent;
 import pedca.agents.Population;
@@ -11,7 +11,6 @@ import pedca.environment.grid.GridPoint;
 import pedca.environment.grid.PedestrianGrid;
 import pedca.environment.markers.Destination;
 import pedca.environment.markers.Start;
-
 import pedca.utility.Lottery;
 
 import java.util.ArrayList;

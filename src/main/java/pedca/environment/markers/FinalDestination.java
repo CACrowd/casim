@@ -1,6 +1,6 @@
 package pedca.environment.markers;
 
-import connector.environment.TransitionArea;
+import org.cacrowd.casim.environment.TransitionArea;
 import pedca.environment.grid.GridPoint;
 import pedca.environment.network.Coordinate;
 
