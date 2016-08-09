@@ -24,12 +24,12 @@ import org.cacrowd.casim.pedca.engine.SimulationEngine;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.output.CAScenarioWriter;
+import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.proto.geom.Edge;
 import org.cacrowd.casim.proto.geom.Rasterizer;
 import org.cacrowd.casim.proto.scenario.ProtoCAScenario;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.api.experimental.events.EventsManager;
-import proto.HybridSimProto;
 
 import java.io.IOException;
 import java.util.ArrayList;

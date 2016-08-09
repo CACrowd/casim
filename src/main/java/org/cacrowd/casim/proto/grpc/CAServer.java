@@ -18,9 +18,10 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.proto.HybridSimProto;
+import org.cacrowd.casim.proto.HybridSimulationGrpc;
 import org.cacrowd.casim.proto.engine.CAEngine;
-import proto.HybridSimProto;
-import proto.HybridSimulationGrpc;
+
 
 /**
  * Created by laemmel on 05/05/16.
