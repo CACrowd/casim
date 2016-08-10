@@ -87,7 +87,7 @@ public class CAServer {
 
         @Override
         public void simulatedTimeInerval(HybridSimProto.LeftClosedRightOpenTimeInterval request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-            log.debug("simulateTimeInterval called");
+            log.info("simulateTimeInterval called: " + request.getToTimeExcluding() );
 
 
             engine.doSimStep(request.getToTimeExcluding());
@@ -100,28 +100,40 @@ public class CAServer {
 
         @Override
         public void transferAgent(HybridSimProto.Agent request, StreamObserver<HybridSimProto.Boolean> responseObserver) {
-            log.debug("transferAgent called");
+            log.info("transferAgent called");
+            HybridSimProto.Boolean resp = HybridSimProto.Boolean.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
 
         }
 
         @Override
         public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
-
+            log.info("receiveTrajectories called");
+            HybridSimProto.Trajectories resp = HybridSimProto.Trajectories.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
         }
 
         @Override
         public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
-
+            log.info("retrieveAgents called");
+            HybridSimProto.Agents resp = HybridSimProto.Agents.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
         }
 
         @Override
         public void shutdown(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-
+            log.info("shutdown called");
+            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+            responseObserver.onNext(resp);
+            responseObserver.onCompleted();
         }
 
         @Override
         public void initScenario(HybridSimProto.Scenario request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-            //TODO generate CA scenario; solve the upside-down issue
+            log.info("initScenario called");
 
             engine.prepareSim(request);
 

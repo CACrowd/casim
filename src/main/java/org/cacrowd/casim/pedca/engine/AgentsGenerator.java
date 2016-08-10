@@ -72,8 +72,12 @@ public class AgentsGenerator {
 	public Pedestrian generatePedestrian(GridPoint initialPosition, int destinationId, QVehicle vehicle, TransitionArea transitionArea){
 		int pedID = pedestrianCounter;
 		Destination destination = context.getMarkerConfiguration().getDestination(destinationId);
+
+		//TODO FIXME this looks evil. First an Agent is instantiated, then it is passed as an Argument to Pedestrian, which in
+		//turn extends Agent [gl Aug '16]
 		Agent agent = new Agent(pedID,initialPosition,destination,context);
 		Pedestrian pedestrian = new Pedestrian(agent, vehicle, transitionArea);
+
 		getPopulation().addPedestrian(pedestrian);
 		//context.getPedestrianGrid().addPedestrian(initialPosition, pedestrian);
 		pedestrianCounter++;
