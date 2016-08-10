@@ -45,6 +45,7 @@ public class DistancesTests {
         double dist = Distances.EuclideanDistance(p1, p2);
 
         assertThat(dist, is(closeTo(14.14213562373095048801, EPSILON)));
+
     }
 
     @Test
