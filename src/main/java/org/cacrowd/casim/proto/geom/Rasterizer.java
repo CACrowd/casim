@@ -38,7 +38,7 @@ public class Rasterizer {
             case WALL:
                 return 0;
             case TRANSITION:
-                return -2;
+                return -3;
             case TRANSITION_INTERNAL:
                 return -2;
             default:

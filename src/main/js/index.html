@@ -53,6 +53,13 @@
         stroke: black;
         fill: blue;
     }
+
+    .cell-exit {
+        stroke-width: 1;
+        opacity: 0.5;
+        stroke: black;
+        fill: black;
+    }
 </style>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
@@ -94,6 +101,8 @@
                 st = "cell-door";
             } else if (kind == 1) {
                 st = "cell-semifree";
+            } else if (kind == -3) {
+                st = "cell-exit";
             } else {
                 st = "cell-obst";
             }
