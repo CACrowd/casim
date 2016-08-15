@@ -258,7 +258,7 @@ public class EnvironmentGenerator {
 					visitList.add(cell);
 					while(!visitList.isEmpty()){
 						GridPoint currentCell = visitList.get(0);
-						visitList.remove(0);
+						visitList.remove(0);   //TODO remove(idx) operations are rather expensive, maybe a LinkedList (Queue) would do better here,
  						destinationCells.add(currentCell);
 						consideredCells.add(currentCell);
 						Neighbourhood neighbourhood = NeighbourhoodUtility.calculateVonNeumannNeighbourhood(currentCell);
@@ -269,25 +269,25 @@ public class EnvironmentGenerator {
 						}
 					
 					}
-					
-					/**
-					GridPoint difference = null;
-					for (GridPoint neighbour : neighbourhood.getObjects()){
-						if (!neighbour.equals(cell) && environmentGrid.belongsToTacticalDestination(neighbour)){
-							difference = MathUtility.gridPointDifference(cell, neighbour);
-							break;
-						}
-					}
-					if (difference != null){
-						GridPoint neighbour = MathUtility.gridPointDifference(cell, difference);
-						do{
-							cell = neighbour;
-							cells.add(cell);
-							consideredCells.add(cell);
-							neighbour = MathUtility.gridPointDifference(cell, difference);
-						}while (environmentGrid.belongsToTacticalDestination(neighbour));
-					}**/
-					
+
+//
+//					GridPoint difference = null;
+//					for (GridPoint neighbour : neighbourhood.getObjects()){
+//						if (!neighbour.equals(cell) && environmentGrid.belongsToTacticalDestination(neighbour)){
+//							difference = MathUtility.gridPointDifference(cell, neighbour);
+//							break;
+//						}
+//					}
+//					if (difference != null){
+//						GridPoint neighbour = MathUtility.gridPointDifference(cell, difference);
+//						do{
+//							cell = neighbour;
+//							cells.add(cell);
+//							consideredCells.add(cell);
+//							neighbour = MathUtility.gridPointDifference(cell, difference);
+//						}while (environmentGrid.belongsToTacticalDestination(neighbour));
+//					}
+
 					TacticalDestination tacticalDestination;
 					if (environmentGrid.belongsToDelayedDestination(cell))
 						tacticalDestination = new DelayedDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 6);

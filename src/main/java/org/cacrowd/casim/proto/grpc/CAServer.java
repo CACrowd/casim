@@ -101,7 +101,8 @@ public class CAServer {
         @Override
         public void transferAgent(HybridSimProto.Agent request, StreamObserver<HybridSimProto.Boolean> responseObserver) {
             log.info("transferAgent called");
-            HybridSimProto.Boolean resp = HybridSimProto.Boolean.getDefaultInstance();
+            boolean success = engine.tryAddAgent(request);
+            HybridSimProto.Boolean resp = HybridSimProto.Boolean.newBuilder().setVal(success).build();
             responseObserver.onNext(resp);
             responseObserver.onCompleted();
 

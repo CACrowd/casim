@@ -386,7 +386,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
     @Override
     public void handleEvent(CAAgentChangeLinkEvent event) {
-        //Pedestrian pedestrian = event.getPedestrian();
+        //PedestrianProto pedestrian = event.getPedestrian();
         //updateColor(pedestrian);
     }
 

@@ -16,7 +16,6 @@ package org.cacrowd.casim.proto.engine;
 import com.google.inject.Inject;
 import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.matsimconnector.engine.CAAgentFactory;
 import org.cacrowd.casim.matsimconnector.scenario.CAEnvironment;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.context.Context;
@@ -51,12 +50,13 @@ public class CAEngine {
     @Inject
     private EventsManager env;
 
-    @Inject
+
     private CAAgentFactory agentFactory;
 
 
     private Map<Id<CAEnvironment>, SimulationEngine> enginesCA = new HashMap<>();
     private double simCATime;
+    private Context context;
 
     public void doSimStep(double time) {
         double stepDuration = Constants.CA_STEP_DURATION;
@@ -77,7 +77,7 @@ public class CAEngine {
 
         generateCAEngines();
 
-        initGenerators();
+//        initGenerators();
 
 
         //on prepare
@@ -91,11 +91,11 @@ public class CAEngine {
 //        System.out.println("done");
     }
 
-    private void initGenerators() {
-        for (Id<CAEnvironment> key : this.enginesCA.keySet()) {
-            agentFactory.addAgentsGenerator(key, this.enginesCA.get(key).getAgentGenerator());
-        }
-    }
+//    private void initGenerators() {
+//        for (Id<CAEnvironment> key : this.enginesCA.keySet()) {
+//            agentFactory.addAgentsGenerator(key, this.enginesCA.get(key).getAgentGenerator());
+//        }
+//    }
 
     private void generateCAEngines() {
         for (CAEnvironment env : this.protoCAScenario.getEnvironments().values()) {
@@ -138,9 +138,18 @@ public class CAEngine {
         r.rasterize(createEdgeTable(request.getEnvironment(), grid));
 
 
-        Context context = new Context(grid, new MarkerConfiguration());
+        this.context = new Context(grid, new MarkerConfiguration());
+
+        this.agentFactory = new CAAgentFactory(context);
+
+
         CAEnvironment env = new CAEnvironment("1", context);
+
+        //TODO transition areas!!!
+
+
         this.protoCAScenario.addCAEnvironment(env);
+
 
         try {
             new CAScenarioWriter(grid).write("src/main/js/grid.json");
@@ -186,4 +195,8 @@ public class CAEngine {
         return edgeTable;
     }
 
+    public boolean tryAddAgent(HybridSimProto.Agent request) {
+        this.agentFactory.createOne(request);
+        return false;
+    }
 }

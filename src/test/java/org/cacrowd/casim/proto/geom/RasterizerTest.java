@@ -69,7 +69,7 @@ public class RasterizerTest {
             {0, 0, 0, 0, 0, 0, 0, -1, -1, -1, 0, 0, 0, 0, -1, -1},
             {0, 0, 0, 0, 0, 0, 0, -1, -1, -1, 0, 0, 0, 0, 0, -1},
             {0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, -1},
-            {0, 0, 0, 0, 0, 0, -2, -2, -2, -2, -2, -2, 0, 0, 0, -1},
+            {0, 0, 0, 0, 0, 0, -3, -3, -3, -3, -3, -3, 0, 0, 0, -1},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
@@ -140,7 +140,7 @@ public class RasterizerTest {
         Rasterizer r = new Rasterizer(grid);
         r.rasterize(et);
 
-
+//
 //        try {
 //            new CAScenarioWriter(grid).write("src/main/js/grid.json");
 //        } catch (IOException e) {
