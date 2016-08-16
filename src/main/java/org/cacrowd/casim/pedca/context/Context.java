@@ -19,6 +19,7 @@ import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
 import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
+import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
 import org.cacrowd.casim.pedca.environment.network.CANetwork;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.io.MarkerConfigurationReader;
@@ -44,7 +45,7 @@ public class Context {
 	}
 
     public Context(String path) throws IOException, ClassNotFoundException {
-        MarkerConfiguration mc = new MarkerConfiguration();
+        MarkerConfiguration mc = new MarkerConfigurationImpl();
         new MarkerConfigurationReader(mc).loadConfiguration(path);
         initializeGrids(environmentGrid, markerConfiguration);
         population = new Population();
