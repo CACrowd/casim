@@ -138,7 +138,6 @@ public class Rasterizer {
             if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
                 if (oldCol != col && oldRow != row) {
                     grid.setCellValue(row, oldCol, colorCode);
-
                 }
             }
             oldRow = row;

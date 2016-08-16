@@ -139,7 +139,7 @@ public class EnvironmentGenerator {
 	}
 
 	public static MarkerConfiguration searchFinalDestinations(EnvironmentGrid environmentGrid) {
-		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
+		MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
 		GridPoint environmentCenter = new GridPoint(environmentGrid.getColumns()/2,environmentGrid.getRows()/2);
 		boolean found = false;
 		ArrayList<GridPoint> cells = null;
@@ -194,7 +194,7 @@ public class EnvironmentGenerator {
 	}
 	
 	public static MarkerConfiguration generateBorderDestinations(EnvironmentGrid environmentGrid) {
-		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
+		MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
 		GridPoint environmentCenter = new GridPoint(environmentGrid.getColumns()/2,environmentGrid.getRows()/2);
 		boolean found = false;
 		ArrayList<GridPoint> cells = null;
@@ -247,7 +247,7 @@ public class EnvironmentGenerator {
 	}
 	
 	public static void addTacticalDestinations(MarkerConfiguration markerConfiguration, EnvironmentGrid environmentGrid){
-		ArrayList<GridPoint> consideredCells = new ArrayList<GridPoint>();
+		ArrayList<GridPoint> consideredCells = new ArrayList<>();
 		ArrayList<GridPoint> destinationCells = null;
 		for (int i=0;i<environmentGrid.getRows();i++){
 			for (int j=0;j<environmentGrid.getColumns();j++){

@@ -16,6 +16,7 @@ import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
+import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
 import org.cacrowd.casim.pedca.environment.markers.Start;
 
 import java.io.File;
@@ -97,7 +98,7 @@ public class ContextGenerator {
 	public static Context getCorridorContext(int rows, int cols, int populationSize){
 		EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
 		EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
-		MarkerConfiguration markerConfiguration = new MarkerConfiguration();
+		MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
 		markerConfiguration.addDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
 		Start start = EnvironmentGenerator.getCorridorWestStart(environmentGrid);
 		start.setTotalPedestrians(populationSize);

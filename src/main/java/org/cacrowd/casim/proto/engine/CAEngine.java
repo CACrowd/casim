@@ -26,7 +26,9 @@ import org.cacrowd.casim.pedca.output.CAScenarioWriter;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.proto.geom.Edge;
 import org.cacrowd.casim.proto.geom.Rasterizer;
+import org.cacrowd.casim.proto.markers.MarkerConfigurationImplProto;
 import org.cacrowd.casim.proto.scenario.ProtoCAScenario;
+import org.cacrowd.casim.scenarios.EnvironmentGenerator;
 import org.matsim.api.core.v01.Id;
 import org.matsim.core.api.experimental.events.EventsManager;
 
@@ -135,10 +137,14 @@ public class CAEngine {
         }
 
         Rasterizer r = new Rasterizer(grid);
-        r.rasterize(createEdgeTable(request.getEnvironment(), grid));
+        r.rasterize(createEdgeTable(request.getEnvironment(), grid));  //TODO: collect exit cells
 
 
-        this.context = new Context(grid, new MarkerConfiguration());
+        MarkerConfiguration markerConf = new MarkerConfigurationImplProto();
+        this.context = new Context(grid, markerConf);
+
+
+        EnvironmentGenerator.addTacticalDestinations(markerConf, grid);
 
         this.agentFactory = new CAAgentFactory(context);
 
