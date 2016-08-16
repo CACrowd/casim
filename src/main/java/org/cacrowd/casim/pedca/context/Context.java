@@ -21,6 +21,8 @@ import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.network.CANetwork;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.io.MarkerConfigurationReader;
+import org.cacrowd.casim.pedca.io.MarkerConfigurationWriter;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,10 +42,14 @@ public class Context {
 		population = new Population();
 		network = new CANetwork(markerConfiguration, floorFieldsGrid);
 	}
-	
-	public Context(String path) throws IOException{
-		this(new EnvironmentGrid(path),new MarkerConfiguration(path));
-		loadCoordinates(path);
+
+    public Context(String path) throws IOException, ClassNotFoundException {
+        MarkerConfiguration mc = new MarkerConfiguration();
+        new MarkerConfigurationReader(mc).loadConfiguration(path);
+        initializeGrids(environmentGrid, markerConfiguration);
+        population = new Population();
+        network = new CANetwork(markerConfiguration, floorFieldsGrid);
+        loadCoordinates(path);
 	}
 
 	private void initializeGrids(EnvironmentGrid environmentGrid, MarkerConfiguration markerConfiguration) {
@@ -55,8 +61,8 @@ public class Context {
 	}
 	
 	public void saveConfiguration(String path) throws IOException{
-		markerConfiguration.saveConfiguration(path);
-		environmentGrid.saveCSV(path);
+        new MarkerConfigurationWriter(markerConfiguration).saveConfiguration(path);
+        environmentGrid.saveCSV(path);
 		floorFieldsGrid.saveCSV(path);
 		saveCoordinates(path);
     } 
