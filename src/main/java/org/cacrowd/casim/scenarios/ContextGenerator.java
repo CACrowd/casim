@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class ContextGenerator {
 	
-	public static Context createContextWithResourceEnvironmentFileV2(String envFileName){
+	public static Context createContextWithResourceEnvironmentFileV2(String envFileName, int envId){
 		EnvironmentGrid environmentGrid = null;
 		MarkerConfiguration markerConfiguration = null;
 		try {
@@ -34,7 +34,7 @@ public class ContextGenerator {
 			e.printStackTrace();
 		}
 		markerConfiguration = EnvironmentGenerator.searchFinalDestinations(environmentGrid);
-		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);
+		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid, envId);
 		Context context = new Context(environmentGrid, markerConfiguration);
 		return context;
 	}
@@ -49,7 +49,7 @@ public class ContextGenerator {
 			e.printStackTrace();
 		}
 		markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
-		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);
+		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid, 0);
 		Context context = new Context(environmentGrid, markerConfiguration);
 		try {
 			context.saveConfiguration(path);
@@ -83,7 +83,7 @@ public class ContextGenerator {
 		EnvironmentGrid environmentGrid = new EnvironmentGrid((int)(sizeY/Constants.CA_CELL_SIDE), (int)(sizeX/Constants.CA_CELL_SIDE));
 		EnvironmentGenerator.initBottleneckScenario(environmentGrid, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
-		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);
+		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid, 0);
 		return new Context(environmentGrid, markerConfiguration);
 	}
 	

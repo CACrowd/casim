@@ -88,7 +88,7 @@ public class FundamentalDiagramWriter implements CAEventHandler{
 				travelTimes.add(event.getTravelTime());
 			}
 		else{
-			event.getPedestrian().lastTimeCheckAtExit=null;
+//			event.getPedestrian().lastTimeCheckAtExit=null;
 		}
 	}
 

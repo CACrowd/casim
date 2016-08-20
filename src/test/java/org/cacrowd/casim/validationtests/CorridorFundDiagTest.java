@@ -59,7 +59,7 @@ public class CorridorFundDiagTest {
 	}
 	
 	private static void setupCommonConstants() {
-		Constants.CA_TEST_END_TIME = 2000;
+		Constants.CA_FD_TEST_END_TIME = 2000;
 		Constants.SIMULATION_DURATION = 2300;
         Constants.FAKE_LINK_WIDTH = 3.2;   //width of the scenario. The final width of the corridor is 0.8m lower since border rows are filled with obstacles
         Constants.CA_LINK_LENGTH = scenarioLength;

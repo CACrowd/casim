@@ -12,16 +12,28 @@
 
 package org.cacrowd.casim.scenarios;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
-import org.cacrowd.casim.pedca.environment.markers.*;
+import org.cacrowd.casim.pedca.environment.markers.ConstrainedFlowDestination;
+import org.cacrowd.casim.pedca.environment.markers.DelayedDestination;
+import org.cacrowd.casim.pedca.environment.markers.Destination;
+import org.cacrowd.casim.pedca.environment.markers.FinalDestination;
+import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
+import org.cacrowd.casim.pedca.environment.markers.ScheduledDestination;
+import org.cacrowd.casim.pedca.environment.markers.Start;
+import org.cacrowd.casim.pedca.environment.markers.TacticalDestination;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.NeighbourhoodUtility;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EnvironmentGenerator {
 
@@ -246,7 +258,7 @@ public class EnvironmentGenerator {
 		return markerConfiguration;
 	}
 	
-	public static void addTacticalDestinations(MarkerConfiguration markerConfiguration, EnvironmentGrid environmentGrid){
+	public static void addTacticalDestinations(MarkerConfiguration markerConfiguration, EnvironmentGrid environmentGrid, int environmentId){
 		ArrayList<GridPoint> consideredCells = new ArrayList<GridPoint>();
 		ArrayList<GridPoint> destinationCells = null;
 		for (int i=0;i<environmentGrid.getRows();i++){
@@ -295,9 +307,54 @@ public class EnvironmentGenerator {
 						tacticalDestination = new ConstrainedFlowDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), 3);
 					}
 					else if(environmentGrid.belongsToScheduledDestination(cell)){
-						double[] scheduleTimes = {600., 1200};
-						tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleTimes);
+						File fileSG = new File(org.cacrowd.casim.matsimconnector.utility.Constants.RESOURCE_PATH+"/ferrySG.csv");
+						File fileWH = new File(org.cacrowd.casim.matsimconnector.utility.Constants.RESOURCE_PATH+"/ferryWH.csv");;
 						
+						ArrayList<Integer> scheduleSG = new ArrayList<Integer> ();
+						ArrayList<Integer> scheduleWH = new ArrayList<Integer> ();
+						BufferedReader br;
+						String line;
+						try {
+							br = new BufferedReader(new FileReader(fileSG));
+							line = br.readLine();
+							StringTokenizer st = new StringTokenizer(line,",");
+							while(st.hasMoreTokens())
+								scheduleSG.add(60*Integer.parseInt(st.nextToken()));
+							br = new BufferedReader(new FileReader(fileWH));
+							line = br.readLine();
+							st = new StringTokenizer(line,",");
+							while(st.hasMoreTokens())
+								scheduleWH.add(60*Integer.parseInt(st.nextToken()));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						double[]scheduleSG_ferry = new double[scheduleSG.size()];
+						double[] scheduleWH_ferry = new double[scheduleWH.size()];		
+						for(int a= 0; a<scheduleSG_ferry.length;a++)
+								scheduleSG_ferry[a] = scheduleSG.get(a);
+						//{0., 900, 1800, 2700, 3600, 4500};
+						for(int a= 0; a<scheduleWH_ferry.length;a++)
+							scheduleWH_ferry[a] = scheduleWH.get(a);
+						
+						double[] scheduleSG_Bo = new double[scheduleSG_ferry.length];
+						double[] scheduleWH_Bo = new double[scheduleSG_ferry.length];
+						int boardingTime = 300;
+						for (int a=0;a<scheduleSG_ferry.length;a++){
+							scheduleSG_Bo[a] = scheduleSG_ferry[a]+boardingTime;
+							scheduleWH_Bo[a] = scheduleWH_ferry[a]+boardingTime;
+						}
+						
+						if (environmentId == 0){
+							if(environmentGrid.getCellValue(cell)==Constants.ENV_SCHEDULED_DESTINATION1)
+								tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleSG_Bo, boardingTime);
+							else
+								tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleSG_ferry, boardingTime*2);
+						} else if(environmentGrid.getCellValue(cell)==Constants.ENV_SCHEDULED_DESTINATION1)
+								tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleWH_Bo, boardingTime);
+							else
+							   	tacticalDestination = new ScheduledDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)), scheduleWH_ferry, boardingTime*2);
+					
 					}else
 						tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
 					markerConfiguration.addDestination(tacticalDestination);

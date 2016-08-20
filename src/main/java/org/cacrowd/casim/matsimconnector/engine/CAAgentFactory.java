@@ -21,7 +21,6 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class CAAgentFactory {
 	public Pedestrian buildPedestrian(Id<CAEnvironment> environmentId, QVehicle vehicle, TransitionArea transitionArea){
 		GridPoint gp = transitionArea.calculateEnterPosition();
 		int destinationId = extractDestinationId(vehicle);
-		Pedestrian pedestrian = generators.get(environmentId).generatePedestrian(gp, destinationId, vehicle,transitionArea);
+		Pedestrian pedestrian = generators.get(environmentId).generatePedestrian(gp, destinationId, vehicle,transitionArea, environmentId.toString());
 		return pedestrian;
 	}
 
@@ -45,9 +44,9 @@ public class CAAgentFactory {
 		Id<Link> linkId = vehicle.getDriver().chooseNextLinkId();
 		return IdUtility.linkIdToDestinationId(linkId);
 	}
-
-    public void addAgentsGenerator(Id<CAEnvironment> environmentId, AgentsGenerator agentGenerator) {
-        this.generators.put(environmentId, agentGenerator);
-    }
+	
+	public void addAgentsGenerator(Id<CAEnvironment> environmentId, AgentsGenerator agentGenerator){
+		this.generators.put(environmentId,agentGenerator);
+	}
 	
 }

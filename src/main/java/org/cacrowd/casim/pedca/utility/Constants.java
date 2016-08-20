@@ -22,7 +22,8 @@ public class Constants {
 	public static final int ENV_STAIRS_BORDER = -4;
 	public static final int ENV_DELAYED_DESTINATION = -5;   //destination with additional time to cross it
 	public static final int ENV_CONSTRAINED_DESTINATION = -6;
-	public static final int ENV_SCHEDULED_DESTINATION = -7;  //destination with scheduled opening time (for boarding procedures)
+	public static final int ENV_SCHEDULED_DESTINATION1 = -7;  //destination with scheduled opening time (for boarding procedures)
+	public static final int ENV_SCHEDULED_DESTINATION2 = -8;
 	public static final int ENV_WALKABLE_CELL = 0;
 	public static final double MAX_FF_VALUE = Double.POSITIVE_INFINITY;
 	//Constants for Conflict Management

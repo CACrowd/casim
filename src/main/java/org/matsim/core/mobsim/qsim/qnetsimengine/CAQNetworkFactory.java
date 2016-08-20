@@ -12,6 +12,11 @@
 
 package org.matsim.core.mobsim.qsim.qnetsimengine;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
 import org.cacrowd.casim.environment.TransitionArea;
 import org.cacrowd.casim.matsimconnector.engine.CAAgentFactory;
 import org.cacrowd.casim.matsimconnector.engine.CAEngine;
@@ -30,12 +35,8 @@ import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.mobsim.framework.MobsimTimer;
 import org.matsim.core.mobsim.qsim.interfaces.AgentCounter;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetsimEngine.NetsimInternalInterface;
-import org.matsim.vis.snapshotwriters.AgentSnapshotInfoFactory;
+import org.matsim.core.network.NetworkImpl;
 import org.matsim.vis.snapshotwriters.SnapshotLinkWidthCalculator;
-
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CAQNetworkFactory extends QNetworkFactory {
 	private final EventsManager events ;
@@ -72,14 +73,14 @@ public class CAQNetworkFactory extends QNetworkFactory {
 	
 	@Override
 	void initializeFactory(AgentCounter agentCounter, MobsimTimer mobsimTimer, NetsimInternalInterface netsimEngine1) {
-		double effectiveCellSize = network.getEffectiveCellSize();
+		double effectiveCellSize = ((NetworkImpl)network).getEffectiveCellSize();
 
 		SnapshotLinkWidthCalculator linkWidthCalculator = new SnapshotLinkWidthCalculator();
 		linkWidthCalculator.setLinkWidthForVis( qsimConfig.getLinkWidthForVis() );
 		if (! Double.isNaN(network.getEffectiveLaneWidth())){
 			linkWidthCalculator.setLaneWidth( network.getEffectiveLaneWidth() );
 		}
-		AgentSnapshotInfoFactory snapshotInfoFactory = new AgentSnapshotInfoFactory(linkWidthCalculator);
+//		AgentSnapshotInfoFactory snapshotInfoFactory = new AgentSnapshotInfoFactory(linkWidthCalculator);
 		AbstractAgentSnapshotInfoBuilder snapshotInfoBuilder = QNetsimEngine.createAgentSnapshotInfoBuilder( scenario, linkWidthCalculator );
 
 		this.context = new NetsimEngineContext(events, effectiveCellSize, agentCounter, snapshotInfoBuilder, qsimConfig, mobsimTimer,

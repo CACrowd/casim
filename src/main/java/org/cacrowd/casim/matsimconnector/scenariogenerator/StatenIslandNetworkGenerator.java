@@ -12,6 +12,10 @@
 
 package org.cacrowd.casim.matsimconnector.scenariogenerator;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.matsimconnector.utility.Distances;
 import org.cacrowd.casim.matsimconnector.utility.MathUtility;
@@ -26,23 +30,20 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkFactory;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.core.network.NetworkImpl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-public class NetworkGenerator {
+public class StatenIslandNetworkGenerator {
 
 	private static final Double DOOR_WIDTH = Constants.FAKE_LINK_WIDTH;
 	/*package*/ static double LINK_LENGTH = 10.;
 	private static double FLOW = Constants.FLOPW_CAP_PER_METER_WIDTH * DOOR_WIDTH;
 	private static Set<String> MODES = new HashSet<String>();
-	private static int nodeCount = 0;
-	private static int linkCount = 0;
-
 	static{
 		MODES.add("walk"); //MODES.add("car");
 	}
+	private static int nodeCount = 0;
+	private static int linkCount = 0;
+	private static double orLinkLength = 20;
 	
 	public static void createNetwork(Scenario sc, Context contextCA) {
 		Network net = sc.getNetwork();
@@ -154,9 +155,9 @@ public class NetworkGenerator {
 			net.addNode(orDestNode);
 			connect(orDestNode, east, net, fac, 'e', nodeShift);
 		}
-//		net.setCapacityPeriod(1);
-//		net.setEffectiveCellSize(.26);
-//		net.setEffectiveLaneWidth(.71);
+		((NetworkImpl)net).setCapacityPeriod(1);
+		((NetworkImpl)net).setEffectiveCellSize(.26);
+		((NetworkImpl)net).setEffectiveLaneWidth(.71);		
 	}
 
 	private static void connect(Node orDestNode, ArrayList<Node> nodes, Network net, NetworkFactory fac, char direction, double[] nodeShift) {
@@ -170,17 +171,21 @@ public class NetworkGenerator {
 		}
 		if ((nodeShift[0] == 0 && nodeShift[1] == 0) || direction != 's'){
 			Node firstNode;
-			if (direction == 'n' && (nodeShift[0] == 0 && nodeShift[1] == 0))
-				firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+			if (direction == 'n' && (nodeShift[0] == 0 && nodeShift[1] == 0)){
+				if (direction != 'n')
+					firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+				else
+					firstNode = fac.createNode(Id.create("n_SG",Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+			}
 			else if (direction == 'n')
-				firstNode = fac.createNode(Id.create("n_2"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+				firstNode = fac.createNode(Id.create("n_WH",Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
 			else
 				firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
-			Link linkOut = fac.createLink(Id.create("l"+nextLinkId(),Link.class), orDestNode, firstNode);
-			Link linkIn = fac.createLink(Id.create("l"+nextLinkId(),Link.class), firstNode, orDestNode);
+			Link linkOut = fac.createLink(Id.create("l_"+orDestNode.getId()+"_"+firstNode.getId(),Link.class), orDestNode, firstNode);
+			Link linkIn = fac.createLink(Id.create("l_"+firstNode.getId()+"_"+orDestNode.getId(),Link.class), firstNode, orDestNode);
 			net.addNode(firstNode);
-			initLink(linkOut);
-			initLink(linkIn);
+			initOriginLink(linkOut);
+			initOriginLink(linkIn);
 			net.addLink(linkOut);
 			net.addLink(linkIn);
 		}else{
@@ -193,13 +198,28 @@ public class NetworkGenerator {
 				Node firstNode = inLink.getFromNode();
 				Link linkOut = fac.createLink(Id.create("l"+nextLinkId(),Link.class), orDestNode, firstNode);
 				Link linkIn = fac.createLink(Id.create("l"+nextLinkId(),Link.class), firstNode, orDestNode);
-				initLink(linkOut);
-				initLink(linkIn);
+				initFerryLink(linkOut);
+				initFerryLink(linkIn);
 				net.addLink(linkOut);
 				net.addLink(linkIn);
 		}
 	}
 
+	private static void initFerryLink(Link link){
+		link.setLength(MathUtility.EuclideanDistance(link.getFromNode().getCoord(), link.getToNode().getCoord())+.000001);
+		link.setAllowedModes(MODES);
+		link.setFreespeed(8000/(15*60));
+		link.setCapacity(2000);
+	}
+	
+	private static void initOriginLink(Link link) {
+		link.setLength(orLinkLength );
+		link.setAllowedModes(MODES);
+		link.setFreespeed(Constants.PEDESTRIAN_SPEED);
+		link.setCapacity(FLOW);
+		//link.setNumberOfLanes(LANES);
+	}
+	
 	/*package*/ static void initLink(Link link) {
 		link.setLength(MathUtility.EuclideanDistance(link.getFromNode().getCoord(), link.getToNode().getCoord())+.000001);
 		link.setAllowedModes(MODES);

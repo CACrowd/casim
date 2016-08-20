@@ -24,19 +24,19 @@ public class ScheduledDestination extends DelayedDestination {
 
 	private double[] scheduledTimes;
 	private int scheduleIndex;
-	private int timeShift;
+	private int timeWindow;
 	
-	public ScheduledDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, double[] scheduleTimes) {
+	public ScheduledDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, double[] scheduleTimes, int timeWindow) {
 		super(coordinate, cells, isStairsBorder, 0);
 		this.scheduledTimes = scheduleTimes;
 		this.scheduleIndex = 0;
-		this.timeShift = 240;
+		this.timeWindow = timeWindow;
 	}
 
 	@Override
 	public int waitingTimeForCrossing(double time){
-		int dayTime = (int)time % 86400;
-		int stepToCross = (int)((scheduledTimes[scheduleIndex] - dayTime + timeShift)/Constants.CA_STEP_DURATION);
+		int dayTime = (int)time; // % 86400;
+		int stepToCross = (int)((scheduledTimes[scheduleIndex] - dayTime)/Constants.CA_STEP_DURATION);
 		if (stepToCross > 0)
 			return stepToCross;
 		return 0;
@@ -44,9 +44,12 @@ public class ScheduledDestination extends DelayedDestination {
 	
 	@Override
 	public void step(double time) {
+		//TODO FIX THIS: just a first implementation of a daily schedule (86400 s) for the simulation of more days..
 		int dayTime = (int)time % 86400;
-		if (dayTime > scheduledTimes[scheduleIndex]+2*timeShift)
+		if (dayTime > scheduledTimes[scheduleIndex]+timeWindow)
 			scheduleIndex=(scheduleIndex+1)%scheduledTimes.length;
+		else if (dayTime < scheduledTimes[0]+timeWindow)
+			scheduleIndex = 0;
 	}
 	
 }

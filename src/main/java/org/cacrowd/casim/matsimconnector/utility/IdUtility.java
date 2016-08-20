@@ -45,8 +45,18 @@ public class IdUtility {
 		return Integer.parseInt(linkId.toString().substring(beginIndex));
 	}
 	
-	public static Id<Pedestrian> createPedestrianId(int pedestrianId){
-		return Id.create(""+pedestrianId, Pedestrian.class);
+	public static String linkIdToDestinationNodeId(String linkId){
+		int beginIndex = linkId.toString().indexOf('>')+1;
+		return linkId.toString().substring(beginIndex);
+	}
+	
+	public static Id<Pedestrian> createPedestrianId(String envCAId, int pedId){
+		return Id.create("p_"+envCAId+"_"+pedId, Pedestrian.class);
+	}
+	
+	public static int getEnvironmentId (Id<Pedestrian> pedId){
+		String id = pedId.toString();
+		return Integer.parseInt(id.substring(id.indexOf("_")+1, id.lastIndexOf("_")));
 	}
 	
 }

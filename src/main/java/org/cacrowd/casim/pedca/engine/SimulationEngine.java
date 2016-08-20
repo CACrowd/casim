@@ -14,44 +14,28 @@ package org.cacrowd.casim.pedca.engine;
 
 import org.cacrowd.casim.pedca.context.Context;
 
-import java.io.IOException;
-
 public class SimulationEngine {
-	private final int finalStep;
-	private int step;
 	private AgentsGenerator agentGenerator;
 	private AgentsUpdater agentUpdater;
 	private ConflictSolver conflictSolver;
 	private AgentMover agentMover;
 	private GridsAndObjectsUpdater activeObjectsUpdater;
 	
-	public SimulationEngine(int finalStep, Context context){
-		step = 1;
-		this.finalStep = finalStep;
+	public SimulationEngine(Context context){
 		agentGenerator = new AgentsGenerator(context);
 		agentUpdater = new AgentsUpdater(context.getPopulation());
 		conflictSolver = new ConflictSolver(context);
-//		agentMover = new AgentMover(context);
+		agentMover = null;	//must be set with setter method
         activeObjectsUpdater = new GridsAndObjectsUpdater(context);
 	}
-	
-	public SimulationEngine(int finalStep, String path) throws IOException{
-		this(finalStep,new Context(path));
-	}
-	
-	public SimulationEngine(Context context){
-		this(0,context);
-	}
-
 
     //FOR MATSIM CONNECTOR
 	public void doSimStep(double time){
 		//Log.log("STEP at: "+time);
-		agentUpdater.step();
+		agentUpdater.step(time);
 		conflictSolver.step();
 		agentMover.step(time);		
 		activeObjectsUpdater.step(time);
-		step++;
 	}
 	
 	//FOR MATSIM CONNECTOR

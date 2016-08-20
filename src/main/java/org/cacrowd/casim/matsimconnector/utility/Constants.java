@@ -39,7 +39,7 @@ public class Constants {
 	public static boolean stopOnStairs;
 	/** this is for the generation of the fundamental diagram of the CA: pedestrian will be kept inside the
 	 * CAEnvironment until this time (in seconds). Keep to 0 if you want to run normal simulation.**/
-	public static int CA_TEST_END_TIME = 0; //1200;
+	public static int CA_FD_TEST_END_TIME = 0; //1200;
 	public static double SIMULATION_DURATION = 22000;
 	public static int SIMULATION_ITERATIONS = 10;
 	/**
@@ -51,9 +51,19 @@ public class Constants {
 	public static Double FAKE_LINK_WIDTH = 10.;  // 1.2;
 	public static Double CA_LINK_LENGTH = 10.;
 	public static boolean MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
+	
 	public static String PATH;
+	static {
+		String OS = System.getProperty("os.name").toLowerCase();
+		if (OS.indexOf("win") >= 0)
+			PATH = "C:/Users/Luca/Documents/uni/Dottorato/Juelich/developing_stuff/Test";
+		else
+			PATH = "/tmp/TestCA";
+		FD_TEST_PATH = PATH+"/FD/";
+	}
+
 	public static final String DEBUG_TEST_PATH = PATH+"/debug";
-	public static String FD_TEST_PATH = PATH+"/FD/";
+	public static String FD_TEST_PATH;
 	public static String INPUT_PATH = DEBUG_TEST_PATH+"/input";
 	public static String OUTPUT_PATH = DEBUG_TEST_PATH+"/output";
 	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
@@ -62,13 +72,6 @@ public class Constants {
 	public static boolean SAVE_FRAMES = false;
 	public static List<String> stairsLinks;
 
-	static {
-		String OS = System.getProperty("os.name").toLowerCase();
-		if (OS.indexOf("win") >= 0)
-			PATH = "C:/Users/Luca/Documents/uni/Dottorato/Juelich/developing_stuff/Test";
-		else
-			PATH = "/tmp/TestCA";
-	}
 
 	static{
 		stairsLinks = new ArrayList<String>();

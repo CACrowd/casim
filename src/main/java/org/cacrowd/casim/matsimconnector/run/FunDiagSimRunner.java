@@ -70,7 +70,7 @@ public class FunDiagSimRunner implements IterationStartsListener {
 		
 		Context contextCA = ContextGenerator.createAndSaveBidCorridorContext(inputDir+"/CAScenario", caRows, caCols);
 		NetworkGenerator.createNetwork(scenario, contextCA);
-		c.network().setInputFile("network.xml.gz");
+		c.network().setInputFile(inputDir+"/network.xml.gz");
 		c.strategy().addParam("Module_1", "ReRoute");
 		c.strategy().addParam("ModuleProbability_1", ".05");
 		c.strategy().addParam("ModuleDisableAfterIteration_1", "10");
@@ -85,7 +85,7 @@ public class FunDiagSimRunner implements IterationStartsListener {
 		c.controler().setLastIteration(0);
 		c.controler().setRoutingAlgorithmType(ControlerConfigGroup.RoutingAlgorithmType.AStarLandmarks);
 
-		c.plans().setInputFile("population.xml.gz");
+		c.plans().setInputFile(inputDir+"/population.xml.gz");
 
 		ActivityParams pre = new ActivityParams("origin");
 		// needs to be geq 49, otherwise when running a simulation one gets "java.lang.RuntimeException: zeroUtilityDuration of type pre-evac must be greater than 0.0. Did you forget to specify the typicalDuration?"

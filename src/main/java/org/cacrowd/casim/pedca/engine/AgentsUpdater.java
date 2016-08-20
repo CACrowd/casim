@@ -22,12 +22,12 @@ public class AgentsUpdater {
 		this.population = population;
 	}
 	
-	public void step(){
+	public void step(double time){
 		if (!population.isEmpty()){
 			for(Agent pedestrian : population.getPedestrians()){
 				//TODO maybe here is not the right place for this check 
 				if (!pedestrian.isArrived()){
-					pedestrian.updateChoice();
+					pedestrian.updateChoice(time);
 				}
 			}
 		}

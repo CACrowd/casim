@@ -39,6 +39,7 @@ public class Agent extends PhysicalObject{
 	private boolean wantToSwap;
 	private int stepToPerformSwap;
 	private boolean hasToSwap;
+	protected int waitingTime;
 	
 	public Agent(int Id, GridPoint position, Destination destination, Context context){
 		this.Id = Id;
@@ -51,15 +52,16 @@ public class Agent extends PhysicalObject{
 		wantToSwap = false;
 		stepToPerformSwap = 0;
 		hasToSwap = false;
+		waitingTime = 0;
 	}
 	
-	public void updateChoice(){
+	public void updateChoice(double time){
 		if (isWaitingToSwap()){
 			stepToPerformSwap--;
 			hasToSwap = stepToPerformSwap==0;
 		}
 		else{
-			percept();
+			percept(time);
 			if (!isArrived()){
 				ArrayList<WeightedCell> probabilityValues = evaluate();
 				choose(probabilityValues);
@@ -116,7 +118,7 @@ public class Agent extends PhysicalObject{
 		return stepToPerformSwap;
 	}
 
-	protected void percept(){
+	protected void percept(double time){
 		if (getStaticFFValue(position)==0.)
 			exit();
 	}
@@ -148,7 +150,10 @@ public class Agent extends PhysicalObject{
 	}
 
 	private double utilityFunction(double myPositionValue, double neighbourValue, double occupation) {
-		double utilityValue = Math.pow(Math.E, Constants.KS*(myPositionValue - neighbourValue));
+		double kS = Constants.KS;
+		if (waitingTime > 0)
+			kS = .5;
+		double utilityValue = Math.pow(Math.E, kS*(myPositionValue - neighbourValue));
 		utilityValue = utilityValue*(1-(Constants.PHI*occupation));				//FORMULA => Math.pow(Math.E, Constants.KS*(MyPositionValue - neighbourValue))*epsilon*(1-(Constants.PHI*n));	
 		return utilityValue;
 	}

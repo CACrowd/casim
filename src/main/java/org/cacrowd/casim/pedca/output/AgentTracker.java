@@ -32,7 +32,7 @@ public class AgentTracker implements CAEventHandler, AfterMobsimListener {
 	private static final double TIME_STEP_SIZE = 0.3;
 	private final double maxX;
 	private final double maxY;
-	private final Map<Id, List<String>> trajectories = new HashMap<>();
+	private final Map<Id<Pedestrian>, List<String>> trajectories = new HashMap<Id<Pedestrian>, List<String>>();
 	private FileWriter csvWriter;
 
 	public AgentTracker(String outputFileName, int rows, int columns){

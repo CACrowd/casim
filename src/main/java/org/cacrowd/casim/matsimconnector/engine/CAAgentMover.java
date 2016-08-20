@@ -26,38 +26,31 @@ import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CALink;
 import org.matsim.core.mobsim.qsim.qnetsimengine.CAQLink;
 
+
 public class CAAgentMover implements AgentMover {
 
-    private final Population population;
-    private CAEngine engineCA;
-    private EventsManager eventManager;
-//	private boolean stairs = true;
+	private final Population population;
+	private CAEngine engineCA;
+	private EventsManager eventManager;
 
 	public CAAgentMover(CAEngine engineCA, Context context, EventsManager eventManager) {
-        this.population = context.getPopulation();
-        this.eventManager = eventManager;
+		this.population = context.getPopulation();
+		this.eventManager = eventManager;
 		this.engineCA = engineCA;
 		Constants.stopOnStairs = false;
 	}
 
-
-    @Override
-    public void step(double now) {
-        Constants.stopOnStairs = !Constants.stopOnStairs;
-//		stairs = !stairs;
-        for (int index = 0; index < population.size(); index++) {
-            Pedestrian pedestrian = (Pedestrian) population.getPedestrian(index);
-            if (pedestrian.isArrived()){
-				//Log.log(pedestrian.toString()+" Exited.");
+	@Override
+	public void step(double now){
+		Constants.stopOnStairs = !Constants.stopOnStairs;
+		for(int index = 0; index < population.size(); index++){
+			Pedestrian pedestrian = (Pedestrian) population.getPedestrian(index);
+			if (pedestrian.isArrived()){
 				delete(pedestrian);
 				index--;
 			} 
 			else{
-				GridPoint oldPosition = pedestrian.getRealPosition();
-//				if (stairs && isOnStairs(pedestrian)){
-//					eventManager.processEvent(new CAAgentMoveEvent(now, pedestrian, oldPosition, oldPosition));
-//					continue;
-//				}				
+				GridPoint oldPosition = pedestrian.getRealPosition();	
 				GridPoint newPosition = pedestrian.getRealNewPosition();
 				moveAgent(pedestrian, now);
 				if (Constants.VIS)
@@ -69,7 +62,7 @@ public class CAAgentMover implements AgentMover {
 					if (engineCA.getCALink(nextLinkId) != null){
 						changeLinkInsideEnvironment(pedestrian, now);
 					}
-					else if(now>= Constants.CA_TEST_END_TIME){
+					else if(now>= Constants.CA_FD_TEST_END_TIME){
 						//TODO check if the outlink can host pedestrians coming from the CA environment
 						moveToQ(pedestrian, now);
 					}
@@ -81,7 +74,7 @@ public class CAAgentMover implements AgentMover {
 	public void moveAgent(Pedestrian pedestrian, double now) {
 		Double pedestrianTravelTime = pedestrian.lastTimeCheckAtExit;
 		pedestrian.move(now);
-		if (pedestrianTravelTime != null && pedestrian.lastTimeCheckAtExit != pedestrianTravelTime){
+		if (Constants.CA_FD_TEST_END_TIME > 0 && pedestrianTravelTime != null && pedestrian.lastTimeCheckAtExit != pedestrianTravelTime){
 			pedestrianTravelTime = pedestrian.lastTimeCheckAtExit - pedestrianTravelTime;
 			eventManager.processEvent(new CAAgentMoveToOrigin(now, pedestrian, pedestrianTravelTime));
 		}
@@ -89,8 +82,8 @@ public class CAAgentMover implements AgentMover {
 	
 	private void delete(Pedestrian pedestrian) {
 		pedestrian.moveToUniverse();
-        population.remove(pedestrian);
-    }
+		population.remove(pedestrian);
+	}
 
 	private void moveToCA(Pedestrian pedestrian, double time) {
 		//Log.log(pedestrian.toString() + " Moving inside Pedestrian Grid");
@@ -133,9 +126,9 @@ public class CAAgentMover implements AgentMover {
 		//eventManager.processEvent(new CAAgentLeaveEnvironmentEvent(time, pedestrian));
 		
 		// CHANGE THE DESTINATION OF THE AGENT
-		pedestrian.refreshDestination();
-    }
-
+		pedestrian.refreshDestination(time);
+	}	
+	
 //	private boolean isOnStairs(Pedestrian pedestrian){
 //		try{
 //			Id<Link> currentLinkId = pedestrian.getVehicle().getDriver().getCurrentLinkId();

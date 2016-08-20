@@ -97,14 +97,16 @@ public class CAScenario {
             Node nodeMatsim = scNet.getNodes().get(nodeCA.getId());
             if (nodeMatsim == null) {
 
-                Map<Id<Link>, ? extends Link> tmp = new HashMap<>(nodeCA.getInLinks());
-                for (Link l : tmp.values()) {
-                    nodeCA.removeInLink(l.getId());
-                }
-                tmp = new HashMap<>(nodeCA.getOutLinks());
-                for (Link l : tmp.values()) {
-                    nodeCA.removeOutLink(l.getId());
-                }
+//                Map<Id<Link>, ? extends Link> tmp = new HashMap<>(nodeCA.getInLinks());
+//                for (Link l : tmp.values()) {
+//                    nodeCA.removeInLink(l.getId());
+//                }
+//                tmp = new HashMap<>(nodeCA.getOutLinks());
+//                for (Link l : tmp.values()) {
+//                    nodeCA.removeOutLink(l.getId());
+//                }
+            	nodeCA.getInLinks().clear();
+				nodeCA.getOutLinks().clear();
                 scNet.addNode(nodeCA);
                 plugNode(nodeCA, scNet, environmentCA);
             } else {

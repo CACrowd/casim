@@ -65,6 +65,11 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
         this.keyControl = new Control(this.vis.zoomer, 90, this.fs);
         this.vis.addKeyControl(this.keyControl);
+        if (!environmentInit) {
+            drawNodesAndLinks();
+            drawCAEnvironments();
+            environmentInit = true;
+        }
     }
 
     public EventBasedVisDebuggerEngine(Scenario sc) {
@@ -83,7 +88,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
         if ((iteration % 2 == 0) && Constants.SAVE_FRAMES) {
             String pathName = Constants.PATH + "/videos/frames/it" + iteration;
             FileUtility.deleteDirectory(new File(pathName));
-            fs = new FrameSaver(pathName, "png", 10);
+            fs = new FrameSaver(pathName, "png", 30);
         }
         this.vis.fs = fs;
         this.keyControl.fs = fs;
@@ -99,7 +104,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     private void drawNodesAndLinks() {
         for (Node n : sc.getNetwork().getNodes().values()) {
             this.vis.addCircleStatic(n.getCoord().getX(), n.getCoord().getY(), .2f, 0, 0, 0, 255, 0);
-            this.vis.addTextStatic(n.getCoord().getX(), n.getCoord().getY()-.3, ""+ n.getId().toString(), 100);
+            this.vis.addTextStatic(n.getCoord().getX(), n.getCoord().getY()-.3, ""+ n.getId().toString(), 10);
         }
         for (Link l : sc.getNetwork().getLinks().values()) {
 
@@ -304,27 +309,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
         cp.rr = (float) (0.8 / 5.091);
         this.circleProperties.put(pedestrian.getId(), cp);
         updateColor(pedestrian);
-        /*
-        int nr = pedestrian.getDestination().getLevel();
-		int color = nr;//(nr/10)%3;
-
-		if (color == 1){
-			cp.r = 255;
-			cp.g = 255-nr;
-			cp.b = 0;
-			cp.a = 255;
-		} else if (color == 2) {
-			cp.r = nr-nr;
-			cp.g = 0;
-			cp.b = 255;
-			cp.a = 255;
-		}else {
-			cp.r = 0;
-			cp.g = 255;
-			cp.b = 255-nr;
-			cp.a = 255;
-		}
-		*/
+       
     }
 
     @Override
@@ -392,22 +377,28 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
     private void updateColor(Pedestrian pedestrian) {
         CircleProperty cp = this.circleProperties.get(pedestrian.getId());
-        //int destLevel = 0;//pedestrian.getDestination().getLevel();
-        double xDest = pedestrian.getOriginMarker().getCoordinate().getX();
+        String idDestination = pedestrian.getVehicle().getDriver().getDestinationLinkId().toString();
+        //double xOrigin = pedestrian.getOriginMarker().getCoordinate().getX();
         //int color;
         //int origLevel = pedestrian.getOriginMarker().getLevel();
         //int color = (((destLevel+1)*origLevel)*100)%256;
         int brightness = 80;
-        if (xDest < 0.4) {
+        if (idDestination.endsWith("SG")) {	//Staten Island - St. George
             cp.r = 255;
             cp.g = brightness;
             cp.b = brightness;//255-color;
             cp.a = 255;
-        } else {
+        } else if (idDestination.endsWith("WH")) { //Staten Island - St. George
             cp.r = brightness;
             cp.g = brightness;
             cp.b = 255;//255-color;
             cp.a = 255;
+        }else {
+            cp.r = 255;
+            cp.g = 255;
+            cp.b = 255;//255-color;
+            cp.a = 255;
+            System.out.println(idDestination);
         }
     }
 

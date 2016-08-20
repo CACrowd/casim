@@ -12,7 +12,8 @@
 
 package org.cacrowd.casim.matsimconnector.run;
 
-import com.google.inject.Provider;
+import java.io.IOException;
+
 import org.cacrowd.casim.matsimconnector.congestionpricing.MSACongestionHandler;
 import org.cacrowd.casim.matsimconnector.congestionpricing.MSAMarginalCongestionPricingContolerListener;
 import org.cacrowd.casim.matsimconnector.congestionpricing.MSATollDisutilityCalculatorFactory;
@@ -20,16 +21,19 @@ import org.cacrowd.casim.matsimconnector.congestionpricing.MSATollHandler;
 import org.cacrowd.casim.matsimconnector.engine.CAMobsimFactory;
 import org.cacrowd.casim.matsimconnector.engine.CATripRouterFactory;
 import org.cacrowd.casim.matsimconnector.scenario.CAScenario;
-import org.cacrowd.casim.matsimconnector.scenariogenerator.NetworkGenerator;
-import org.cacrowd.casim.matsimconnector.scenariogenerator.PopulationGenerator;
+import org.cacrowd.casim.matsimconnector.scenariogenerator.StatenIslandNetworkGenerator;
+import org.cacrowd.casim.matsimconnector.scenariogenerator.StatenIslandPopulationGenerator;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.matsimconnector.utility.IdUtility;
+import org.cacrowd.casim.matsimconnector.utility.MathUtility;
 import org.cacrowd.casim.matsimconnector.visualizer.debugger.eventsbaseddebugger.EventBasedVisDebuggerEngine;
 import org.cacrowd.casim.matsimconnector.visualizer.debugger.eventsbaseddebugger.InfoBox;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.scenarios.ContextGenerator;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.NetworkWriter;
 import org.matsim.api.core.v01.population.PopulationWriter;
@@ -47,23 +51,32 @@ import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import java.io.IOException;
+import com.google.inject.Provider;
 
 public class StatenIslandRunner implements IterationStartsListener {
-
 	private static EventBasedVisDebuggerEngine dbg;
 	private static String inputDir = Constants.INPUT_PATH;
 	private static String outputDir = Constants.OUTPUT_PATH;
-	private static int POPULATION_SIZE = 2000;
-	private static String[] environmentFiles = {"stGeorge_1F_1.csv","WhiteHall_2F_4.csv"};
-	private static double[] envRotation = {135, 45};
+	private static String[] environmentFiles = {"stGeorge_1F_4.csv","WhiteHall_2F.csv"};
+	private static double[] envRotation = {120, 10};
 	
+	public static final int peakTime1Start = (int)(6.5 *3600);
+	public static final int peakTime1End = (int)(10 *3600);
+	public static final int peakTime2Start = (int)(15 *3600);
+	public static final int peakTime2End = (int)(19 *3600);
 
+	private static int scenario = 1;
+	static {
+		if (scenario == 2)
+			environmentFiles[1]="WhiteHall_2Fv2.csv";
+	}
+	
 	public static void main(String[] args){
 		Constants.SIMULATION_ITERATIONS = 30;
-		Constants.SIMULATION_DURATION = 16000;
+		Constants.SIMULATION_DURATION = 23.9*3600;
 		Constants.VIS = true;
-		Constants.ORIGIN_FLOWS[0] = "2n";
+		String[] origins = {"SG","WH"};
+		Constants.ORIGIN_FLOWS = origins;
 		generateScenario();
 		runSimulation();
 	}
@@ -75,15 +88,17 @@ public class StatenIslandRunner implements IterationStartsListener {
 		
 		Context[] contextCAs = new Context[environmentFiles.length];
 		for (int i = 0;i<contextCAs.length;i++){		
-			contextCAs[i] = ContextGenerator.createContextWithResourceEnvironmentFileV2(environmentFiles[i]);
-			contextCAs[i].environmentOrigin = new Coordinate(i*150, i*200);
+			contextCAs[i] = ContextGenerator.createContextWithResourceEnvironmentFileV2(environmentFiles[i],i);
+			Coordinate point = new Coordinate(i*0, i*8000);
+			MathUtility.rotate(point, -38);
+			contextCAs[i].environmentOrigin = point;
 			contextCAs[i].environmentRotation = envRotation[i];
 			try {
 				contextCAs[i].saveConfiguration(inputDir+"/CAScenario/input"+i);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			NetworkGenerator.createNetwork(scenario, contextCAs[i]);
+			StatenIslandNetworkGenerator.createNetwork(scenario, contextCAs[i]);
 		}		
 		
 		c.network().setInputFile(inputDir + "/network.xml.gz");
@@ -126,8 +141,8 @@ public class StatenIslandRunner implements IterationStartsListener {
 		scenario.getConfig().planCalcScore().setPerforming_utils_hr(0.);
 
 		QSimConfigGroup qsim = scenario.getConfig().qsim();
-		qsim.setEndTime(20*60);
-		qsim.setStuckTime(100000);
+		qsim.setEndTime(23.9*3600);
+		qsim.setStuckTime(10000000);
 		c.controler().setMobsim(Constants.CA_MOBSIM_MODE);
 		c.global().setCoordinateSystem(Constants.COORDINATE_SYSTEM);
 		c.qsim().setEndTime(60*10);
@@ -135,7 +150,7 @@ public class StatenIslandRunner implements IterationStartsListener {
 		c.travelTimeCalculator().setTraveltimeBinSize(60);
 		c.planCalcScore().setBrainExpBeta(1);
 
-		PopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
+		StatenIslandPopulationGenerator.createPopulation(scenario);
 		
 		new ConfigWriter(c).write(inputDir+ "/config.xml");
 		new NetworkWriter(scenario.getNetwork()).write(c.network().getInputFile());
@@ -145,6 +160,7 @@ public class StatenIslandRunner implements IterationStartsListener {
 	@SuppressWarnings("deprecation")
 	public static void runSimulation() {
 		Config c = ConfigUtils.loadConfig(inputDir+"/config.xml");
+		c.plans().setInputFile("C:/Users/Luca/Documents/uni/Dottorato/Juelich/developing_stuff/Test/debug/outputSI_1_2600peds/output_plans.xml.gz");
 		Scenario scenario = ScenarioUtils.loadScenario(c);
 		CAScenario scenarioCA = new CAScenario(inputDir+"/CAScenario", environmentFiles.length);
 		scenarioCA.initNetworks();
@@ -207,54 +223,181 @@ public class StatenIslandRunner implements IterationStartsListener {
 			controller.getEvents().addHandler(dbg);
 		}
 		
+//		controller.getEvents().addHandler(new TravelTimeAnalyzer(outputDir));
+//		controller.getEvents().addHandler(new CANodeFlowAnalyzer(outputDir));
 		StatenIslandRunner runner = new StatenIslandRunner();
 		controller.addControlerListener(runner);
 		controller.run();
 	}
 
+	
 	private static void cleanNetwork(Network net) {
-		net.removeLink(IdUtility.createLinkId(0, 19, 23));
-		net.removeLink(IdUtility.createLinkId(0, 23, 19));
-		net.removeLink(IdUtility.createLinkId(0, 24, 22));
+		net.removeLink(IdUtility.createLinkId(0, 10, 1));
+		net.removeLink(IdUtility.createLinkId(0, 1, 10));
+		net.removeLink(IdUtility.createLinkId(0, 11, 0));
+		net.removeLink(IdUtility.createLinkId(0, 0, 11));
+		net.removeLink(IdUtility.createLinkId(0, 0, 1));
+		net.removeLink(IdUtility.createLinkId(0, 1, 0));
+		
+		net.removeLink(IdUtility.createLinkId(0, 15, 23));
+		net.removeLink(IdUtility.createLinkId(0, 14, 23));
+		net.removeLink(IdUtility.createLinkId(0, 15, 16));
+		net.removeLink(IdUtility.createLinkId(0, 14, 16));
+		
+		net.removeLink(IdUtility.createLinkId(0, 16, 30));
+		net.removeLink(IdUtility.createLinkId(0, 16, 24));
+		net.removeLink(IdUtility.createLinkId(0, 17, 30));
+		net.removeLink(IdUtility.createLinkId(0, 18, 30));
+		net.removeLink(IdUtility.createLinkId(0, 19, 30));
+		net.removeLink(IdUtility.createLinkId(0, 20, 30));
+		net.removeLink(IdUtility.createLinkId(0, 21, 30));
+		net.removeLink(IdUtility.createLinkId(0, 24, 26));
+		net.removeLink(IdUtility.createLinkId(0, 24, 16));
+		net.removeLink(IdUtility.createLinkId(0, 33, 24));
+		net.removeLink(IdUtility.createLinkId(0, 33, 26));
+		net.removeLink(IdUtility.createLinkId(0, 35, 26));
+		
+		
+		net.removeLink(IdUtility.createLinkId(0, 23, 25));
+		net.removeLink(IdUtility.createLinkId(0, 23, 26));
+		net.removeLink(IdUtility.createLinkId(0, 23, 24));
+		net.removeLink(IdUtility.createLinkId(0, 23, 30));
+		net.removeLink(IdUtility.createLinkId(0, 24, 23));
 		net.removeLink(IdUtility.createLinkId(0, 25, 23));
+		net.removeLink(IdUtility.createLinkId(0, 25, 26));
+		net.removeLink(IdUtility.createLinkId(0, 25, 30));
+		net.removeLink(IdUtility.createLinkId(0, 26, 25));
+		net.removeLink(IdUtility.createLinkId(0, 26, 23));
+		net.removeLink(IdUtility.createLinkId(0, 26, 30));
+		net.removeLink(IdUtility.createLinkId(0, 26, 35));
+		net.removeLink(IdUtility.createLinkId(0, 30, 25));
+		net.removeLink(IdUtility.createLinkId(0, 30, 26));
+		net.removeLink(IdUtility.createLinkId(0, 30, 23));
 		
-		net.removeLink(IdUtility.createLinkId(0, 16, 26));
-		net.removeLink(IdUtility.createLinkId(0, 18, 26));
-		net.removeLink(IdUtility.createLinkId(0, 19, 26));
-		net.removeLink(IdUtility.createLinkId(0, 20, 26));
+		net.removeLink(IdUtility.createLinkId(0, 25, 30));
+		net.removeLink(IdUtility.createLinkId(0, 26, 30));
+		net.removeLink(IdUtility.createLinkId(0, 37, 40));
+		net.removeLink(IdUtility.createLinkId(0, 38, 35));
+		net.removeLink(IdUtility.createLinkId(0, 39, 36));
 		
-		net.removeLink(IdUtility.createLinkId(0, 16, 18));
-		net.removeLink(IdUtility.createLinkId(0, 16, 19));
-		net.removeLink(IdUtility.createLinkId(0, 16, 20));
-		net.removeLink(IdUtility.createLinkId(0, 18, 16));
-		net.removeLink(IdUtility.createLinkId(0, 18, 20));
-		net.removeLink(IdUtility.createLinkId(0, 18, 19));
-		net.removeLink(IdUtility.createLinkId(0, 18, 22));
-		net.removeLink(IdUtility.createLinkId(0, 19, 16));
-		net.removeLink(IdUtility.createLinkId(0, 19, 18));
-		net.removeLink(IdUtility.createLinkId(0, 19, 20));
-		net.removeLink(IdUtility.createLinkId(0, 20, 18));
-		net.removeLink(IdUtility.createLinkId(0, 20, 19));
-		net.removeLink(IdUtility.createLinkId(0, 20, 16));
+		net.removeLink(IdUtility.createLinkId(0, 10, 11));
+		net.removeLink(IdUtility.createLinkId(0, 11, 10));
+		net.removeLink(IdUtility.createLinkId(0, 10, 15));
+		net.removeLink(IdUtility.createLinkId(0, 15, 10));
+		net.removeLink(IdUtility.createLinkId(0, 11, 14));
+		net.removeLink(IdUtility.createLinkId(0, 14, 11));
+		net.removeLink(IdUtility.createLinkId(0, 14, 15));
+		net.removeLink(IdUtility.createLinkId(0, 15, 14));
 		
-		net.removeLink(IdUtility.createLinkId(0, 20, 22));
-		net.removeLink(IdUtility.createLinkId(0, 22, 20));
-		net.removeLink(IdUtility.createLinkId(0, 22, 18));
-		net.removeLink(IdUtility.createLinkId(0, 22, 14));
-		net.removeLink(IdUtility.createLinkId(0, 20, 14));
-		net.removeLink(IdUtility.createLinkId(0, 24, 22));
-
-		net.removeLink(IdUtility.createLinkId(1, 15, 22));
-		net.removeLink(IdUtility.createLinkId(1, 16, 18));
-		net.removeLink(IdUtility.createLinkId(1, 17, 18));
-		net.removeLink(IdUtility.createLinkId(1, 22, 25));
-		net.removeLink(IdUtility.createLinkId(1, 25, 22));
-		net.removeLink(IdUtility.createLinkId(1, 27, 30));
-		net.removeLink(IdUtility.createLinkId(1, 28, 30));
-		net.removeLink(IdUtility.createLinkId(1, 28, 25));
-		net.removeLink(IdUtility.createLinkId(1, 29, 26));
-		net.removeLink(IdUtility.createLinkId(1, 29, 30));
+		net.removeLink(IdUtility.createLinkId(0, 36, 39));	//West exit corridor
+		net.removeLink(IdUtility.createLinkId(0, 37, 30));	//Western boarding door
+		net.removeLink(IdUtility.createLinkId(0, 37, 25));	//MW boarding door
+				
+		if(scenario==1){
+			net.removeLink(IdUtility.createLinkId(1, 14, 15));
+			net.removeLink(IdUtility.createLinkId(1, 15, 14));
+			net.removeLink(IdUtility.createLinkId(1, 24, 25));
+			net.removeLink(IdUtility.createLinkId(1, 25, 24));
+			
+			
+			net.removeLink(IdUtility.createLinkId(1, 43, 46));
+			net.removeLink(IdUtility.createLinkId(1, 44, 41));
+			net.removeLink(IdUtility.createLinkId(1, 45, 42));
+			
+			net.removeLink(IdUtility.createLinkId(1, 34, 35));
+			net.removeLink(IdUtility.createLinkId(1, 34, 39));
+			net.removeLink(IdUtility.createLinkId(1, 34, 40));
+			net.removeLink(IdUtility.createLinkId(1, 35, 34));
+			net.removeLink(IdUtility.createLinkId(1, 35, 39));
+			net.removeLink(IdUtility.createLinkId(1, 35, 40));
+			net.removeLink(IdUtility.createLinkId(1, 39, 35));
+			net.removeLink(IdUtility.createLinkId(1, 39, 34));
+			net.removeLink(IdUtility.createLinkId(1, 39, 40));
+			net.removeLink(IdUtility.createLinkId(1, 40, 35));
+			net.removeLink(IdUtility.createLinkId(1, 40, 39));
+			net.removeLink(IdUtility.createLinkId(1, 40, 34));
+			
+			net.removeLink(IdUtility.createLinkId(1, 42, 45));	//East exit corridor 
+			net.removeLink(IdUtility.createLinkId(1, 33, 35));	//ME boarding door
+			net.removeLink(IdUtility.createLinkId(1, 33, 39));	//ME boarding door
+			net.removeLink(IdUtility.createLinkId(1, 33, 40));	//ME boarding door
+			
+			net.removeLink(IdUtility.createLinkId(1, 31, 38));
+			net.removeLink(IdUtility.createLinkId(1, 30, 38));
+			net.removeLink(IdUtility.createLinkId(1, 29, 38));
+			net.removeLink(IdUtility.createLinkId(1, 41, 38));
+			net.removeLink(IdUtility.createLinkId(1, 38, 41));
+			
+			net.removeLink(IdUtility.createLinkId(1, 1, 14));
+			net.removeLink(IdUtility.createLinkId(1, 14, 1));
+			net.removeLink(IdUtility.createLinkId(1, 1, 0));
+			net.removeLink(IdUtility.createLinkId(1, 0, 1));
+			net.removeLink(IdUtility.createLinkId(1, 0, 15));
+			net.removeLink(IdUtility.createLinkId(1, 15, 0));
+		} else if(scenario==2){
+			
+			net.removeLink(IdUtility.createLinkId(1, 14, 15));
+			net.removeLink(IdUtility.createLinkId(1, 15, 14));
+			net.removeLink(IdUtility.createLinkId(1, 24, 25));
+			net.removeLink(IdUtility.createLinkId(1, 25, 24));
+			
+			
+			net.removeLink(IdUtility.createLinkId(1, 43, 46));
+			net.removeLink(IdUtility.createLinkId(1, 44, 41));
+			net.removeLink(IdUtility.createLinkId(1, 45, 42));
+			
+			net.removeLink(IdUtility.createLinkId(1, 34, 35));
+			net.removeLink(IdUtility.createLinkId(1, 34, 39));
+			net.removeLink(IdUtility.createLinkId(1, 34, 40));
+			net.removeLink(IdUtility.createLinkId(1, 35, 34));
+			net.removeLink(IdUtility.createLinkId(1, 35, 39));
+			net.removeLink(IdUtility.createLinkId(1, 35, 40));
+			net.removeLink(IdUtility.createLinkId(1, 39, 34));
+			net.removeLink(IdUtility.createLinkId(1, 39, 40));
+			net.removeLink(IdUtility.createLinkId(1, 40, 35));
+			net.removeLink(IdUtility.createLinkId(1, 40, 39));
+			net.removeLink(IdUtility.createLinkId(1, 40, 34));
+			
+			net.removeLink(IdUtility.createLinkId(1, 42, 45));	//East exit corridor 
+			
+			net.removeLink(IdUtility.createLinkId(1, 43, 38));	//West boarding door
+			net.removeLink(IdUtility.createLinkId(1, 33, 38));	//West boarding door
+			
+			net.removeLink(IdUtility.createLinkId(1, 33, 35));	//ME boarding door
+			
+	//		net.removeLink(IdUtility.createLinkId(1, 33, 39));	//ME boarding door
+			net.removeLink(IdUtility.createLinkId(1, 33, 40));	//ME boarding door
+			
+			net.removeLink(IdUtility.createLinkId(1, 31, 38));
+			net.removeLink(IdUtility.createLinkId(1, 30, 38));
+			net.removeLink(IdUtility.createLinkId(1, 29, 38));
+			net.removeLink(IdUtility.createLinkId(1, 41, 38));
+			net.removeLink(IdUtility.createLinkId(1, 38, 41));
+			
+			net.removeLink(IdUtility.createLinkId(1, 1, 14));
+			net.removeLink(IdUtility.createLinkId(1, 14, 1));
+			net.removeLink(IdUtility.createLinkId(1, 1, 0));
+			net.removeLink(IdUtility.createLinkId(1, 0, 1));
+			net.removeLink(IdUtility.createLinkId(1, 0, 15));
+			net.removeLink(IdUtility.createLinkId(1, 15, 0));
+		}
 		
+		
+		//boarding ramps
+//		net.removeLink(Id.create("l41",Link.class));
+//		net.removeLink(Id.create("l40",Link.class));
+		net.removeLink(Id.create("l44",Link.class));
+		net.removeLink(Id.create("l45",Link.class));
+//		net.removeLink(Id.create("l2",Link.class));
+//		net.removeLink(Id.create("l3",Link.class));
+		net.removeLink(Id.create("l4",Link.class));
+		net.removeLink(Id.create("l5",Link.class));
+		net.removeLink(Id.create("l6",Link.class));
+		net.removeLink(Id.create("l7",Link.class));
+		net.removeLink(Id.create("l82",Link.class));
+		net.removeLink(Id.create("l78",Link.class));
+		net.removeLink(Id.create("l80",Link.class));
+		net.removeLink(Id.create("l84",Link.class));
 	}
 
 

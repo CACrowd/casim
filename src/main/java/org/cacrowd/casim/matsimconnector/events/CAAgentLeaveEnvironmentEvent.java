@@ -42,6 +42,10 @@ public class CAAgentLeaveEnvironmentEvent extends Event {
 		return pedestrian;
 	}
 	
+	public double getRealTime(){	
+		return realTime;			
+	}
+	
 	@Override
 	public String getEventType() {
 		return EVENT_TYPE;
