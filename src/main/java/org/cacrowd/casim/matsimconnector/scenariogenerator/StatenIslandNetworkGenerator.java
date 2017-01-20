@@ -45,6 +45,10 @@ public class StatenIslandNetworkGenerator {
 	private static int linkCount = 0;
 	private static double orLinkLength = 20;
 	
+	//List containing nodes linked to the ferries 
+	//pos. 1 = St. George; 2 = Whitehall_2F; 3 = Whitehall_1F
+	private static ArrayList<Node> orDestNodes = new ArrayList<Node>(); 
+	
 	public static void createNetwork(Scenario sc, Context contextCA) {
 		Network net = sc.getNetwork();
 		NetworkFactory fac = net.getFactory();
@@ -134,6 +138,7 @@ public class StatenIslandNetworkGenerator {
 			Coordinate centroid = Distances.centroid(south);
 			Node orDestNode = fac.createNode(Id.create("n"+nextNodeId(),Node.class), new Coord(centroid.getX(),centroid.getY()-LINK_LENGTH));
 			net.addNode(orDestNode);
+			orDestNodes.add(orDestNode);
 			connect(orDestNode, south, net, fac,'s', nodeShift);
 		
 		}
@@ -171,14 +176,17 @@ public class StatenIslandNetworkGenerator {
 		}
 		if ((nodeShift[0] == 0 && nodeShift[1] == 0) || direction != 's'){
 			Node firstNode;
+			//ST. GEORGE NORTH NODE
 			if (direction == 'n' && (nodeShift[0] == 0 && nodeShift[1] == 0)){
-				if (direction != 'n')
-					firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
-				else
-					firstNode = fac.createNode(Id.create("n_SG",Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+				firstNode = fac.createNode(Id.create("n_SG",Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
 			}
-			else if (direction == 'n')
-				firstNode = fac.createNode(Id.create("n_WH",Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+			else if (direction == 'n'){
+				Id<Node> key = Id.create("n_WH", Node.class);
+				if (!net.getNodes().containsKey(key))
+					firstNode = fac.createNode(key, new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
+				else 
+					firstNode = net.getNodes().get(key).getOutLinks().values().iterator().next().getToNode();
+			}
 			else
 				firstNode = fac.createNode(Id.create("n_"+direction,Node.class), new Coord(orDestNode.getCoord().getX(),orDestNode.getCoord().getY()+LINK_LENGTH));
 			Link linkOut = fac.createLink(Id.create("l_"+orDestNode.getId()+"_"+firstNode.getId(),Link.class), orDestNode, firstNode);
@@ -188,20 +196,31 @@ public class StatenIslandNetworkGenerator {
 			initOriginLink(linkIn);
 			net.addLink(linkOut);
 			net.addLink(linkIn);
+		}else if (nodeShift[0] > 4500 && nodeShift[1] < 6500) //coordinates of WhiteHall 2F
+		{
+			Node prevDestNode = net.getNodes().get(Id.create("n_s",Node.class));
+			Link inLink = prevDestNode.getInLinks().values().iterator().next();
+			Link outLink = prevDestNode.getOutLinks().values().iterator().next();
+			net.removeLink(inLink.getId());
+			net.removeLink(outLink.getId());
+			net.removeNode(prevDestNode.getId());
+			Node firstNode = inLink.getFromNode();
+			Link linkOut = fac.createLink(Id.create("l"+nextLinkId(),Link.class), orDestNode, firstNode);
+			Link linkIn = fac.createLink(Id.create("l"+nextLinkId(),Link.class), firstNode, orDestNode);
+			initFerryLink(linkOut);
+			initFerryLink(linkIn);
+			net.addLink(linkOut);
+			net.addLink(linkIn);
 		}else{
-				Node prevDestNode = net.getNodes().get(Id.create("n_"+'s',Node.class));
-				Link inLink = prevDestNode.getInLinks().values().iterator().next();
-				Link outLink = prevDestNode.getOutLinks().values().iterator().next();
-				net.removeLink(inLink.getId());
-				net.removeLink(outLink.getId());
-				net.removeNode(prevDestNode.getId());
-				Node firstNode = inLink.getFromNode();
-				Link linkOut = fac.createLink(Id.create("l"+nextLinkId(),Link.class), orDestNode, firstNode);
-				Link linkIn = fac.createLink(Id.create("l"+nextLinkId(),Link.class), firstNode, orDestNode);
-				initFerryLink(linkOut);
-				initFerryLink(linkIn);
-				net.addLink(linkOut);
-				net.addLink(linkIn);
+			Node firstNode = orDestNodes.get(1); //WhiteHall 2F south node
+			Link linkOut = fac.createLink(Id.create("l"+nextLinkId(),Link.class), orDestNode, firstNode);
+			Link linkIn = fac.createLink(Id.create("l"+nextLinkId(),Link.class), firstNode, orDestNode);
+			initOriginLink(linkOut);
+			initOriginLink(linkIn);
+			linkOut.setLength(0);
+			linkIn.setLength(0);
+			net.addLink(linkOut);
+			net.addLink(linkIn);
 		}
 	}
 

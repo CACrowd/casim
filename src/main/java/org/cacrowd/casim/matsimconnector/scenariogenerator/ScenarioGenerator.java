@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.scenarios.ContextGenerator;
+import org.jfree.util.Log;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.NetworkWriter;
 import org.matsim.api.core.v01.population.PopulationWriter;
@@ -26,6 +27,7 @@ import org.matsim.core.config.groups.ControlerConfigGroup;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup.ActivityParams;
 import org.matsim.core.config.groups.QSimConfigGroup;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.run.gui.PopulationSampler;
 
 public class ScenarioGenerator {
 
@@ -113,11 +115,7 @@ public class ScenarioGenerator {
 		c.travelTimeCalculator().setTraveltimeBinSize(60);
 		c.planCalcScore().setBrainExpBeta(1);
 
-
 		PopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
-//		PgStationPopulationGenerator.createPopulation(scenario, POPULATION_SIZE);
-//		MyPopulationGenerator90deg.createPopulation(scenario);
-//		MyPopulationGenerator180deg.createPopulation(scenario);
 		
 		new ConfigWriter(c).write(inputDir+ "/config.xml");
 		new NetworkWriter(scenario.getNetwork()).write(c.network().getInputFile());

@@ -12,20 +12,18 @@
 
 package org.cacrowd.casim.matsimconnector.congestionpricing;
 
-import org.apache.log4j.Logger;
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.Person;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
-import org.matsim.core.router.costcalculators.RandomizingTimeDistanceTravelDisutilityFactory;
+import org.matsim.core.router.costcalculators.RandomizingTimeDistanceTravelDisutility;
 import org.matsim.core.router.util.TravelDisutility;
 import org.matsim.core.router.util.TravelTime;
 import org.matsim.vehicles.Vehicle;
 
 public class MSATollTravelDisutilityCalculator implements TravelDisutility {
 
-	private static final Logger log = Logger.getLogger(MSATollTravelDisutilityCalculator.class);
+//	private static final Logger log = Logger.getLogger(MSATollTravelDisutilityCalculator.class);
 
 	private final TravelDisutility delegate;
 	private final TravelTime timeCalculator;
@@ -37,10 +35,10 @@ public class MSATollTravelDisutilityCalculator implements TravelDisutility {
 	public MSATollTravelDisutilityCalculator(TravelTime timeCalculator, PlanCalcScoreConfigGroup cnScoringGroup, MSATollHandler tollHandler) {
 		this.timeCalculator = timeCalculator;
 		this.marginalUtlOfMoney = cnScoringGroup.getMarginalUtilityOfMoney();
-		this.distanceCostRateCar = cnScoringGroup.getOrCreateModeParams(Constants.CA_LINK_MODE).getMonetaryDistanceRate();
+		this.distanceCostRateCar = cnScoringGroup.getOrCreateModeParams(TransportMode.car).getMonetaryDistanceRate();
 		this.marginalUtlOfTravelTime = (-cnScoringGroup.getModes().get(TransportMode.car).getMarginalUtilityOfTraveling() / 3600.0) + (cnScoringGroup.getPerforming_utils_hr() / 3600.0);
 		this.tollHandler = tollHandler;
-		final RandomizingTimeDistanceTravelDisutilityFactory fac = new RandomizingTimeDistanceTravelDisutilityFactory( TransportMode.car, cnScoringGroup );
+		final RandomizingTimeDistanceTravelDisutility.Builder fac = new RandomizingTimeDistanceTravelDisutility.Builder(TransportMode.car, cnScoringGroup );
 		this.delegate = fac.createTravelDisutility(timeCalculator);
 	}
 

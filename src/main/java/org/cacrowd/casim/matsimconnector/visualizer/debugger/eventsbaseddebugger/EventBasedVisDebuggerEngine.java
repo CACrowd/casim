@@ -12,10 +12,31 @@
 
 package org.cacrowd.casim.matsimconnector.visualizer.debugger.eventsbaseddebugger;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.cacrowd.casim.environment.TransitionArea;
 import org.cacrowd.casim.matsimconnector.agents.Pedestrian;
-import org.cacrowd.casim.matsimconnector.events.*;
-import org.cacrowd.casim.matsimconnector.events.debug.*;
+import org.cacrowd.casim.matsimconnector.events.CAAgentChangeLinkEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentConstructEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentEnterEnvironmentEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentExitEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentLeaveEnvironmentEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentMoveEvent;
+import org.cacrowd.casim.matsimconnector.events.CAAgentMoveToOrigin;
+import org.cacrowd.casim.matsimconnector.events.CAEngineStepPerformedEvent;
+import org.cacrowd.casim.matsimconnector.events.CAEventHandler;
+import org.cacrowd.casim.matsimconnector.events.debug.ForceReDrawEvent;
+import org.cacrowd.casim.matsimconnector.events.debug.ForceReDrawEventHandler;
+import org.cacrowd.casim.matsimconnector.events.debug.LineEvent;
+import org.cacrowd.casim.matsimconnector.events.debug.LineEventHandler;
+import org.cacrowd.casim.matsimconnector.events.debug.RectEvent;
+import org.cacrowd.casim.matsimconnector.events.debug.RectEventHandler;
 import org.cacrowd.casim.matsimconnector.scenario.CAEnvironment;
 import org.cacrowd.casim.matsimconnector.scenario.CAScenario;
 import org.cacrowd.casim.matsimconnector.utility.Constants;
@@ -31,9 +52,6 @@ import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-
-import java.io.File;
-import java.util.*;
 
 public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHandler, ForceReDrawEventHandler, RectEventHandler {
 
@@ -55,6 +73,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     private long lastUpdate = -1;
     private Control keyControl;
     private int nrAgents;
+    private int caEnvShift = 200;
 
     public EventBasedVisDebuggerEngine(Collection<CAEnvironment> caEnvs) {
         this.sc = ScenarioUtils.createScenario(ConfigUtils.createConfig());
@@ -88,7 +107,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
         if ((iteration % 2 == 0) && Constants.SAVE_FRAMES) {
             String pathName = Constants.PATH + "/videos/frames/it" + iteration;
             FileUtility.deleteDirectory(new File(pathName));
-            fs = new FrameSaver(pathName, "png", 30);
+            fs = new FrameSaver(pathName, "png", 10);
         }
         this.vis.fs = fs;
         this.keyControl.fs = fs;
@@ -104,7 +123,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     private void drawNodesAndLinks() {
         for (Node n : sc.getNetwork().getNodes().values()) {
             this.vis.addCircleStatic(n.getCoord().getX(), n.getCoord().getY(), .2f, 0, 0, 0, 255, 0);
-            this.vis.addTextStatic(n.getCoord().getX(), n.getCoord().getY()-.3, ""+ n.getId().toString(), 10);
+            this.vis.addTextStatic(n.getCoord().getX(), n.getCoord().getY()-.3, ""+ n.getId().toString(), 40);
         }
         for (Link l : sc.getNetwork().getLinks().values()) {
 
@@ -140,7 +159,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
     }
 
     public void drawCAEnvironment(CAEnvironment environmentCA) {
-        Coordinate origin = MathUtility.sum(environmentCA.getContext().environmentOrigin,new Coordinate(10+environmentCA.getContext().getColumns()*Constants.CA_CELL_SIDE,0));
+		Coordinate origin = MathUtility.sum(environmentCA.getContext().environmentOrigin,new Coordinate(caEnvShift+environmentCA.getContext().getColumns()*Constants.CA_CELL_SIDE,0));
 		drawObjects(environmentCA.getContext().getEnvironmentGrid(), origin);
         for (PedestrianGrid pedestrianGrid : environmentCA.getContext().getPedestrianGrids())
             drawPedestrianGridBorders(pedestrianGrid, origin);
@@ -224,7 +243,7 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
         this.nrAgents++;
 
-        Coordinate origin = MathUtility.sum(event.getPedestrian().getContext().environmentOrigin,new Coordinate(10+event.getPedestrian().getContext().getColumns()*Constants.CA_CELL_SIDE,0));
+        Coordinate origin = MathUtility.sum(event.getPedestrian().getContext().environmentOrigin,new Coordinate(caEnvShift+event.getPedestrian().getContext().getColumns()*Constants.CA_CELL_SIDE,0));
 
         double from_x = MathUtility.convertGridCoordinate(event.getFrom_x())+origin.getX();
         double from_y = MathUtility.convertGridCoordinate(event.getFrom_y())+origin.getY();
@@ -377,29 +396,26 @@ public class EventBasedVisDebuggerEngine implements CAEventHandler, LineEventHan
 
     private void updateColor(Pedestrian pedestrian) {
         CircleProperty cp = this.circleProperties.get(pedestrian.getId());
-        String idDestination = pedestrian.getVehicle().getDriver().getDestinationLinkId().toString();
-        //double xOrigin = pedestrian.getOriginMarker().getCoordinate().getX();
-        //int color;
-        //int origLevel = pedestrian.getOriginMarker().getLevel();
-        //int color = (((destLevel+1)*origLevel)*100)%256;
-        int brightness = 80;
-        if (idDestination.endsWith("SG")) {	//Staten Island - St. George
-            cp.r = 255;
-            cp.g = brightness;
-            cp.b = brightness;//255-color;
-            cp.a = 255;
-        } else if (idDestination.endsWith("WH")) { //Staten Island - St. George
-            cp.r = brightness;
-            cp.g = brightness;
-            cp.b = 255;//255-color;
-            cp.a = 255;
-        }else {
-            cp.r = 255;
-            cp.g = 255;
-            cp.b = 255;//255-color;
-            cp.a = 255;
-            System.out.println(idDestination);
-        }
+        int origLevel = pedestrian.getOriginMarker().getLevel();
+        int destLevel = pedestrian.getDestination().getLevel();
+		int color = (((destLevel +1)*origLevel)*100)%256;
+        //int brightness = 80;
+//        if (idDestination.endsWith("SG")) {	//Staten Island - St. George
+//            cp.r = 255;
+//            cp.g = brightness;
+//            cp.b = brightness;//255-color;
+//            cp.a = 255;
+//        } else if (idDestination.endsWith("WH")) { //Staten Island - St. George
+//            cp.r = brightness;
+//            cp.g = brightness;
+//            cp.b = 255;//255-color;
+//            cp.a = 255;
+//        }else {
+        cp.r = color;
+        cp.g = 255;
+        cp.b = 255-color;
+        cp.a = 255;
+//        }
     }
 
     @Override

@@ -66,11 +66,12 @@ public class StatenIslandPopulationGenerator {
 		final float tic = 15;
 		float sigma = 1.5f *60;
 		
+//------------------------------ST GEORGE
+
 		Link link = initLinks.get(0);
 //		for (int i = 0; i < avgPerTimeSG.size(); i++) {
-
 			float timeWindowEnd = 8.5f*3600; //tic*(i+1)*60;
-			int nPeds = 1300;	//avgPerTimeWH.get(i);
+			int nPeds = 800;	//avgPerTimeWH.get(i);
 			if ((timeWindowEnd >= StatenIslandRunner.peakTime1Start && timeWindowEnd<=StatenIslandRunner.peakTime1End)||(timeWindowEnd >= StatenIslandRunner.peakTime2Start && timeWindowEnd<=StatenIslandRunner.peakTime2End)){		
 				for(int n = 0; n < nPeds; n++){
 					double departureTime = (timeWindowEnd-(tic/2))+(MatsimRandom.getRandom().nextGaussian()*sigma);
@@ -94,12 +95,12 @@ public class StatenIslandPopulationGenerator {
 			}
 //		}
 		
+//------------------------------WHITEHALL
 
 		link = initLinks.get(1);
 //		for (int i = 0; i < avgPerTimeWH.size(); i++) {
-		
 			timeWindowEnd = 9*3600; //tic*(i+1)*60;
-//			nPeds = 1300;	//avgPerTimeWH.get(i);
+			nPeds = 1800;	//avgPerTimeWH.get(i);
 			if ((timeWindowEnd >= StatenIslandRunner.peakTime1Start && timeWindowEnd<=StatenIslandRunner.peakTime1End)||(timeWindowEnd >= StatenIslandRunner.peakTime2Start && timeWindowEnd<=StatenIslandRunner.peakTime2End)){
 				for(int n = 0; n < nPeds; n++){
 					double departureTime = (timeWindowEnd-(tic/2))+(MatsimRandom.getRandom().nextGaussian()*sigma);

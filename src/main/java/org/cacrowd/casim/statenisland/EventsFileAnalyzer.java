@@ -104,9 +104,9 @@ public class EventsFileAnalyzer implements LinkEnterEventHandler, LinkLeaveEvent
 
 //        analyzer.stGeorgeDepTime = 30900;
 //        analyzer.whitehallDepTime = 32820;
-        String dir = "/Users/laemmel/svn/unimb/NYC-DOTS/TRB2016/matsim/2600peds/it.29/";
-
-
+//        String dir = "C:/Users/Luca/Documents/uni/Dottorato/Juelich/developing_stuff/Test/debug/SI_november/SG_futurePeak_largeRampAccess/ITERS/it.29/";
+//        String it = "29";
+        String dir = "C:/Users/Luca/Documents/uni/Dottorato/Juelich/developing_stuff/Test/debug/SI_SeptRes/currentSG_withGF/ITERS/it.29/";
         String it = "29";
 
 

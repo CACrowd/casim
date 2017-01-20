@@ -55,6 +55,7 @@ public class FrameSaver {
 	
 	public void saveFrame(PApplet p, String identifier) {
 		if (this.skiped < this.frameSkip) {
+			frameNumber--;
 			return;
 		}
 //		this.await();

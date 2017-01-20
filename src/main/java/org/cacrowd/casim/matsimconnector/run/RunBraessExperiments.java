@@ -17,31 +17,33 @@ import org.cacrowd.casim.matsimconnector.utility.Constants;
 
 public class RunBraessExperiments {
 	public static void main(String [] args) {
-//		Constants.VIS = true;
+		Constants.VIS = true;
+		Constants.ORIGIN_FLOWS = new String[1];
+		Constants.ORIGIN_FLOWS[0] = "e";
 
 		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess_WL.csv";
 		Constants.BRAESS_WL = true;
 		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = true;
-		Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_wl_so/";
+		//Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_wl_so/";
 		LoadAndRunCASimulation.main(new String[]{});
 
-//		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess_WL.csv";
-//		Constants.BRAESS_WL = true;
-//		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
+		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess_WL.csv";
+		Constants.BRAESS_WL = true;
+		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
 //		Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_wl_ne/";
-//		LoadAndRunCASimulation.main(new String[]{});
-//
-//		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess.csv";
-//		Constants.BRAESS_WL = false;
-//		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = true;
-//		Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_so/";
-//		LoadAndRunCASimulation.main(new String[]{});
+		LoadAndRunCASimulation.main(new String[]{});
 
-//		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess.csv";
-//		Constants.BRAESS_WL = false;
-//		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
+		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess.csv";
+		Constants.BRAESS_WL = false;
+		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = true;
+//		Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_so/";
+		LoadAndRunCASimulation.main(new String[]{});
+
+		Constants.ENVIRONMENT_FILE = "environmentGrid_Braess.csv";
+		Constants.BRAESS_WL = false;
+		Constants.MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
 //		Constants.OUTPUT_PATH = "/Users/laemmel/devel/CACAIE/braess_ne/";
-//		LoadAndRunCASimulation.main(new String[]{});
+		LoadAndRunCASimulation.main(new String[]{});
 
 	}
 

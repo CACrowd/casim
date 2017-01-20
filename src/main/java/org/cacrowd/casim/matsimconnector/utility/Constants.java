@@ -35,19 +35,19 @@ public class Constants {
 	public static final int TRANSITION_AREA_COLUMNS = (int) (TRANSITION_AREA_LENGTH / CA_CELL_SIDE);
 	public static final String RESOURCE_PATH = "src/main/resources";
 	public static final String COORDINATE_SYSTEM = "EPSG:3395";
-	public static String[] ORIGIN_FLOWS = {"n"};    //each char denote one origin of flow (e.g. "e" stays for "east")
+	public static String[] ORIGIN_FLOWS = {"n","e","w","s"};    //each char denote one origin of flow (e.g. "e" stays for "east")
 	public static boolean stopOnStairs;
 	/** this is for the generation of the fundamental diagram of the CA: pedestrian will be kept inside the
 	 * CAEnvironment until this time (in seconds). Keep to 0 if you want to run normal simulation.**/
 	public static int CA_FD_TEST_END_TIME = 0; //1200;
 	public static double SIMULATION_DURATION = 22000;
-	public static int SIMULATION_ITERATIONS = 10;
+	public static int SIMULATION_ITERATIONS = 30;
 	/**
 	 * global density value used to efficiently compute the test of the fundamental diagram.
 	 * Used by DensityGrid only if Constants.DENSITY_GRID_RADIUS==0
 	 * **/
 	public static double GLOBAL_DENSITY;
-	public static Double FLOPW_CAP_PER_METER_WIDTH = 1.2;
+	public static Double FLOPW_CAP_PER_METER_WIDTH = 1000.;
 	public static Double FAKE_LINK_WIDTH = 10.;  // 1.2;
 	public static Double CA_LINK_LENGTH = 10.;
 	public static boolean MARGINAL_SOCIAL_COST_OPTIMIZATION = false;
@@ -66,7 +66,7 @@ public class Constants {
 	public static String FD_TEST_PATH;
 	public static String INPUT_PATH = DEBUG_TEST_PATH+"/input";
 	public static String OUTPUT_PATH = DEBUG_TEST_PATH+"/output";
-	public static String ENVIRONMENT_FILE = "ABMUS_PG_station_separated.csv";
+	public static String ENVIRONMENT_FILE = "environmentGrid_Braess.csv";
 	public static boolean BRAESS_WL = false;
 	public static boolean VIS = true;
 	public static boolean SAVE_FRAMES = false;
