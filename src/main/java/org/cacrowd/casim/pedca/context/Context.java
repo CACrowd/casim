@@ -29,9 +29,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Context {
-	public Coordinate environmentOrigin = new Coordinate(0, 0);    //shift of this context with respect to the coordinate system of the scenario
-	public double environmentRotation = 0;    //only for visualization purposes
-	private ArrayList<PedestrianGrid> pedestrianGrids;
+    private Coordinate environmentOrigin = new Coordinate(0, 0);    //shift of this context with respect to the coordinate system of the scenario
+    private double environmentRotation = 0;    //only for visualization purposes
+    private ArrayList<PedestrianGrid> pedestrianGrids;
 	private EnvironmentGrid environmentGrid;
 	private FloorFieldsGrid floorFieldsGrid;
 	private MarkerConfiguration markerConfiguration;
@@ -66,10 +66,10 @@ public class Context {
         environmentGrid.saveCSV(path);
 		floorFieldsGrid.saveCSV(path);
 		saveCoordinates(path);
-    } 
-	
-	public void loadCoordinates(String path) throws IOException{
-		BufferedReader br = new BufferedReader(new FileReader(path+"/coordinates.txt"));
+    }
+
+    private void loadCoordinates(String path) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(path+"/coordinates.txt"));
 		String line = br.readLine();
 		String coordString = line.substring(line.indexOf(":")+1);
 		environmentOrigin = new Coordinate(Double.parseDouble(coordString.substring(0, coordString.indexOf(","))), Double.parseDouble(coordString.substring(coordString.indexOf(",")+1)));
@@ -79,9 +79,9 @@ public class Context {
 
 		br.close();
 	}
-	
-	public void saveCoordinates(String path) throws IOException{
-		File file = new File(path+"/coordinates.txt");
+
+    private void saveCoordinates(String path) throws IOException {
+        File file = new File(path+"/coordinates.txt");
 		if (!file.exists()) {
 			file.createNewFile();
 		} 

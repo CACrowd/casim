@@ -96,9 +96,8 @@ public class TransitionArea extends PedestrianGrid {
 	}
 
 	public GridPoint calculateEnterPosition(){
-		GridPoint result = Lottery.extractObject(getFreePositions(positionsForGeneration));
-		return result;
-	}
+        return Lottery.extractObject(getFreePositions(positionsForGeneration));
+    }
 
 	public double getSFFValue(GridPoint position, boolean destinationReached) {
 		if (destinationReached)
@@ -110,8 +109,8 @@ public class TransitionArea extends PedestrianGrid {
 	public FinalDestination getReferenceDestination(){
 		return destinationRef;
 	}
-	
-	/**
+
+    /**
 	 * returns all free positions useful for the generation.
 	 * The last column, which is overimposed with the environment, is not considered.
 	 * */

@@ -22,79 +22,78 @@ import java.io.IOException;
 
 public class DensityGrid extends Grid<Double> {
 
-	private static double cellArea = Math.pow(Constants.CELL_SIZE, 2);
-	private final PedestrianFootprint pedestrianFootprint;
-	private final EnvironmentGrid environmentGrid;
-	
-	public DensityGrid(int rows, int cols, EnvironmentGrid environmentGrid) {
-		super(rows, cols);
-		this.pedestrianFootprint = new PedestrianFootprint(Constants.DENSITY_GRID_RADIUS);
-		this.environmentGrid = environmentGrid;
-	}
+    private static double cellArea = Math.pow(Constants.CELL_SIZE, 2);
+    private final PedestrianFootprint pedestrianFootprint;
+    private final EnvironmentGrid environmentGrid;
 
-	protected void diffuse(GridPoint position){
-		for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()){
-			GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
-			if (neighbourCondition(positionToWrite.getY(), positionToWrite.getX())){
-				Double oldValue =  get(positionToWrite).get(0);
-				if (oldValue == null)
-					get(positionToWrite).add(pedestrianFootprint.getValuesMap().get(shift));
-				else
-					get(positionToWrite).set(0, oldValue + pedestrianFootprint.getValuesMap().get(shift));
-			}
-		}
-	}
-	
-	protected void remove(GridPoint position){
-		for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()){
-			GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
-			if (neighbourCondition(positionToWrite.getY(), positionToWrite.getX())){
-				Double oldValue =  get(positionToWrite).get(0);
-				get(positionToWrite).set(0, oldValue - pedestrianFootprint.getValuesMap().get(shift));
-			}
-		}
-	}
-	
-	public double getDensityAt(GridPoint position){
-		if (Constants.DENSITY_GRID_RADIUS == 0)
-			return Constants.GLOBAL_DENSITY;
-		double deltaArea = 0;
-		for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()){
-			GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
-			if (!neighbourCondition(positionToWrite.getY(), positionToWrite.getX())){
-				deltaArea+=cellArea;
-			} 
-		}
-		double densityValue;
-		if (get(position).get(0)!=null)
-			densityValue = get(position).get(0);
-		else
-			densityValue = 0;
-		double footprintArea = pedestrianFootprint.getArea();
-		densityValue = densityValue*footprintArea/(footprintArea-deltaArea);
-		return densityValue;
-	}
-	
-	@Override
-	public boolean neighbourCondition(int row, int col){
-		if (environmentGrid != null)
-			return super.neighbourCondition(row, col) && environmentGrid.isWalkable(row, col);
-		else
-			return super.neighbourCondition(row, col);
-	}
-	
-	@Override
-	protected void loadFromCSV(File file) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+    public DensityGrid(int rows, int cols, EnvironmentGrid environmentGrid) {
+        super(rows, cols);
+        this.pedestrianFootprint = new PedestrianFootprint(Constants.DENSITY_GRID_RADIUS);
+        this.environmentGrid = environmentGrid;
+    }
 
-	@Override
-	public void saveCSV(String path) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+    protected void diffuse(GridPoint position) {
+        for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()) {
+            GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
+            if (neighbourCondition(positionToWrite.getY(), positionToWrite.getX())) {
+                Double oldValue = get(positionToWrite).get(0);
+                if (oldValue == null)
+                    get(positionToWrite).add(pedestrianFootprint.getValuesMap().get(shift));
+                else
+                    get(positionToWrite).set(0, oldValue + pedestrianFootprint.getValuesMap().get(shift));
+            }
+        }
+    }
 
-	
+    protected void remove(GridPoint position) {
+        for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()) {
+            GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
+            if (neighbourCondition(positionToWrite.getY(), positionToWrite.getX())) {
+                Double oldValue = get(positionToWrite).get(0);
+                get(positionToWrite).set(0, oldValue - pedestrianFootprint.getValuesMap().get(shift));
+            }
+        }
+    }
+
+    public double getDensityAt(GridPoint position) {
+        if (Constants.DENSITY_GRID_RADIUS == 0)
+            return Constants.GLOBAL_DENSITY;
+        double deltaArea = 0;
+        for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()) {
+            GridPoint positionToWrite = Distances.gridPointDifference(position, shift);
+            if (!neighbourCondition(positionToWrite.getY(), positionToWrite.getX())) {
+                deltaArea += cellArea;
+            }
+        }
+        double densityValue;
+        if (get(position).get(0) != null)
+            densityValue = get(position).get(0);
+        else
+            densityValue = 0;
+        double footprintArea = pedestrianFootprint.getArea();
+        densityValue = densityValue * footprintArea / (footprintArea - deltaArea);
+        return densityValue;
+    }
+
+    @Override
+    public boolean neighbourCondition(int row, int col) {
+        if (environmentGrid != null)
+            return super.neighbourCondition(row, col) && environmentGrid.isWalkable(row, col);
+        else
+            return super.neighbourCondition(row, col);
+    }
+
+    @Override
+    protected void loadFromCSV(File file) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void saveCSV(String path) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
 
 }

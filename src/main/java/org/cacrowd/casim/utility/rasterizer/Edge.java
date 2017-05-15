@@ -10,7 +10,7 @@
  * (at your option) any later version.
  */
 
-package org.cacrowd.casim.proto.geom;
+package org.cacrowd.casim.utility.rasterizer;
 
 
 import org.cacrowd.casim.pedca.utility.Constants;

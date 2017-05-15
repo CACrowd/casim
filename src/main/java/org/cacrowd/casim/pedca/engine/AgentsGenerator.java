@@ -22,8 +22,8 @@ public class AgentsGenerator {
 
 	private Context context;
 	private int pedestrianCounter;
-	
-	public AgentsGenerator(Context context){
+
+    public AgentsGenerator(Context context){
 		this.context = context;
 		pedestrianCounter = 0;
 	}

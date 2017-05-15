@@ -69,8 +69,8 @@ public class ConflictSolver {
 //		Lista che user� per riempire la lista di 
 		ArrayList<GridPoint> nextPosList = new ArrayList<GridPoint>();
 		//---HashSet<GridPoint> nextPosList = new HashSet<GridPoint>();
-		
-		ArrayList<Agent> listaCompletaPedoni = new ArrayList<Agent>();
+
+//		ArrayList<Agent> listaCompletaPedoni = new ArrayList<Agent>();
 //		HashSet per ottenere le destinazioni UNIVOCHE dei pedoni
         HashSet<GridPoint> uniqueGP = new HashSet<GridPoint>();
 //		Vecchia dimensione della hashMap
@@ -84,9 +84,9 @@ public class ConflictSolver {
 			oldSize = uniqueGP.size();
 			GridPoint agentNewPosition = p.getNewPosition();
 			uniqueGP.add(agentNewPosition);
-			
-			listaCompletaPedoni.add(p);
-			if(oldSize == uniqueGP.size()){
+
+//			listaCompletaPedoni.add(p);
+            if(oldSize == uniqueGP.size()){
 				pedsList.add(p);
 				if(!nextPosList.contains(agentNewPosition)){
 				nextPosList.add(agentNewPosition);

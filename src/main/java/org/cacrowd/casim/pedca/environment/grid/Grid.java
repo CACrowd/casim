@@ -70,7 +70,7 @@ public abstract class Grid<T> {
         return new GridPoint(col, row);
 
     }
-    
+
     public double getOffsetX() {
         return this.offsetX;
     }
@@ -141,13 +141,12 @@ public abstract class Grid<T> {
     }
 
     public String toString() {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (ArrayList<GridCell<T>> cell : cells) {
-            for (int j = 0; j < cell.size(); j++)
-                res += cell.get(j).toString() + " ";
-            res += "\n";
+            for (GridCell<T> aCell : cell) res.append(aCell.toString()).append(" ");
+            res.append("\n");
         }
-        return res;
+        return res.toString();
     }
 
     protected boolean neighbourCondition(int row, int col) {
