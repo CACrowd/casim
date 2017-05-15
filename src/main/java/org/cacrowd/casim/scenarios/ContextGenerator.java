@@ -12,12 +12,12 @@
 
 package org.cacrowd.casim.scenarios;
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
 import org.cacrowd.casim.pedca.environment.markers.Start;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +81,7 @@ public class ContextGenerator {
 	}
 	
 	private static Context getBottleneckContext(float sizeX, float sizeY, float bottleneckWidth, float bottleneckHeight, float bottleneckPosY) {
-		EnvironmentGrid environmentGrid = new EnvironmentGrid((int)(sizeY/Constants.CA_CELL_SIDE), (int)(sizeX/Constants.CA_CELL_SIDE));
+		EnvironmentGrid environmentGrid = new EnvironmentGrid((int) (sizeY / Constants.CELL_SIZE), (int) (sizeX / Constants.CELL_SIZE));
 		EnvironmentGenerator.initBottleneckScenario(environmentGrid, bottleneckWidth, bottleneckHeight, bottleneckPosY);
 		MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
 		EnvironmentGenerator.addTacticalDestinations(markerConfiguration, environmentGrid);

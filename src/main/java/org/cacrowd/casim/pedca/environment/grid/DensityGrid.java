@@ -57,7 +57,7 @@ public class DensityGrid extends Grid<Double> {
 	
 	public double getDensityAt(GridPoint position){
 		if (Constants.DENSITY_GRID_RADIUS == 0)
-			return org.cacrowd.casim.matsimconnector.utility.Constants.GLOBAL_DENSITY;
+			return Constants.GLOBAL_DENSITY;
 		double deltaArea = 0;
 		for (GridPoint shift : pedestrianFootprint.getValuesMap().keySet()){
 			GridPoint positionToWrite = Distances.gridPointDifference(position, shift);

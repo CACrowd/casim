@@ -12,9 +12,9 @@
 
 package org.cacrowd.casim.pedca.environment.markers;
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ public class ScheduledDestination extends DelayedDestination {
 	@Override
 	public int waitingTimeForCrossing(double time){
 		int dayTime = (int)time % 86400;
-		int stepToCross = (int)((scheduledTimes[scheduleIndex] - dayTime + timeShift)/Constants.CA_STEP_DURATION);
+		int stepToCross = (int) ((scheduledTimes[scheduleIndex] - dayTime + timeShift) / Constants.STEP_DURATION);
 		if (stepToCross > 0)
 			return stepToCross;
 		return 0;

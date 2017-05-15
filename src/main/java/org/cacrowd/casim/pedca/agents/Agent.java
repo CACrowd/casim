@@ -12,7 +12,6 @@
 
 package org.cacrowd.casim.pedca.agents;
 
-import org.cacrowd.casim.matsimconnector.utility.MathUtility;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -24,6 +23,7 @@ import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.DirectionUtility;
 import org.cacrowd.casim.pedca.utility.DirectionUtility.Heading;
 import org.cacrowd.casim.pedca.utility.Lottery;
+import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 

@@ -13,7 +13,7 @@
 package org.cacrowd.casim.proto.geom;
 
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 /**
  * Created by laemmel on 12/07/16.
@@ -40,7 +40,7 @@ public final class Edge {
             this.y0 = y1;
         }
 
-        dx = Constants.CA_CELL_SIDE * (this.x1 - this.x0) / (this.y1 - this.y0);
+        dx = Constants.CELL_SIZE * (this.x1 - this.x0) / (this.y1 - this.y0);
         currentX = this.x0;
     }
 
@@ -73,4 +73,3 @@ public final class Edge {
         return this.edgeType;
     }
 }
-

@@ -12,13 +12,13 @@
 
 package org.cacrowd.casim.pedca.environment.network;
 
-import org.cacrowd.casim.matsimconnector.utility.MathUtility;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.markers.TacticalDestination;
 import org.cacrowd.casim.pedca.utility.Constants;
+import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 

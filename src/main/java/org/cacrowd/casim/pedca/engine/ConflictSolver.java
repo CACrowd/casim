@@ -12,8 +12,6 @@
 
 package org.cacrowd.casim.pedca.engine;
 
-import org.cacrowd.casim.matsimconnector.agents.Pedestrian;
-import org.cacrowd.casim.matsimconnector.utility.MathUtility;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -21,6 +19,7 @@ import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.utility.CASimRandom;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.Lottery;
+import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,14 +39,13 @@ public class ConflictSolver {
 	
 	private void solveBidirectionalConflicts() {
 		Iterable<Agent> pedsIt = getPedestrians();
-		for (Agent agent_a : pedsIt){
-			Pedestrian agent1 = (Pedestrian) agent_a;
+		for (Agent agent1 : pedsIt) {
 			if (agent1.isWillingToSwap()){
 				GridPoint chosenPosition = agent1.getNewPosition();
 				PedestrianGrid pedestrianGrid = agent1.getUsedPedestrianGrid();
-				Agent agent_b = pedestrianGrid.getPedestrian(chosenPosition);
-				Pedestrian agent2 = (Pedestrian) agent_b;
-				if (agent1 != agent2 && agent2.isWillingToSwap() && agent2.getRealNewPosition().equals(agent1.getRealPosition())){
+				Agent agent2 = pedestrianGrid.getPedestrian(chosenPosition);
+
+				if (agent1 != agent2 && agent2.isWillingToSwap() && agent2.getNewPosition().equals(agent1.getPosition())) {
 					startPedestrianSwitching(agent1, agent2);
 				}else{
 					agent1.revertWillingToSwap();
@@ -57,7 +55,7 @@ public class ConflictSolver {
 	}
 
 	private void startPedestrianSwitching(Agent agent1, Agent agent2) {
-		int stepToPerformSwap = (int)Math.round(MathUtility.average(agent1.calculateStepToPerformSwap(), agent2.calculateStepToPerformSwap()));		
+		int stepToPerformSwap = (int) Math.round(MathUtility.average(agent1.calculateStepToPerformSwap(), agent2.calculateStepToPerformSwap()));
 		agent1.startBidirectionalSwitch(stepToPerformSwap);
 		agent2.startBidirectionalSwitch(stepToPerformSwap);		
 	}
@@ -84,7 +82,7 @@ public class ConflictSolver {
 //      Inizializzo la lista di pedoni che avranno un conflitto (anche la lista della destinazioni con conflitti)
 		for(Agent p:pedsIt){
 			oldSize = uniqueGP.size();
-			GridPoint agentNewPosition = getNewAgentPosition(p);
+			GridPoint agentNewPosition = p.getNewPosition();
 			uniqueGP.add(agentNewPosition);
 			
 			listaCompletaPedoni.add(p);
@@ -110,9 +108,9 @@ public class ConflictSolver {
         	ArrayList<Agent> sameGPPedList = new ArrayList<Agent>();
         	
         	for(Agent p:pedsList){
-        		if(getNewAgentPosition(p).equals(gp)){
-        			sameGPPedList.add(p);
-        		}
+				if (p.getNewPosition().equals(gp)) {
+					sameGPPedList.add(p);
+				}
         	}
         	        	
         	sameGPPedList.add(multipleGP.get(gp));	
@@ -137,9 +135,9 @@ public class ConflictSolver {
 		}*/
 	}
 
-	public GridPoint getNewAgentPosition(Agent p) {
-		return ((Pedestrian)p).getRealNewPosition();
-	}
+//	public GridPoint getNewAgentPosition(Agent p) {
+//		return ((Pedestrian)p).getRealNewPosition();
+//	}
 
 	private boolean frictionCondition() {
 		return Lottery.simpleExtraction(Constants.FRICTION_PROBABILITY);

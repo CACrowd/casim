@@ -12,9 +12,9 @@
 
 package org.cacrowd.casim.pedca.environment.grid;
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,12 +61,12 @@ public abstract class Grid<T> {
     }
 
     public Coordinate gridPoint2Coordinate(GridPoint gp) {
-        return new Coordinate(gp.getX() * Constants.CA_CELL_SIDE + offsetX, gp.getY() * Constants.CA_CELL_SIDE + offsetY);
+        return new Coordinate(gp.getX() * Constants.CELL_SIZE + offsetX, gp.getY() * Constants.CELL_SIZE + offsetY);
     }
 
     public GridPoint coordinate2GridPoint(Coordinate c) {
-        int col = (int) ((c.getX() - offsetX) / Constants.CA_CELL_SIDE);
-        int row = (int) ((c.getY() - offsetY) / Constants.CA_CELL_SIDE);
+        int col = (int) ((c.getX() - offsetX) / Constants.CELL_SIZE);
+        int row = (int) ((c.getY() - offsetY) / Constants.CELL_SIZE);
         return new GridPoint(col, row);
 
     }
@@ -80,11 +80,11 @@ public abstract class Grid<T> {
     }
 
     public int y2Row(double y) {
-        return (int) ((y - offsetY) / Constants.CA_CELL_SIDE);
+        return (int) ((y - offsetY) / Constants.CELL_SIZE);
     }
 
     public int x2Col(double x) {
-        return (int) ((x - offsetX) / Constants.CA_CELL_SIDE);
+        return (int) ((x - offsetX) / Constants.CELL_SIZE);
     }
 
     public void add(int i, int j, T object) {

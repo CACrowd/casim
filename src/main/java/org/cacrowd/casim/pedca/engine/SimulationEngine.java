@@ -14,8 +14,6 @@ package org.cacrowd.casim.pedca.engine;
 
 import org.cacrowd.casim.pedca.context.Context;
 
-import java.io.IOException;
-
 public class SimulationEngine {
 	private final int finalStep;
 	private int step;
@@ -34,10 +32,10 @@ public class SimulationEngine {
 //		agentMover = new AgentMover(context);
         activeObjectsUpdater = new GridsAndObjectsUpdater(context);
 	}
-	
-	public SimulationEngine(int finalStep, String path) throws IOException{
-		this(finalStep,new Context(path));
-	}
+
+//	public SimulationEngine(int finalStep, String path) throws IOException{
+//		this(finalStep,new Context(path));
+//	}
 	
 	public SimulationEngine(Context context){
 		this(0,context);

@@ -27,11 +27,18 @@ public class Constants {
 	public static final double MAX_FF_VALUE = Double.POSITIVE_INFINITY;
 	//Constants for Conflict Management
 	public static final double FRICTION_PROBABILITY = 0.;
-	public static final double CELL_SIZE = org.cacrowd.casim.matsimconnector.utility.Constants.CA_CELL_SIDE;
-	public static final double STEP_DURATION = org.cacrowd.casim.matsimconnector.utility.Constants.CA_STEP_DURATION;
+	public static final double CELL_SIZE = 0.4;
+	public static final double STEP_DURATION = 0.3;
 	public static final int SHADOWS_LIFE = 2;
 	public static final double SHADOWS_PROBABILITY = 1.;
 	public static final int STEP_FOR_BIDIRECTIONAL_SWAPPING = 2;
+	public static final String RESOURCE_PATH = "/some/path";
+	public static final String ENVIRONMENT_FILE = "some file";
+
+
+
+
+
 	//Constant for the random seed
 	public static long RANDOM_SEED = 42;
 	public static double DENSITY_GRID_RADIUS = 1.2;
@@ -41,4 +48,11 @@ public class Constants {
 	//Constants for Pedestrian Model
 	public static Double KS = 6.0;
 	public static Double PHI = 1.0;
+
+	//TODO don't know what this means [GL May 17]
+	/**
+	 * global density value used to efficiently compute the test of the fundamental diagram.
+	 * Used by DensityGrid only if Constants.DENSITY_GRID_RADIUS==0
+	 **/
+	public static double GLOBAL_DENSITY;
 }

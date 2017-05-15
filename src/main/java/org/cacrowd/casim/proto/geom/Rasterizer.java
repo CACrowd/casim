@@ -14,8 +14,8 @@ package org.cacrowd.casim.proto.geom;
 
 
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 import java.util.*;
 
@@ -105,8 +105,8 @@ public class Rasterizer {
         double y0 = e.getY0();
         double y1 = e.getY1();
 
-        double dx = Constants.CA_CELL_SIDE * (x1 - x0) / (y1 - y0);
-        double dy = Constants.CA_CELL_SIDE * (y1 - y0) / (x1 - x0);
+        double dx = Constants.CELL_SIZE * (x1 - x0) / (y1 - y0);
+        double dy = Constants.CELL_SIZE * (y1 - y0) / (x1 - x0);
 
         int colorCode = getColorCode(e.getEdgeType());
 

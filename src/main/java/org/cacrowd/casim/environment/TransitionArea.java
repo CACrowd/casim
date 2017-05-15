@@ -12,14 +12,14 @@
 
 package org.cacrowd.casim.environment;
 
-import org.cacrowd.casim.matsimconnector.agents.Pedestrian;
-import org.cacrowd.casim.matsimconnector.utility.Constants;
-import org.cacrowd.casim.matsimconnector.utility.MathUtility;
+
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.environment.markers.FinalDestination;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.Lottery;
+import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 
@@ -48,20 +48,20 @@ public class TransitionArea extends PedestrianGrid {
 		MathUtility.rotate(transAreaRef, this.rotation);
 		calculatePositionsForGeneration();
 	}
-	
-	//TODO OPTIMIZE THIS
-	public boolean acceptPedestrians(){
-		return getFreePositions(positionsForGeneration).size()>2;
-	}
-	
-	public boolean isAtBorder(Pedestrian pedestrian){
-		GridPoint position = pedestrian.getPosition();
-		return isAtBorder(position) && this.get(position).contains(pedestrian);
-	}
-	
-	public boolean isAtBorder(GridPoint position){
-		return position.getX() == getColumns()-1;
-	}
+
+//	//TODO OPTIMIZE THIS
+//	public boolean acceptPedestrians(){
+//		return getFreePositions(positionsForGeneration).size()>2;
+//	}
+//
+//	public boolean isAtBorder(Pedestrian pedestrian){
+//		GridPoint position = pedestrian.getPosition();
+//		return isAtBorder(position) && this.get(position).contains(pedestrian);
+//	}
+//
+//	public boolean isAtBorder(GridPoint position){
+//		return position.getX() == getColumns()-1;
+//	}
 	
 	//TODO TEST
 	public GridPoint convertTAPosToEnvPos(GridPoint tAPosition){
@@ -86,7 +86,7 @@ public class TransitionArea extends PedestrianGrid {
 		Coordinate result = new Coordinate(tACoordinate.getX(), tACoordinate.getY());
 		Coordinate shift = new Coordinate(0, 0);
 		MathUtility.rotate(result, rotation);
-		MathUtility.rotate(shift, rotation, Constants.CA_CELL_SIDE*0.5, Constants.CA_CELL_SIDE*0.5);
+		MathUtility.rotate(shift, rotation, Constants.CELL_SIZE * 0.5, Constants.CELL_SIZE * 0.5);
 		Coordinate transAreaRef = gridPoint2Coordinate(this.transAreaRef);
 		Coordinate environmentRef = gridPoint2Coordinate(this.environmentRef);
 		double x_r = result.getX()-transAreaRef.getX()+environmentRef.getX()+shift.getX();

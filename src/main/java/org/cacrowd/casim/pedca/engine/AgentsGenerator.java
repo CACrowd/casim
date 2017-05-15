@@ -13,14 +13,8 @@
 package org.cacrowd.casim.pedca.engine;
 
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.environment.TransitionArea;
-import org.cacrowd.casim.matsimconnector.agents.Pedestrian;
-import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.environment.grid.GridPoint;
-import org.cacrowd.casim.pedca.environment.markers.Destination;
-import org.matsim.core.mobsim.qsim.qnetsimengine.QVehicle;
 
 public class AgentsGenerator {
 
@@ -64,27 +58,27 @@ public class AgentsGenerator {
 //		context.getPedestrianGrid().addPedestrian(initialPosition, pedestrian);
 //	}
 
-	//FOR MATSIM CONNECTOR
-	public Pedestrian generatePedestrian(GridPoint initialPosition, int destinationId, QVehicle vehicle, TransitionArea transitionArea){
-		int pedID = pedestrianCounter;
-		Destination destination = context.getMarkerConfiguration().getDestination(destinationId);
-
-		//TODO FIXME this looks evil. First an Agent is instantiated, then it is passed as an Argument to Pedestrian, which in
-		//turn extends Agent [gl Aug '16]
-		Agent agent = new Agent(pedID,initialPosition,destination,context);
-		Pedestrian pedestrian = new Pedestrian(agent, vehicle, transitionArea);
-
-		getPopulation().addPedestrian(pedestrian);
-		//context.getPedestrianGrid().addPedestrian(initialPosition, pedestrian);
-		pedestrianCounter++;
-		return pedestrian;
-		
-	}
-	
-	//FOR MATSIM CONNECTOR
-	public Context getContext(){
-		return context;
-	}
+//	//FOR MATSIM CONNECTOR
+//	public Pedestrian generatePedestrian(GridPoint initialPosition, int destinationId, QVehicle vehicle, TransitionArea transitionArea){
+//		int pedID = pedestrianCounter;
+//		Destination destination = context.getMarkerConfiguration().getDestination(destinationId);
+//
+//		//TODO FIXME this looks evil. First an Agent is instantiated, then it is passed as an Argument to Pedestrian, which in
+//		//turn extends Agent [gl Aug '16]
+//		Agent agent = new Agent(pedID,initialPosition,destination,context);
+//		Pedestrian pedestrian = new Pedestrian(agent, vehicle, transitionArea);
+//
+//		getPopulation().addPedestrian(pedestrian);
+//		//context.getPedestrianGrid().addPedestrian(initialPosition, pedestrian);
+//		pedestrianCounter++;
+//		return pedestrian;
+//
+//	}
+//
+//	//FOR MATSIM CONNECTOR
+//	public Context getContext(){
+//		return context;
+//	}
 
     //Method never used
 //	//FOR MATSIM CONNECTOR

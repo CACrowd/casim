@@ -13,8 +13,8 @@
 package org.cacrowd.casim.proto.geom;
 
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.pedca.utility.Constants;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -85,8 +85,8 @@ public class RasterizerTest {
         Edge e2 = new Edge(5, 4, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e2);
 
-        int rows = (int) (5 / Constants.CA_CELL_SIDE) + 1;
-        int cols = (int) (5 / Constants.CA_CELL_SIDE) + 1;
+        int rows = (int) (5 / Constants.CELL_SIZE) + 1;
+        int cols = (int) (5 / Constants.CELL_SIZE) + 1;
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -129,8 +129,8 @@ public class RasterizerTest {
         Edge tr = new Edge(2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(tr);
 
-        int rows = (int) (10 / Constants.CA_CELL_SIDE) + 1;
-        int cols = (int) (6 / Constants.CA_CELL_SIDE) + 1;
+        int rows = (int) (10 / Constants.CELL_SIZE) + 1;
+        int cols = (int) (6 / Constants.CELL_SIZE) + 1;
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
