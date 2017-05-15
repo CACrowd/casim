@@ -32,9 +32,6 @@ public class EnvironmentGrid extends Grid<Integer> {
         super(environmentFile);
     }
 
-    public EnvironmentGrid(String path) throws IOException {
-        super(path + "/environment/environmentGrid.csv");
-    }
 
     public void setCellValue(int row, int col, int value) {
         try {

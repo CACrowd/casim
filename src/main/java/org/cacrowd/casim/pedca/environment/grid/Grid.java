@@ -60,6 +60,11 @@ public abstract class Grid<T> {
         }
     }
 
+    public Coordinate rowCol2Coordinate(int row, int col) {
+        GridPoint gp = new GridPoint(col, row);
+        return gridPoint2Coordinate(gp);
+    }
+
     public Coordinate gridPoint2Coordinate(GridPoint gp) {
         return new Coordinate(gp.getX() * Constants.CELL_SIZE + offsetX, gp.getY() * Constants.CELL_SIZE + offsetY);
     }
