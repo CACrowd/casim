@@ -13,6 +13,7 @@
 package org.cacrowd.casim.pedca.engine;
 
 import org.cacrowd.casim.pedca.context.Context;
+import org.cacrowd.casim.scenarios.ContextGenerator;
 
 public class SimulationEngine {
     private final int finalStep;
@@ -41,6 +42,13 @@ public class SimulationEngine {
         this(0, context);
     }
 
+    public static void main(String[] args) {
+        Context context = ContextGenerator.getCorridorContext(4, 16, 100);
+        SimulationEngine e = new SimulationEngine(context);
+        AgentMover am = new CAAgentMover(context);
+        e.setAgentMover(am);
+        e.doSimStep(1);
+    }
 
     //FOR MATSIM CONNECTOR
     public void doSimStep(double time) {

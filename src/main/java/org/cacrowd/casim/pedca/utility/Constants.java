@@ -51,4 +51,5 @@ public class Constants {
      * Used by DensityGrid only if Constants.DENSITY_GRID_RADIUS==0
      **/
     public static double GLOBAL_DENSITY;
+    public static boolean stopOnStairs;
 }
