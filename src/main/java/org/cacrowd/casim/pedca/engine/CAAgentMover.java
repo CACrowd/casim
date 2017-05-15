@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.Inject;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
@@ -24,6 +25,7 @@ public class CAAgentMover implements AgentMover {
 //       private EventsManager eventManager;
     //	private boolean stairs = true;
 
+    @Inject
     public CAAgentMover(Context context) {//}, EventsManager eventManager) {
         this.population = context.getPopulation();
 //   		this.engineCA = engineCA;

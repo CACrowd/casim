@@ -12,41 +12,41 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.scenarios.ContextGenerator;
 
 public class SimulationEngine {
-    private final int finalStep;
-    private int step;
+
+    @Inject
     private AgentsGenerator agentGenerator;
+    @Inject
     private AgentsUpdater agentUpdater;
+    @Inject
     private ConflictSolver conflictSolver;
+    @Inject
     private AgentMover agentMover;
+    @Inject
+    private Context context;
+    @Inject
     private GridsAndObjectsUpdater activeObjectsUpdater;
-
-    public SimulationEngine(int finalStep, Context context) {
-        step = 1;
-        this.finalStep = finalStep;
-        agentGenerator = new AgentsGenerator(context);
-        agentUpdater = new AgentsUpdater(context.getPopulation());
-        conflictSolver = new ConflictSolver(context);
-//		agentMover = new AgentMover(context);
-        activeObjectsUpdater = new GridsAndObjectsUpdater(context);
-    }
-
-//	public SimulationEngine(int finalStep, String path) throws IOException{
-//		this(finalStep,new Context(path));
-//	}
-
-    public SimulationEngine(Context context) {
-        this(0, context);
-    }
 
     public static void main(String[] args) {
         Context context = ContextGenerator.getCorridorContext(4, 16, 100);
-        SimulationEngine e = new SimulationEngine(context);
-        AgentMover am = new CAAgentMover(context);
-        e.setAgentMover(am);
+
+        Injector injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Context.class).toInstance(context);
+                bind(AgentMover.class).to(CAAgentMover.class);
+            }
+        });
+
+
+        SimulationEngine e = injector.getInstance(SimulationEngine.class);
         e.doSimStep(1);
     }
 
@@ -57,17 +57,6 @@ public class SimulationEngine {
         conflictSolver.step();
         agentMover.step(time);
         activeObjectsUpdater.step(time);
-        step++;
-    }
-
-    //FOR MATSIM CONNECTOR
-    public AgentsGenerator getAgentGenerator() {
-        return agentGenerator;
-    }
-
-    //FOR MATSIM CONNECTOR
-    public void setAgentMover(AgentMover agentMover) {
-        this.agentMover = agentMover;
     }
 
 }

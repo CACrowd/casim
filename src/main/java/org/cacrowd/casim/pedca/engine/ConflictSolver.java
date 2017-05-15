@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.Inject;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -27,8 +28,9 @@ import java.util.HashSet;
 
 public class ConflictSolver {
 	private Context context;
-	
-	public ConflictSolver(Context context){
+
+    @Inject
+    public ConflictSolver(Context context){
 		this.context = context;
 	}
 	

@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.Inject;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.ActiveGrid;
 import org.cacrowd.casim.pedca.environment.markers.DelayedDestination;
@@ -24,6 +25,7 @@ public class GridsAndObjectsUpdater {
     private ArrayList<ActiveGrid> activeGrids;
     private ArrayList<DelayedDestination> activeDestinations;
 
+    @Inject
     public GridsAndObjectsUpdater(Context context) {
         this.activeGrids = new ArrayList<ActiveGrid>();
         this.activeDestinations = new ArrayList<DelayedDestination>();

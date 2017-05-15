@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
@@ -23,10 +24,11 @@ public class AgentsGenerator {
 	private Context context;
 	private int pedestrianCounter;
 
+    @Inject
     public AgentsGenerator(Context context){
-		this.context = context;
-		pedestrianCounter = 0;
-	}
+        this.context = context;
+        pedestrianCounter = 0;
+    }
 
     //Methods never used [GL Aug'16]
 //	public void step(){
