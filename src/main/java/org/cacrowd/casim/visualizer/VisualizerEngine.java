@@ -39,7 +39,8 @@ public class VisualizerEngine implements SimulationObserver {
 
     private final Control keyControl;
     private final double dT;
-    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 0);
+    //    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 0);
+    private final FrameSaver fs = null;
 
     private final Visualizer vis = new Visualizer(fs);
     @Inject

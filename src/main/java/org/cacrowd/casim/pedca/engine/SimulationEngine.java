@@ -108,11 +108,15 @@ public class SimulationEngine {
 
 
             doSimStep(time);
-            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 6) {
-                context.setTimeOfDay(visTime);
-                observer.observerDensityGrid();
-                observer.observePopulation();
-            }
+            observer.observerDensityGrid();
+            observer.observePopulation();
+
+            //           //for movie creation to reach a higher (pseudo) frame rate
+//            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 6) {
+//                context.setTimeOfDay(visTime);
+//                observer.observerDensityGrid();
+//                observer.observePopulation();
+//            }
         }
     }
 
