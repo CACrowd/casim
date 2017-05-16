@@ -45,7 +45,6 @@ public class SimulationEngine {
     private SimulationObserver observer;
 
     public static void main(String[] args) {
-//        Context context = ContextGenerator.getCorridorContext(8, 50,100);
         Context context = ContextGenerator.getBidCorridorContext(8, 150);
 
         EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
@@ -69,22 +68,6 @@ public class SimulationEngine {
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
             }
         }
-
-
-//        Agent b1 = new Agent(4, new GridPoint(49, 2), west, context);
-//        Agent b2 = new Agent(5, new GridPoint(49, 3), west, context);
-//        Agent b3 = new Agent(6, new GridPoint(49, 4), west, context);
-//        Agent b4 = new Agent(7, new GridPoint(49, 5), west, context);
-//
-//        context.getPopulation().addPedestrian(b1);
-//        context.getPopulation().addPedestrian(b2);
-//        context.getPopulation().addPedestrian(b3);
-//        context.getPopulation().addPedestrian(b4);
-//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 2), b1);
-//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 3), b2);
-//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 4), b3);
-//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 5), b4);
-
 
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
