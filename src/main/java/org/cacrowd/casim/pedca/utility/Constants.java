@@ -38,7 +38,7 @@ public class Constants {
 
     //Constant for the random seed
     public static long RANDOM_SEED = 42;
-    public static double DENSITY_GRID_RADIUS = 1.2;
+    public static double DENSITY_GRID_RADIUS = 2;
 
 
     //Constants for Pedestrian Model

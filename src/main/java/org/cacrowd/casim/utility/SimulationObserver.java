@@ -20,5 +20,7 @@ public interface SimulationObserver {
 
     void observerEnvironmentGrid();
 
+    void observerDensityGrid();
+
     void observePopulation();
 }

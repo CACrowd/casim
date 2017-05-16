@@ -123,7 +123,7 @@ public class Agent extends PhysicalObject {
     private ArrayList<WeightedCell> evaluate() {
         double myPositionValue = getStaticFFValue(position);
         double neighbourValue;
-        double occupation = 0.0;
+        double occupation;
         double probabilitySum = 0.0;
 
         Neighbourhood neighbourhood = getNeighbourhood();
@@ -138,6 +138,7 @@ public class Agent extends PhysicalObject {
                 occupation = 1.0;
 
             double p = utilityFunction(myPositionValue, neighbourValue, occupation);
+
 
             probabilitySum += p;
             probabilityValues.add(new WeightedCell(neighbour, p));

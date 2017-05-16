@@ -19,6 +19,11 @@ public class NullObserver implements SimulationObserver {
     }
 
     @Override
+    public void observerDensityGrid() {
+        //intentionally empty
+    }
+
+    @Override
     public void observePopulation() {
         //intentionally empty
     }

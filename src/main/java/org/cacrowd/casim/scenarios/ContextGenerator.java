@@ -87,7 +87,7 @@ public class ContextGenerator {
         return new Context(environmentGrid, markerConfiguration);
     }
 
-    private static Context getBidCorridorContext(int rows, int cols) {
+    public static Context getBidCorridorContext(int rows, int cols) {
         EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
         EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
         MarkerConfiguration markerConfiguration = EnvironmentGenerator.generateBorderDestinations(environmentGrid);
@@ -98,10 +98,17 @@ public class ContextGenerator {
         EnvironmentGrid environmentGrid = new EnvironmentGrid(rows, cols);
         EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
         MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
+
         markerConfiguration.addDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
-        Start start = EnvironmentGenerator.getCorridorWestStart(environmentGrid);
-        start.setTotalPedestrians(populationSize);
-        markerConfiguration.addStart(start);
+        Start westStart = EnvironmentGenerator.getCorridorWestStart(environmentGrid);
+        westStart.setTotalPedestrians(populationSize);
+        markerConfiguration.addStart(westStart);
+
+        markerConfiguration.addDestination(EnvironmentGenerator.getCorridorWestDestination(environmentGrid));
+        Start eastStart = EnvironmentGenerator.getCorridorEastStart(environmentGrid);
+        eastStart.setTotalPedestrians(populationSize);
+        markerConfiguration.addStart(eastStart);
+
         return new Context(environmentGrid, markerConfiguration);
     }
 }

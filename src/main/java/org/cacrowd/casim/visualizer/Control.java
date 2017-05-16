@@ -34,8 +34,8 @@ public class Control implements KeyListener, MouseWheelListener {
     private static final Zoom z = new Zoom();
 
     static {
-        z.z = 22.704667199218342;
-        z.o = new PVector(11619.073f, 8703.7f);
+        z.z = 51.00763820844019;
+        z.o = new PVector(31210.887f, 18397.307f);
     }
 
     private final CyclicBarrier pauseBarrier = new CyclicBarrier(2);
@@ -58,6 +58,8 @@ public class Control implements KeyListener, MouseWheelListener {
 
     public Control(ZoomPan zoomer, int cameraTrackFrameSkip, FrameSaver fs) {
         this.zoomer = zoomer;
+        this.zoomer.setZoomScale(z.z);
+        this.zoomer.setPanOffset(z.o.x, z.o.y);
         int c = '0';
         this.zooms.put(c, z);
         this.current.cameraTrackFrameSkip = cameraTrackFrameSkip;
@@ -271,7 +273,7 @@ public class Control implements KeyListener, MouseWheelListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent arg0) {
-        if (this.recordCameraMovement) {
+        if (!this.recordCameraMovement) {
             Zoom z = new Zoom();
             z.o = this.zoomer.getPanOffset();
             z.z = this.zoomer.getZoomScale();

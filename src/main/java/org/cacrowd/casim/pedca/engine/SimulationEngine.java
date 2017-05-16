@@ -18,14 +18,14 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
+import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.scenarios.ContextGenerator;
+import org.cacrowd.casim.scenarios.EnvironmentGenerator;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
-
-import java.util.ArrayList;
 
 public class SimulationEngine {
 
@@ -45,20 +45,45 @@ public class SimulationEngine {
     private SimulationObserver observer;
 
     public static void main(String[] args) {
-        Context context = ContextGenerator.getCorridorContext(8, 50, 100);
-        ArrayList<GridPoint> east = new ArrayList<>();
-        east.add(new GridPoint(50, 1));
-        east.add(new GridPoint(50, 2));
-        east.add(new GridPoint(50, 3));
-        east.add(new GridPoint(50, 4));
-        east.add(new GridPoint(50, 5));
-        east.add(new GridPoint(50, 6));
-        east.add(new GridPoint(50, 7));
+//        Context context = ContextGenerator.getCorridorContext(8, 50,100);
+        Context context = ContextGenerator.getBidCorridorContext(8, 150);
 
-        Agent a = new Agent(0, new GridPoint(0, 2), new Destination(east), context);
+        EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
+        Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
+        east.setLevel(1);
+        int id = 0;
+        for (int col = 0; col < 50; col += 4) {
+            for (int row = 1; row < 7; row += 4) {
+                Agent a1 = new Agent(id++, new GridPoint(col, row), east, context);
+                context.getPopulation().addPedestrian(a1);
+                context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), a1);
+            }
+        }
+        Destination west = EnvironmentGenerator.getCorridorWestDestination(environmentGrid);
+        west.setLevel(0);
+        id = -1;
+        for (int col = 149; col > 100; col -= 4) {
+            for (int row = 1; row < 7; row += 4) {
+                Agent b1 = new Agent(id--, new GridPoint(col, row), west, context);
+                context.getPopulation().addPedestrian(b1);
+                context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
+            }
+        }
 
-        context.getPopulation().addPedestrian(a);
-        context.getPedestrianGrid().addPedestrian(new GridPoint(0, 2), a);
+
+//        Agent b1 = new Agent(4, new GridPoint(49, 2), west, context);
+//        Agent b2 = new Agent(5, new GridPoint(49, 3), west, context);
+//        Agent b3 = new Agent(6, new GridPoint(49, 4), west, context);
+//        Agent b4 = new Agent(7, new GridPoint(49, 5), west, context);
+//
+//        context.getPopulation().addPedestrian(b1);
+//        context.getPopulation().addPedestrian(b2);
+//        context.getPopulation().addPedestrian(b3);
+//        context.getPopulation().addPedestrian(b4);
+//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 2), b1);
+//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 3), b2);
+//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 4), b3);
+//        context.getPedestrianGrid().addPedestrian(new GridPoint(49, 5), b4);
 
 
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -80,8 +105,14 @@ public class SimulationEngine {
         observer.observerEnvironmentGrid();
         for (double time = 0; time < 100; time += Constants.STEP_DURATION) {
             context.setTimeOfDay(time);
+
+
             doSimStep(time);
-            observer.observePopulation();
+            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 6) {
+                context.setTimeOfDay(visTime);
+                observer.observerDensityGrid();
+                observer.observePopulation();
+            }
         }
     }
 
