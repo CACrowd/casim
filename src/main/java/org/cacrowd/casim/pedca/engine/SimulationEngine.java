@@ -17,6 +17,8 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.cacrowd.casim.pedca.agents.Agent;
+import org.cacrowd.casim.pedca.agents.SingleDestinationTactic;
+import org.cacrowd.casim.pedca.agents.Tactic;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -53,7 +55,8 @@ public class SimulationEngine {
         int id = 0;
         for (int col = 0; col < 50; col += 4) {
             for (int row = 1; row < 7; row += 4) {
-                Agent a1 = new Agent(id++, new GridPoint(col, row), east, context);
+                Tactic tactic = new SingleDestinationTactic(east, context);
+                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context);
                 context.getPopulation().addPedestrian(a1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), a1);
             }
@@ -63,7 +66,8 @@ public class SimulationEngine {
         id = -1;
         for (int col = 149; col > 100; col -= 4) {
             for (int row = 1; row < 7; row += 4) {
-                Agent b1 = new Agent(id--, new GridPoint(col, row), west, context);
+                Tactic tactic = new SingleDestinationTactic(west, context);
+                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context);
                 context.getPopulation().addPedestrian(b1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
             }
@@ -77,7 +81,6 @@ public class SimulationEngine {
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
             }
         });
-
 
         SimulationEngine e = injector.getInstance(SimulationEngine.class);
         e.run();

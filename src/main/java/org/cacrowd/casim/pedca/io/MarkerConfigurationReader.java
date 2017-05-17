@@ -52,11 +52,11 @@ public class MarkerConfigurationReader {
             try {
                 streamIn = new FileInputStream(path + "/destinations/destination_" + i + ".ser");
                 ois = new ObjectInputStream(streamIn);
-                mc.addDestination((Destination) ois.readObject());
+                mc.addTacticalDestination((Destination) ois.readObject());
             } catch (IOException e) {
                 streamIn = new FileInputStream(path + "/destinations/tacticalDestination_" + i + ".ser");
                 ois = new ObjectInputStream(streamIn);
-                mc.addDestination((FinalDestination) ois.readObject());
+                mc.addTacticalDestination((FinalDestination) ois.readObject());
             }
             ois.close();
         }

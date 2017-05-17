@@ -21,12 +21,14 @@ import org.cacrowd.casim.pedca.utility.Constants;
 
 public class CAAgentMover implements AgentMover {
     private final Population population;
+    private final Context context;
 //       private CAEngine engineCA;
 //       private EventsManager eventManager;
     //	private boolean stairs = true;
 
     @Inject
     public CAAgentMover(Context context) {//}, EventsManager eventManager) {
+        this.context = context;
         this.population = context.getPopulation();
 //   		this.engineCA = engineCA;
         Constants.stopOnStairs = false;
@@ -79,6 +81,7 @@ public class CAAgentMover implements AgentMover {
 
     private void delete(Agent pedestrian) {
 //   		pedestrian.re;
+        context.getPedestrianGrid().removePedestrian(pedestrian.getPosition(), pedestrian);
         population.remove(pedestrian);
     }
 

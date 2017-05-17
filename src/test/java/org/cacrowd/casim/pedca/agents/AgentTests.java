@@ -20,14 +20,22 @@ import org.cacrowd.casim.pedca.engine.*;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
+import org.cacrowd.casim.pedca.utility.CASimRandom;
 import org.cacrowd.casim.scenarios.ContextGenerator;
 import org.cacrowd.casim.scenarios.EnvironmentGenerator;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
 public class AgentTests {
+
+
+    @Before
+    public void reset() {
+        CASimRandom.reset(42);
+    }
 
 
     @Test
@@ -37,7 +45,8 @@ public class AgentTests {
         EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
-        Agent a1 = new Agent(0, new GridPoint(0, 1), east, context);
+        Tactic tactic = new SingleDestinationTactic(east, context);
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -65,10 +74,11 @@ public class AgentTests {
         EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
-        Agent a1 = new Agent(0, new GridPoint(0, 1), east, context);
+        Tactic tactic = new SingleDestinationTactic(east, context);
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
-        Agent a2 = new Agent(1, new GridPoint(1, 1), east, context);
+        Agent a2 = new Agent(1, new GridPoint(1, 1), tactic, context);
         context.getPopulation().addPedestrian(a2);
         context.getPedestrianGrid().addPedestrian(new GridPoint(1, 1), a2);
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -128,12 +138,16 @@ public class AgentTests {
         EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
-        Agent a1 = new Agent(0, new GridPoint(0, 1), east, context);
+        Tactic tacticEast = new SingleDestinationTactic(east, context);
+
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tacticEast, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
 
         Destination west = EnvironmentGenerator.getCorridorWestDestination(environmentGrid);
-        Agent b1 = new Agent(1, new GridPoint(1, 1), west, context);
+        Tactic tacticWest = new SingleDestinationTactic(west, context);
+
+        Agent b1 = new Agent(1, new GridPoint(1, 1), tacticWest, context);
         context.getPopulation().addPedestrian(b1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(1, 1), b1);
         Injector injector = Guice.createInjector(new AbstractModule() {

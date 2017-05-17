@@ -130,7 +130,7 @@ public class VisualizerEngine implements SimulationObserver {
                 double density = densityGridGrid.getDensityAt(new GridPoint(col, row));
                 int r, g, b, a;
                 boolean fill;
-                if (density <= 0.01) {
+                if (Double.isNaN(density) || density <= 0.01) {
                     continue;
                 } else {
                     Map.Entry<Double, Color> floor = this.densityColorRamp.floorEntry(density);

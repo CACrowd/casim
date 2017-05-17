@@ -20,13 +20,14 @@ import java.util.ArrayList;
  */
 public interface MarkerConfiguration {
     //TODO tests
-    Destination getDestination(int destinationID);
+    //TODO strategic destination aka transition area [GL May '17]
+    Destination getTacticalDestination(int destinationID);
 
-    void addDestination(Destination destination);
+    void addTacticalDestination(Destination destination);
 
+    ArrayList<Destination> getTacticalDestinations();
+    
     void addStart(Start start);
 
     ArrayList<Start> getStarts();
-
-    ArrayList<Destination> getDestinations();
 }

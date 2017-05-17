@@ -37,13 +37,13 @@ public class CANetwork {
     }
 
     private void createBidirectionalEdge(MarkerConfiguration markerConfiguration, CANode n1, CANode n2, double ffDistance) {
-        boolean isStairs = ((TacticalDestination) markerConfiguration.getDestination(n1.getDestinationId())).isStairsBorder() && ((TacticalDestination) markerConfiguration.getDestination(n2.getDestinationId())).isStairsBorder();
+        boolean isStairs = ((TacticalDestination) markerConfiguration.getTacticalDestination(n1.getDestinationId())).isStairsBorder() && ((TacticalDestination) markerConfiguration.getTacticalDestination(n2.getDestinationId())).isStairsBorder();
         edges.add(new CAEdge(n1, n2, ffDistance, isStairs));
         edges.add(new CAEdge(n2, n1, ffDistance, isStairs));
     }
 
     public void buildNetwork(MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
-        for (Destination destination : markerConfiguration.getDestinations())
+        for (Destination destination : markerConfiguration.getTacticalDestinations())
             if (destination instanceof TacticalDestination) {
                 TacticalDestination td = (TacticalDestination) destination;
                 CANode node = new CANode(td.getID(), td.getCoordinate(), td.getWidth());
@@ -83,7 +83,7 @@ public class CANetwork {
     private double getFFDistance(CANode caNode1, CANode caNode2, MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
         int fieldLevel1 = caNode1.getDestinationId();
         int fieldLevel2 = caNode2.getDestinationId();
-        TacticalDestination td = (TacticalDestination) markerConfiguration.getDestination(fieldLevel2);
+        TacticalDestination td = (TacticalDestination) markerConfiguration.getTacticalDestination(fieldLevel2);
         GridPoint td_center = td.getCells().get(td.getCells().size() / 2);
         return floorFieldsGrid.getCellValue(fieldLevel1, td_center);
     }

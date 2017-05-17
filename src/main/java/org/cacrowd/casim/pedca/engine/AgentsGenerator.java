@@ -63,7 +63,7 @@ public class AgentsGenerator {
 //	//FOR MATSIM CONNECTOR
 //	public Pedestrian generatePedestrian(GridPoint initialPosition, int destinationId, QVehicle vehicle, TransitionArea transitionArea){
 //		int pedID = pedestrianCounter;
-//		Destination destination = context.getMarkerConfiguration().getDestination(destinationId);
+//		Destination destination = context.getMarkerConfiguration().getTacticalDestination(destinationId);
 //
 //		//TODO FIXME this looks evil. First an Agent is instantiated, then it is passed as an Argument to Pedestrian, which in
 //		//turn extends Agent [gl Aug '16]
@@ -85,14 +85,14 @@ public class AgentsGenerator {
     //Method never used
 //	//FOR MATSIM CONNECTOR
 //	public GridPoint getFreePosition(int destinationId){
-//		ArrayList<GridPoint> cells = getContext().getMarkerConfiguration().getDestination(destinationId).getCells();
+//		ArrayList<GridPoint> cells = getContext().getMarkerConfiguration().getTacticalDestination(destinationId).getCells();
 // 		ArrayList<GridPoint> usedCells = getPedestrianGrid().getFreePositions(cells);
 // 		return Lottery.extractObjects(usedCells,1).get(0);
 //	}
 
     //MEthod never used
 //	private Destination getRandomDestination() {
-//		return Lottery.extractObject(context.getMarkerConfiguration().getDestinations());
+//		return Lottery.extractObject(context.getMarkerConfiguration().getTacticalDestinations());
 //	}
 
     private Population getPopulation(){

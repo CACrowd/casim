@@ -49,8 +49,8 @@ public class MarkerConfigurationWriter {
             oos.close();
         }
 
-        for (int i = 0; i < mc.getDestinations().size(); i++) {
-            if (mc.getDestinations().get(i) instanceof FinalDestination) {
+        for (int i = 0; i < mc.getTacticalDestinations().size(); i++) {
+            if (mc.getTacticalDestinations().get(i) instanceof FinalDestination) {
                 File file = new File(path + "/destinations/tacticalDestination_" + i + ".ser");
                 file.createNewFile();
                 fout = new FileOutputStream(path + "/destinations/tacticalDestination_" + i + ".ser", false);
@@ -60,7 +60,7 @@ public class MarkerConfigurationWriter {
                 fout = new FileOutputStream(path + "/destinations/destination_" + i + ".ser", false);
             }
             oos = new ObjectOutputStream(fout);
-            oos.writeObject(mc.getDestinations().get(i));
+            oos.writeObject(mc.getTacticalDestinations().get(i));
             oos.close();
         }
 

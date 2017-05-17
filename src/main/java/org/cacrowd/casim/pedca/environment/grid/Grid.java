@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.environment.grid;
 
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
@@ -21,6 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Grid<T> {
+
+    private static final Logger log = Logger.getLogger(Grid.class);
+
     protected ArrayList<ArrayList<GridCell<T>>> cells;
     private double offsetY = 0.;
     private double offsetX = 0.;
@@ -97,10 +101,15 @@ public abstract class Grid<T> {
     }
 
     public GridCell<T> get(GridPoint p) {
+
         return cells.get(p.getY()).get(p.getX());
     }
 
     public GridCell<T> get(int row, int col) {
+        if (row == -1 || col == -1) {
+            log.error("-1");
+        }
+
         return cells.get(row).get(col);
     }
 

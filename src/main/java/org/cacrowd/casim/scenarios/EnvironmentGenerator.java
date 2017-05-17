@@ -155,14 +155,14 @@ public class EnvironmentGenerator {
                 } else if (found) {
                     //skip vertical markers or any other FinalDestination marker drawn in only 1 cell
                     if (cells.size() > 1)
-                        markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                        markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                     found = false;
                 }
             }
             if (found) {
                 //skip vertical markers or any other FinalDestination marker drawn in only 1 cell
                 if (cells.size() > 1)
-                    markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                    markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                 found = false;
             }
         }
@@ -179,14 +179,14 @@ public class EnvironmentGenerator {
                 } else if (found) {
                     //skip horizontal markers or any other FinalDestination marker drawn in only 1 cell
                     if (cells.size() > 1)
-                        markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                        markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                     found = false;
                 }
             }
             if (found) {
                 //skip horizontal markers or any other FinalDestination marker drawn in only 1 cell
                 if (cells.size() > 1)
-                    markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                    markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                 found = false;
             }
         }
@@ -209,13 +209,13 @@ public class EnvironmentGenerator {
                     cells.add(cell);
                 } else if (found) {
                     if (j > 1) //skip corner
-                        markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                        markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                     found = false;
                 }
             }
             if (found) {
                 if (cells.size() > 1) //skip corner for the moment
-                    markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                    markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                 found = false;
             }
         }
@@ -231,15 +231,15 @@ public class EnvironmentGenerator {
                     cells.add(cell);
                 } else if (found) {
                     if (i == 1) { //add corner if it has not been added before
-                        if (!markerConfiguration.getDestinations().get(markerConfiguration.getDestinations().size() - 1).getCells().contains(cells.get(0)))
-                            markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                        if (!markerConfiguration.getTacticalDestinations().get(markerConfiguration.getTacticalDestinations().size() - 1).getCells().contains(cells.get(0)))
+                            markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                     } else
-                        markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                        markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                     found = false;
                 }
             }
             if (found) {
-                markerConfiguration.addDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
+                markerConfiguration.addTacticalDestination(new FinalDestination(generateCoordinates(cells), cells, environmentCenter));
                 found = false;
             }
         }
@@ -299,7 +299,7 @@ public class EnvironmentGenerator {
 
                     } else
                         tacticalDestination = new TacticalDestination(generateCoordinates(destinationCells), destinationCells, environmentGrid.isStairsBorder(destinationCells.get(0)));
-                    markerConfiguration.addDestination(tacticalDestination);
+                    markerConfiguration.addTacticalDestination(tacticalDestination);
                 }
             }
         }

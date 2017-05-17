@@ -30,7 +30,7 @@ public class GridsAndObjectsUpdater {
         this.activeGrids = new ArrayList<ActiveGrid>();
         this.activeDestinations = new ArrayList<DelayedDestination>();
         activeGrids.addAll(context.getPedestrianGrids());
-        for (Destination dest : context.getMarkerConfiguration().getDestinations())
+        for (Destination dest : context.getMarkerConfiguration().getTacticalDestinations())
             if (dest instanceof DelayedDestination)
                 activeDestinations.add((DelayedDestination) dest);
     }

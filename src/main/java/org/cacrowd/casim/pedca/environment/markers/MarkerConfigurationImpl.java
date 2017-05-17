@@ -36,12 +36,12 @@ public class MarkerConfigurationImpl implements MarkerConfiguration {
 
     //TODO tests
     @Override
-    public Destination getDestination(int destinationID) {
+    public Destination getTacticalDestination(int destinationID) {
         return destinations.get(destinationID);
     }
 
     @Override
-    public void addDestination(Destination destination) {
+    public void addTacticalDestination(Destination destination) {
         destinations.add(destination);
         destinationsCells.addAll(destination.getCells());
     }
@@ -57,7 +57,7 @@ public class MarkerConfigurationImpl implements MarkerConfiguration {
     }
 
     @Override
-    public ArrayList<Destination> getDestinations() {
+    public ArrayList<Destination> getTacticalDestinations() {
         return destinations;
     }
 

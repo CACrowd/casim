@@ -18,7 +18,6 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.environment.grid.WeightedCell;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
-import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.DirectionUtility;
 import org.cacrowd.casim.pedca.utility.DirectionUtility.Heading;
@@ -27,11 +26,13 @@ import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 
+//operational level
 public class Agent extends PhysicalObject {
 
     protected final Context context;
     private final int Id;
-    protected Destination destination;
+    private final Tactic tactic;
+
     private GridPoint nextpos;
     private Heading heading;
     private boolean arrived;
@@ -40,11 +41,11 @@ public class Agent extends PhysicalObject {
     private int stepToPerformSwap;
     private boolean hasToSwap;
 
-    public Agent(int Id, GridPoint position, Destination destination, Context context) {
+    public Agent(int Id, GridPoint position, Tactic tactic, Context context) {
         this.Id = Id;
         this.position = nextpos = position;
         this.context = context;
-        this.destination = destination;
+        this.tactic = tactic;
         arrived = false;
         //TODO ENSURE THAT X IS NEVER ASSUMED DURING THE SIMULATION
         heading = Heading.X;
@@ -116,7 +117,7 @@ public class Agent extends PhysicalObject {
     }
 
     private void percept() {
-        if (getStaticFFValue(position) == 0.)
+        if (tactic.exit(position))
             exit();
     }
 
@@ -255,13 +256,15 @@ public class Agent extends PhysicalObject {
         wantToSwap = false;
     }
 
-    private Double getStaticFFValue(GridPoint gridPoint) {
-        return getStaticFF().getCellValue(destination.getLevel(), gridPoint);
+    private double getStaticFFValue(GridPoint gridPoint) {
+        return this.tactic.getStaticFFValue(gridPoint);
+//        return getStaticFF().getCellValue(destination.getLevel(), gridPoint);
     }
 
     private FloorFieldsGrid getStaticFF() {
         return context.getFloorFieldsGrid();
     }
+
 
     private PedestrianGrid getPedestrianGrid() {
         return context.getPedestrianGrid();
@@ -275,9 +278,9 @@ public class Agent extends PhysicalObject {
         return Id;
     }
 
-    public Destination getDestination() {
-        return destination;
-    }
+//    public Destination getTacticalDestination() {
+//        return destination;
+//    }
 
     public Context getContext() {
         return context;

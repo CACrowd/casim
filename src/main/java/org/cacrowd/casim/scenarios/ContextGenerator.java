@@ -99,12 +99,12 @@ public class ContextGenerator {
         EnvironmentGenerator.initCorridorWithWalls(environmentGrid, false);
         MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
 
-        markerConfiguration.addDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
+        markerConfiguration.addTacticalDestination(EnvironmentGenerator.getCorridorEastDestination(environmentGrid));
         Start westStart = EnvironmentGenerator.getCorridorWestStart(environmentGrid);
         westStart.setTotalPedestrians(populationSize);
         markerConfiguration.addStart(westStart);
 
-        markerConfiguration.addDestination(EnvironmentGenerator.getCorridorWestDestination(environmentGrid));
+        markerConfiguration.addTacticalDestination(EnvironmentGenerator.getCorridorWestDestination(environmentGrid));
         Start eastStart = EnvironmentGenerator.getCorridorEastStart(environmentGrid);
         eastStart.setTotalPedestrians(populationSize);
         markerConfiguration.addStart(eastStart);

@@ -42,7 +42,7 @@ public class FloorFieldsGrid extends Grid<Double> {
 
     public FloorFieldsGrid(EnvironmentGrid environment, MarkerConfiguration markerConfiguration) {
         this(environment);
-        for (Destination destination : markerConfiguration.getDestinations()) {
+        for (Destination destination : markerConfiguration.getTacticalDestinations()) {
             generateField(destination);
         }
     }
