@@ -13,12 +13,12 @@
 package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
+import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.agents.Agent;
-import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
 
 public class AgentsUpdater {
-    private Population population;
+    private ActivePopulation population;
 
     @Inject
     public AgentsUpdater(Context context) {

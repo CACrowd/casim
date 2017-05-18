@@ -45,6 +45,8 @@ public class SimulationEngine {
     private GridsAndObjectsUpdater activeObjectsUpdater;
     @Inject
     private SimulationObserver observer;
+    @Inject
+    private TransitionHandler transitionHandler;
 
     public static void main(String[] args) {
         Context context = ContextGenerator.getBidCorridorContext(8, 150);
@@ -79,6 +81,7 @@ public class SimulationEngine {
                 bind(Context.class).toInstance(context);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
+                bind(TransitionHandler.class).to(SimpleTransistionHandler.class);
             }
         });
 
@@ -108,10 +111,12 @@ public class SimulationEngine {
 
     public void doSimStep(double time) {
         //Log.log("STEP at: "+time);
+        transitionHandler.step(time);
         agentUpdater.step();
         conflictSolver.step();
         agentMover.step(time);
         activeObjectsUpdater.step(time);
+
     }
 
 }

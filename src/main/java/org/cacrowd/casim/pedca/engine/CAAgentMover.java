@@ -13,14 +13,14 @@
 package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
+import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.agents.Agent;
-import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.utility.Constants;
 
 public class CAAgentMover implements AgentMover {
-    private final Population population;
+    private final ActivePopulation population;
     private final Context context;
 //       private CAEngine engineCA;
 //       private EventsManager eventManager;
@@ -42,8 +42,8 @@ public class CAAgentMover implements AgentMover {
             Agent pedestrian = population.getPedestrian(index);
             if (pedestrian.isArrived()) {
                 //Log.log(pedestrian.toString()+" Exited.");
-                delete(pedestrian);
-                index--;
+//                delete(pedestrian);
+//                index--;
             } else {
                 GridPoint oldPosition = pedestrian.getPosition();
                 //				if (stairs && isOnStairs(pedestrian)){
@@ -79,11 +79,12 @@ public class CAAgentMover implements AgentMover {
 //   		}
     }
 
-    private void delete(Agent pedestrian) {
-//   		pedestrian.re;
-        context.getPedestrianGrid().removePedestrian(pedestrian.getPosition(), pedestrian);
-        population.remove(pedestrian);
-    }
+//    public boolean delete(Agent pedestrian) {
+////   		pedestrian.re;
+//        context.getPedestrianGrid().removePedestrian(pedestrian.getPosition(), pedestrian);
+////        population.remove(pedestrian);
+//        return true;
+//    }
 
 //   	private void moveToCA(Pedestrian pedestrian, double time) {
 //   		//Log.log(pedestrian.toString() + " Moving inside Pedestrian Grid");

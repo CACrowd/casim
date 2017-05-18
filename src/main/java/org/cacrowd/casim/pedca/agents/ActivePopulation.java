@@ -14,10 +14,10 @@ package org.cacrowd.casim.pedca.agents;
 
 import java.util.ArrayList;
 
-public class Population {
+public class ActivePopulation {
     private ArrayList<Agent> pedestrians;
 
-    public Population() {
+    public ActivePopulation() {
         pedestrians = new ArrayList<Agent>();
     }
 

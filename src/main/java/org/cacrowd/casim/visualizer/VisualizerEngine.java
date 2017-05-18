@@ -14,8 +14,8 @@ package org.cacrowd.casim.visualizer;
 
 import com.google.inject.Inject;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.agents.Agent;
-import org.cacrowd.casim.pedca.agents.Population;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.DensityGrid;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
@@ -155,7 +155,7 @@ public class VisualizerEngine implements SimulationObserver {
 
     @Override
     public void observePopulation() {
-        Population population = context.getPopulation();
+        ActivePopulation population = context.getPopulation();
         population.getPedestrians().forEach(this::draw);
         double time = context.getTimeOfDay();
         update(time);

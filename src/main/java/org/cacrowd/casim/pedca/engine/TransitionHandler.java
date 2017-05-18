@@ -10,18 +10,12 @@
  * (at your option) any later version.
  */
 
-package org.cacrowd.casim.pedca.agents;
+package org.cacrowd.casim.pedca.engine;
 
-import org.cacrowd.casim.pedca.environment.markers.Destination;
+import org.cacrowd.casim.pedca.agents.Agent;
 
-/**
- * Created by laemmel on 17.05.17.
- */
+public interface TransitionHandler {
+    void step(double time);
 
-public interface Strategy {
-
-    Destination getDestination();
-
-    double getDepartureTime();
-
+    void scheduleForDeparture(Agent a);
 }

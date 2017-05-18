@@ -59,7 +59,7 @@ public class FloorFieldsGrid extends Grid<Double> {
         while (L.size() != 0) {
             GridPoint pivot = L.get(0);
             double pivotValue = getCellValue(fieldLevel, pivot);
-            L.remove(0);
+            L.remove(0); //TODO slow operation on array lists, consider using linked list instead [GL May '17]
             Neighbourhood N = getNeighbourhood(pivot);
             for (int i = 0; i < N.size(); i++) {
                 GridPoint neighbour = N.get(i);

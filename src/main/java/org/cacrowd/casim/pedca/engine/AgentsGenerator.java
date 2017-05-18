@@ -14,7 +14,7 @@ package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.pedca.agents.Population;
+import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.context.Context;
 
 public class AgentsGenerator {
@@ -95,9 +95,9 @@ public class AgentsGenerator {
 //		return Lottery.extractObject(context.getMarkerConfiguration().getTacticalDestinations());
 //	}
 
-    private Population getPopulation(){
-		return context.getPopulation();
-	}
+    private ActivePopulation getPopulation() {
+        return context.getPopulation();
+    }
 
     //MEthod never used
 //	private ArrayList<Start> getStarts(){

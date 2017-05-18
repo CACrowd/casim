@@ -13,7 +13,7 @@
 package org.cacrowd.casim.pedca.context;
 
 import org.cacrowd.casim.environment.TransitionArea;
-import org.cacrowd.casim.pedca.agents.Population;
+import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.environment.grid.DensityGrid;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
@@ -36,12 +36,12 @@ public class Context {
     private EnvironmentGrid environmentGrid;
     private FloorFieldsGrid floorFieldsGrid;
     private MarkerConfiguration markerConfiguration;
-    private Population population;
+    private ActivePopulation population;
     private CANetwork network;
 
     public Context(EnvironmentGrid environmentGrid, MarkerConfiguration markerConfiguration) {
         initializeGrids(environmentGrid, markerConfiguration);
-        population = new Population();
+        population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
     }
 
@@ -49,7 +49,7 @@ public class Context {
         MarkerConfiguration mc = new MarkerConfigurationImpl();
         new MarkerConfigurationReader(mc).loadConfiguration(path);
         initializeGrids(environmentGrid, markerConfiguration);
-        population = new Population();
+        population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
         loadCoordinates(path);
     }
@@ -128,7 +128,7 @@ public class Context {
         pedestrianGrids.add(transitionArea);
     }
 
-    public Population getPopulation() {
+    public ActivePopulation getPopulation() {
         return population;
     }
 

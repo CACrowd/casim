@@ -25,4 +25,9 @@ public class ODStrategy implements Strategy {
     public Destination getDestination() {
         return destination;
     }
+
+    @Override
+    public double getDepartureTime() {
+        return 0;
+    }
 }

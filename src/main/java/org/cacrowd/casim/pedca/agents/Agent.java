@@ -233,6 +233,11 @@ public class Agent extends PhysicalObject {
         arrived = true;
     }
 
+    public boolean delete() {
+        context.getPedestrianGrid().removePedestrian(this.position, this);
+        return true;
+    }
+
     public void enterPedestrianGrid(GridPoint position) {
         getPedestrianGrid().addPedestrian(position, this);
         setPosition(position);

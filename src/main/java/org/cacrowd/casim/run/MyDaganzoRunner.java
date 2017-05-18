@@ -17,9 +17,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.engine.AgentMover;
-import org.cacrowd.casim.pedca.engine.CAAgentMover;
-import org.cacrowd.casim.pedca.engine.SimulationEngine;
+import org.cacrowd.casim.pedca.engine.*;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
@@ -60,30 +58,12 @@ public class MyDaganzoRunner {
         bottleneck.add(dests.get(9));
         bottleneck.add(dests.get(10));
 
-        ArrayList<GridPoint> o = new ArrayList<>();
-        Destination origin = new Destination(o);
-
-        ArrayList<GridPoint> d = new ArrayList<>();
-        Destination destination = new Destination(d);
-
 
         Strategy strategy = new ODStrategy(dests.get(6), dests.get(11));
 
-        for (int row = 42; row >= 39; row--) {
 
-            Tactic tactic = new SimpleTargetChainTactic(strategy, bottleneck, context);
-            Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context);
-            context.getPopulation().addPedestrian(a1);
-            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
-        }
+        SimpleTransistionHandler transistionHandler = new SimpleTransistionHandler(context);
 
-
-        for (int row = 42; row >= 39; row--) {
-            Tactic tactic = new SimpleTargetChainTactic(strategy, detour, context);
-            Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context);
-            context.getPopulation().addPedestrian(a1);
-            context.getPedestrianGrid().addPedestrian(new GridPoint(3, row), a1);
-        }
 
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
@@ -91,8 +71,32 @@ public class MyDaganzoRunner {
                 bind(Context.class).toInstance(context);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
+                bind(TransitionHandler.class).toInstance(transistionHandler);
             }
         });
+
+        TransitionHandler handler = injector.getInstance(TransitionHandler.class);
+
+        for (int coeff = 0; coeff < 100; coeff++) {
+
+            for (int row = 42; row >= 39; row--) {
+
+                Tactic tactic = new SimpleTargetChainTactic(strategy, bottleneck, context);
+                Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context);
+                handler.scheduleForDeparture(a1);
+//            context.getPopulation().addPedestrian(a1);
+//            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
+            }
+
+
+            for (int row = 42; row >= 39; row--) {
+                Tactic tactic = new SimpleTargetChainTactic(strategy, detour, context);
+                Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context);
+                handler.scheduleForDeparture(a1);
+//            context.getPopulation().addPedestrian(a1);
+//            context.getPedestrianGrid().addPedestrian(new GridPoint(3, row), a1);
+            }
+        }
 
         SimulationEngine e = injector.getInstance(SimulationEngine.class);
         e.run();
