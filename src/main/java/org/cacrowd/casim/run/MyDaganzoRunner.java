@@ -45,16 +45,20 @@ public class MyDaganzoRunner {
         List<Destination> dests = context.getMarkerConfiguration().getTacticalDestinations();
 
         List<Destination> detour = new ArrayList<>();
+        detour.add(dests.get(7));
         detour.add(dests.get(4));
         detour.add(dests.get(2));
         detour.add(dests.get(0));
         detour.add(dests.get(1));
         detour.add(dests.get(3));
         detour.add(dests.get(5));
+        detour.add(dests.get(10));
 
         List<Destination> bottleneck = new ArrayList<>();
         bottleneck.add(dests.get(7));
         bottleneck.add(dests.get(8));
+        bottleneck.add(dests.get(9));
+        bottleneck.add(dests.get(10));
 
         ArrayList<GridPoint> o = new ArrayList<>();
         Destination origin = new Destination(o);
@@ -63,22 +67,22 @@ public class MyDaganzoRunner {
         Destination destination = new Destination(d);
 
 
-        Strategy strategy = new ODStrategy(dests.get(6), dests.get(9));
+        Strategy strategy = new ODStrategy(dests.get(6), dests.get(11));
 
         for (int row = 42; row >= 39; row--) {
 
             Tactic tactic = new SimpleTargetChainTactic(strategy, bottleneck, context);
-            Agent a1 = new Agent(-row, new GridPoint(1, row), tactic, context);
+            Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context);
             context.getPopulation().addPedestrian(a1);
-            context.getPedestrianGrid().addPedestrian(new GridPoint(1, row), a1);
+            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
         }
 
 
         for (int row = 42; row >= 39; row--) {
             Tactic tactic = new SimpleTargetChainTactic(strategy, detour, context);
-            Agent a1 = new Agent(row, new GridPoint(2, row), tactic, context);
+            Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context);
             context.getPopulation().addPedestrian(a1);
-            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
+            context.getPedestrianGrid().addPedestrian(new GridPoint(3, row), a1);
         }
 
         Injector injector = Guice.createInjector(new AbstractModule() {

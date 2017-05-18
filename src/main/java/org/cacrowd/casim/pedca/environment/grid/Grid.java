@@ -106,9 +106,6 @@ public abstract class Grid<T> {
     }
 
     public GridCell<T> get(int row, int col) {
-        if (row == -1 || col == -1) {
-            log.error("-1");
-        }
 
         return cells.get(row).get(col);
     }
