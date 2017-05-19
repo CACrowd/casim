@@ -81,7 +81,7 @@ public class SimulationEngine {
                 bind(Context.class).toInstance(context);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
-                bind(TransitionHandler.class).to(SimpleTransistionHandler.class);
+                bind(TransitionHandler.class).to(NullTransitionHandler.class);
             }
         });
 
@@ -100,7 +100,7 @@ public class SimulationEngine {
             observer.observerDensityGrid();
             observer.observePopulation();
 
-            //           //for movie creation to reach a higher (pseudo) frame rate
+//                       //for movie creation to reach a higher (pseudo) frame rate
 //            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 6) {
 //                context.setTimeOfDay(visTime);
 //                observer.observerDensityGrid();

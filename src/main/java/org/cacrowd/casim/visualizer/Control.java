@@ -273,7 +273,7 @@ public class Control implements KeyListener, MouseWheelListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent arg0) {
-        if (!this.recordCameraMovement) {
+        if (this.recordCameraMovement) {
             Zoom z = new Zoom();
             z.o = this.zoomer.getPanOffset();
             z.z = this.zoomer.getZoomScale();
