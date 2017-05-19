@@ -1,7 +1,7 @@
 /*
  * casim, cellular automaton simulation for multi-destination pedestrian
  * crowds; see www.cacrowd.org
- * Copyright (C) 2016 CACrowd and contributors
+ * Copyright (C) 2016-2017 CACrowd and contributors
  *
  * This file is part of casim.
  * casim is free software: you can redistribute it and/or modify
