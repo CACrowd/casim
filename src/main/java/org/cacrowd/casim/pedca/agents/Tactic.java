@@ -15,6 +15,7 @@
 package org.cacrowd.casim.pedca.agents;
 
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
+import org.cacrowd.casim.pedca.environment.markers.Destination;
 
 /**
  * Created by laemmel on 17.05.17.
@@ -25,4 +26,8 @@ public interface Tactic {
     double getStaticFFValue(GridPoint gridPoint);
 
     boolean exit(GridPoint position);
+
+    Destination getCurrentDestination();
+
+    boolean isAboutToLeave();
 }

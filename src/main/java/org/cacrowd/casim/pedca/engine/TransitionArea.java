@@ -8,20 +8,21 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
+ *
+ *
  */
 
 package org.cacrowd.casim.pedca.engine;
 
 import org.cacrowd.casim.pedca.agents.Agent;
 
-public class AreaTransitionHandler implements TransitionHandler {
-    @Override
-    public void step(double time) {
+/**
+ * Created by laemmel on 19.05.17.
+ */
+public interface TransitionArea {
+    void scheduleDeparture(Agent a);
 
-    }
+//    void scheduleArrival(Agent a);
 
-    @Override
-    public void scheduleForDeparture(Agent a) {
-
-    }
+    void step(double time);
 }

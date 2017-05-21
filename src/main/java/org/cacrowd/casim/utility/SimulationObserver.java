@@ -25,4 +25,7 @@ public interface SimulationObserver {
     void observerDensityGrid();
 
     void observePopulation();
+
+    //Debug
+//    void observeTransitionAreas(Map<GridPoint,TransitionArea> areaMap);
 }

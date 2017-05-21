@@ -16,8 +16,11 @@ package org.cacrowd.casim.pedca.engine;
 
 import org.cacrowd.casim.pedca.agents.Agent;
 
+//TODO make TransitionHandler part of Context [GL May '17]
 public interface TransitionHandler {
     void step(double time);
 
     void scheduleForDeparture(Agent a);
+
+    void scheduleForArrival(Agent a);
 }

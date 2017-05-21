@@ -56,11 +56,13 @@ public class SimulationEngine {
         EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
+
+        TransitionHandler th = new SimpleTransitionHandler(context);
         int id = 0;
         for (int col = 0; col < 50; col += 4) {
             for (int row = 1; row < 7; row += 4) {
                 Tactic tactic = new SingleDestinationTactic(east, context);
-                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context);
+                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context, th);
                 context.getPopulation().addPedestrian(a1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), a1);
             }
@@ -71,7 +73,7 @@ public class SimulationEngine {
         for (int col = 149; col > 100; col -= 4) {
             for (int row = 1; row < 7; row += 4) {
                 Tactic tactic = new SingleDestinationTactic(west, context);
-                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context);
+                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context, th);
                 context.getPopulation().addPedestrian(b1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
             }
@@ -83,7 +85,7 @@ public class SimulationEngine {
                 bind(Context.class).toInstance(context);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
-                bind(TransitionHandler.class).to(NullTransitionHandler.class);
+                bind(TransitionHandler.class).toInstance(th);
             }
         });
 
@@ -94,7 +96,8 @@ public class SimulationEngine {
     public void run() {
 
         observer.observerEnvironmentGrid();
-        for (double time = 0; time < 100; time += Constants.STEP_DURATION) {
+//        observer.observeTransitionAreas(((SimpleAreaTransitionHandler)transitionHandler).getTransitionAreas());
+        for (double time = 0; time < 1000; time += Constants.STEP_DURATION) {
             context.setTimeOfDay(time);
 
 

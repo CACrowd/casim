@@ -64,7 +64,7 @@ public class MyDaganzoRunner {
         Strategy strategy = new ODStrategy(dests.get(6), dests.get(11));
 
 
-        SimpleTransistionHandler transistionHandler = new SimpleTransistionHandler(context);
+        TransitionHandler transistionHandler = new SimpleAreaTransitionHandler(context);
 
 
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -79,12 +79,12 @@ public class MyDaganzoRunner {
 
         TransitionHandler handler = injector.getInstance(TransitionHandler.class);
 
-        for (int coeff = 0; coeff < 100; coeff++) {
+        for (int coeff = 0; coeff < 10000; coeff++) {
 
             for (int row = 42; row >= 39; row--) {
 
                 Tactic tactic = new SimpleTargetChainTactic(strategy, bottleneck, context);
-                Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context);
+                Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context, transistionHandler);
                 handler.scheduleForDeparture(a1);
 //            context.getPopulation().addPedestrian(a1);
 //            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
@@ -93,12 +93,13 @@ public class MyDaganzoRunner {
 
             for (int row = 42; row >= 39; row--) {
                 Tactic tactic = new SimpleTargetChainTactic(strategy, detour, context);
-                Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context);
+                Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context, transistionHandler);
                 handler.scheduleForDeparture(a1);
 //            context.getPopulation().addPedestrian(a1);
 //            context.getPedestrianGrid().addPedestrian(new GridPoint(3, row), a1);
             }
         }
+
 
         SimulationEngine e = injector.getInstance(SimulationEngine.class);
         e.run();

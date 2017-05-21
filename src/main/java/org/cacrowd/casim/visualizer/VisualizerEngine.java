@@ -84,7 +84,22 @@ public class VisualizerEngine implements SimulationObserver {
         blue.g = 0;
         blue.b = 255;
         this.densityColorRamp.put(7., blue);
+        this.densityColorRamp.put(100., blue);
+        this.densityColorRamp.put(Double.POSITIVE_INFINITY, blue);
     }
+
+//    @Override
+//    public void observeTransitionAreas(Map<GridPoint,TransitionArea> areaMap){
+//        EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
+//        for (Map.Entry<GridPoint,TransitionArea> entry : areaMap.entrySet())  {
+//            int r = entry.getValue().hashCode()%255;
+//            int g = entry.getValue().toString().hashCode()%255; int b = entry.getValue().pointList.hashCode()%255; int a = 255; boolean fill = true;
+//
+//            Coordinate c = environmentGrid.gridPoint2Coordinate(entry.getKey());
+//            vis.addRectStatic(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
+//        }
+//    }
+
 
     @Override
     public void observerEnvironmentGrid() {
@@ -126,16 +141,20 @@ public class VisualizerEngine implements SimulationObserver {
     @Override
     public void observerDensityGrid() {
         DensityGrid densityGridGrid = context.getDensityGrid();
+//        FloorFieldsGrid ff = context.getFloorFieldsGrid();
+
         for (int row = 0; row < densityGridGrid.getRows(); row++) {
             for (int col = 0; col < densityGridGrid.getColumns(); col++) {
                 Coordinate c = densityGridGrid.rowCol2Coordinate(row, col);
                 double density = densityGridGrid.getDensityAt(new GridPoint(col, row));
+//                double density = ff.getCellValue(1,new GridPoint(col,row)) ;
+                
                 int r, g, b, a;
                 boolean fill;
                 if (Double.isNaN(density) || density <= 0.01) {
                     continue;
                 } else {
-                    Map.Entry<Double, Color> floor = this.densityColorRamp.floorEntry(density);
+                    Map.Entry<Double, Color> floor = this.densityColorRamp.floorEntry(density - 0.01);
                     Map.Entry<Double, Color> ceiling = this.densityColorRamp.ceilingEntry(density);
 
 //                     log.info("density: " + density);
@@ -163,6 +182,7 @@ public class VisualizerEngine implements SimulationObserver {
         update(time);
 
     }
+
 
     private void update(double time) {
         this.keyControl.awaitPause();

@@ -26,4 +26,9 @@ public class NullTransitionHandler implements TransitionHandler {
     public void scheduleForDeparture(Agent a) {
         //intentionally empty
     }
+
+    @Override
+    public void scheduleForArrival(Agent a) {
+        //intentionally empty
+    }
 }

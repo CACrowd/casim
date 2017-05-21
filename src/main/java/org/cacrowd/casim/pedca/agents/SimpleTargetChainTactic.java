@@ -33,6 +33,7 @@ public class SimpleTargetChainTactic implements Tactic {
     private int currentIdx = 0;
 
     private Destination currentTacticalDestination;
+    private boolean aboutToLeave = false;
 
     public SimpleTargetChainTactic(Strategy strategy, List<Destination> targets, Context context) {
         this.targets = targets;
@@ -70,7 +71,18 @@ public class SimpleTargetChainTactic implements Tactic {
         } else if (pot == 0 && currentIdx == targets.size() - 1) {
             this.currentTacticalDestination = this.strategy.getDestination();
             pot = ff.getCellValue(this.currentTacticalDestination.getLevel(), gridPoint);
+            this.aboutToLeave = true;
         }
         return pot == 0.;
+    }
+
+    @Override
+    public Destination getCurrentDestination() {
+        return currentTacticalDestination;
+    }
+
+    @Override
+    public boolean isAboutToLeave() {
+        return aboutToLeave;
     }
 }

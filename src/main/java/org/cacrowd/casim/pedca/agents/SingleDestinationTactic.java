@@ -23,6 +23,7 @@ public class SingleDestinationTactic implements Tactic {
 
     private final Destination destination;
     private final Context context;
+    private boolean exit = false;
 
     public SingleDestinationTactic(Destination destination, Context context) {
         this.destination = destination;
@@ -42,6 +43,17 @@ public class SingleDestinationTactic implements Tactic {
     public boolean exit(GridPoint position) {
         int level = destination.getLevel();
         FloorFieldsGrid ff = context.getFloorFieldsGrid();
-        return ff.getCellValue(level, position) == 0.;
+        this.exit = ff.getCellValue(level, position) == 0.;
+        return exit;
+    }
+
+    @Override
+    public Destination getCurrentDestination() {
+        return destination;
+    }
+
+    @Override
+    public boolean isAboutToLeave() {
+        return exit;
     }
 }

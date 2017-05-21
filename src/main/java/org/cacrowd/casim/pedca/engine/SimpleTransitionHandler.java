@@ -23,21 +23,22 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SimpleTransistionHandler implements TransitionHandler {
+public class SimpleTransitionHandler implements TransitionHandler {
 
-    private final Queue<Agent> scheduled = new LinkedList<>();
+    private final Queue<Agent> scheduledForDeparture = new LinkedList<>();
+    //    private final Queue<Agent> scheduledForArrival = new LinkedList<>();
     Context context;
 
-    public SimpleTransistionHandler(Context context) {
+    public SimpleTransitionHandler(Context context) {
         this.context = context;
     }
 
     @Override
     public void step(double time) {
-        context.getPopulation().getPedestrians().removeIf(a -> a.isArrived() && a.delete());
+        context.getPopulation().getPedestrians().removeIf(a -> a.getTactic().isAboutToLeave() && a.delete());
 
-        while (scheduled.peek() != null) {
-            Agent peek = scheduled.peek();
+        while (scheduledForDeparture.peek() != null) {
+            Agent peek = scheduledForDeparture.peek();
             GridPoint pos = peek.getPosition();
 
             GridCell<PhysicalObject> gp = context.getPedestrianGrid().get(pos);
@@ -45,7 +46,7 @@ public class SimpleTransistionHandler implements TransitionHandler {
             if (gp.size() == 0) {
                 context.getPopulation().addPedestrian(peek);
                 context.getPedestrianGrid().addPedestrian(pos, peek);
-                scheduled.poll();
+                scheduledForDeparture.poll();
             } else {
                 break;
             }
@@ -54,7 +55,13 @@ public class SimpleTransistionHandler implements TransitionHandler {
 
     @Override
     public void scheduleForDeparture(Agent a) {
-        this.scheduled.add(a);
+        this.scheduledForDeparture.add(a);
+    }
+
+    @Override
+    public void scheduleForArrival(Agent a) {
+//        this.scheduledForArrival.add(a);
+        
     }
 
 
