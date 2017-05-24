@@ -35,7 +35,7 @@ public class SimpleTransitionHandler implements TransitionHandler {
 
     @Override
     public void step(double time) {
-        context.getPopulation().getPedestrians().removeIf(a -> a.getTactic().isAboutToLeave() && a.delete());
+        context.getPopulation().getPedestrians().removeIf(a -> a.isAboutToLeave() && a.delete());
 
         while (scheduledForDeparture.peek() != null) {
             Agent peek = scheduledForDeparture.peek();

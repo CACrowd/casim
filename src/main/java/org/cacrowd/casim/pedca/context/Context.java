@@ -14,7 +14,6 @@
 
 package org.cacrowd.casim.pedca.context;
 
-import org.cacrowd.casim.environment.TransitionArea;
 import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.environment.grid.DensityGrid;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
@@ -123,11 +122,6 @@ public class Context {
 
     public DensityGrid getDensityGrid() {
         return pedestrianGrids.get(0).getDensityGrid();
-    }
-
-    //FOR MATSIM CONNECTOR
-    public void registerTransitionArea(TransitionArea transitionArea) {
-        pedestrianGrids.add(transitionArea);
     }
 
     public ActivePopulation getPopulation() {

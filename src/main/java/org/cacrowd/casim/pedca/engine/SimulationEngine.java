@@ -62,7 +62,7 @@ public class SimulationEngine {
         for (int col = 0; col < 50; col += 4) {
             for (int row = 1; row < 7; row += 4) {
                 Tactic tactic = new SingleDestinationTactic(east, context);
-                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context, th);
+                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context);
                 context.getPopulation().addPedestrian(a1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), a1);
             }
@@ -73,7 +73,7 @@ public class SimulationEngine {
         for (int col = 149; col > 100; col -= 4) {
             for (int row = 1; row < 7; row += 4) {
                 Tactic tactic = new SingleDestinationTactic(west, context);
-                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context, th);
+                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context);
                 context.getPopulation().addPedestrian(b1);
                 context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
             }

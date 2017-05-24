@@ -14,13 +14,13 @@
 
 package org.cacrowd.casim.pedca.agents;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class ActivePopulation {
-    private ArrayList<Agent> pedestrians;
+    private LinkedList<Agent> pedestrians;
 
     public ActivePopulation() {
-        pedestrians = new ArrayList<Agent>();
+        pedestrians = new LinkedList<Agent>();
     }
 
     public void addPedestrian(Agent pedestrian) {
@@ -35,7 +35,7 @@ public class ActivePopulation {
         return pedestrians.get(index);
     }
 
-    public ArrayList<Agent> getPedestrians() {
+    public LinkedList<Agent> getPedestrians() {
         return pedestrians;
     }
 

@@ -81,17 +81,15 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
 
     @Override
     public void step(double time) {
-        for (Iterator<Agent> it = scheduledArrivals.iterator(); it.hasNext(); ) {
-            Agent cand = it.next();
-//                    if (CASimRandom.nextDouble() < 0.1) { //mx arrival transition rate
-            context.getPedestrianGrid().removePedestrian(cand.getPosition(), cand);
-            context.getPopulation().remove(cand);
-            it.remove();
-//                    }  else {
-//                        break;
-//                    }
-        }
 
+        Iterator<Agent> it = context.getPopulation().getPedestrians().iterator();
+        while (it.hasNext()) {
+            Agent cand = it.next();
+            if (cand.isAboutToLeave()) {
+                context.getPedestrianGrid().removePedestrian(cand.getPosition(), cand);
+                it.remove();
+            }
+        }
         this.transitionAreas.forEach(a -> a.step(time));//try out parallel stream
     }
 

@@ -14,19 +14,18 @@
 
 package org.cacrowd.casim.pedca.environment.markers;
 
-import org.cacrowd.casim.environment.TransitionArea;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 
 import java.util.ArrayList;
 
+@Deprecated //every destination can be a final destination
 public class FinalDestination extends TacticalDestination {
 
     private static final long serialVersionUID = 1L;
     //for the transition area
     private int rotation = -1;
     private GridPoint environmentRef;
-    private TransitionArea transitionArea;
     private GridPoint environmentCenter;
 
     public FinalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, GridPoint environmentCenter) {
@@ -75,12 +74,4 @@ public class FinalDestination extends TacticalDestination {
         return rotation;
     }
 
-    //TODO CLEAN THIS
-    public TransitionArea getTransitionArea() {
-        return transitionArea;
-    }
-
-    public void setTransitionArea(TransitionArea transitionArea) {
-        this.transitionArea = transitionArea;
-    }
 }

@@ -84,7 +84,7 @@ public class MyDaganzoRunner {
             for (int row = 42; row >= 39; row--) {
 
                 Tactic tactic = new SimpleTargetChainTactic(strategy, bottleneck, context);
-                Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context, transistionHandler);
+                Agent a1 = new Agent(-row, new GridPoint(2, row), tactic, context);
                 handler.scheduleForDeparture(a1);
 //            context.getPopulation().addPedestrian(a1);
 //            context.getPedestrianGrid().addPedestrian(new GridPoint(2, row), a1);
@@ -93,7 +93,7 @@ public class MyDaganzoRunner {
 
             for (int row = 42; row >= 39; row--) {
                 Tactic tactic = new SimpleTargetChainTactic(strategy, detour, context);
-                Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context, transistionHandler);
+                Agent a1 = new Agent(row, new GridPoint(3, row), tactic, context);
                 handler.scheduleForDeparture(a1);
 //            context.getPopulation().addPedestrian(a1);
 //            context.getPedestrianGrid().addPedestrian(new GridPoint(3, row), a1);

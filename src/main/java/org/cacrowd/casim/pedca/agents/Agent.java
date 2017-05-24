@@ -15,7 +15,6 @@
 package org.cacrowd.casim.pedca.agents;
 
 import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.engine.TransitionHandler;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
@@ -35,7 +34,6 @@ public class Agent extends PhysicalObject {
     protected final Context context;
     private final int Id;
     private final Tactic tactic;
-    private final TransitionHandler transitionHandler;
     private GridPoint nextpos;
     private Heading heading;
     private boolean arrived;
@@ -43,7 +41,7 @@ public class Agent extends PhysicalObject {
     private int stepToPerformSwap;
     private boolean hasToSwap;
 
-    public Agent(int Id, GridPoint position, Tactic tactic, Context context, TransitionHandler transitionHandler) {
+    public Agent(int Id, GridPoint position, Tactic tactic, Context context) {
         this.Id = Id;
         this.position = nextpos = position;
         this.context = context;
@@ -54,8 +52,6 @@ public class Agent extends PhysicalObject {
         wantToSwap = false;
         stepToPerformSwap = 0;
         hasToSwap = false;
-        this.transitionHandler = transitionHandler;
-
     }
 
     public Tactic getTactic() {
@@ -73,10 +69,11 @@ public class Agent extends PhysicalObject {
                 choose(probabilityValues);
                 checkBidirectionalSwitch();
             }
-            if (tactic.isAboutToLeave()) {
-                this.transitionHandler.scheduleForArrival(this);
-            }
         }
+    }
+
+    public boolean isAboutToLeave() {
+        return this.tactic.isAboutToLeave();
     }
 
     private void checkBidirectionalSwitch() {

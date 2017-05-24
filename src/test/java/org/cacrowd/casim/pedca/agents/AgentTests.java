@@ -48,7 +48,7 @@ public class AgentTests {
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
         Tactic tactic = new SingleDestinationTactic(east, context);
-        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context, null);
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -78,10 +78,10 @@ public class AgentTests {
         Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
         east.setLevel(1);
         Tactic tactic = new SingleDestinationTactic(east, context);
-        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context, ta);
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tactic, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
-        Agent a2 = new Agent(1, new GridPoint(1, 1), tactic, context, ta);
+        Agent a2 = new Agent(1, new GridPoint(1, 1), tactic, context);
         context.getPopulation().addPedestrian(a2);
         context.getPedestrianGrid().addPedestrian(new GridPoint(1, 1), a2);
 
@@ -145,14 +145,14 @@ public class AgentTests {
         east.setLevel(1);
         Tactic tacticEast = new SingleDestinationTactic(east, context);
 
-        Agent a1 = new Agent(0, new GridPoint(0, 1), tacticEast, context, null);
+        Agent a1 = new Agent(0, new GridPoint(0, 1), tacticEast, context);
         context.getPopulation().addPedestrian(a1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(0, 1), a1);
 
         Destination west = EnvironmentGenerator.getCorridorWestDestination(environmentGrid);
         Tactic tacticWest = new SingleDestinationTactic(west, context);
 
-        Agent b1 = new Agent(1, new GridPoint(1, 1), tacticWest, context, null);
+        Agent b1 = new Agent(1, new GridPoint(1, 1), tacticWest, context);
         context.getPopulation().addPedestrian(b1);
         context.getPedestrianGrid().addPedestrian(new GridPoint(1, 1), b1);
         Injector injector = Guice.createInjector(new AbstractModule() {
