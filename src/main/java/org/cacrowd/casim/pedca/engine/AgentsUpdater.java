@@ -15,10 +15,12 @@
 package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
 
+@Singleton
 public class AgentsUpdater {
     private ActivePopulation population;
 

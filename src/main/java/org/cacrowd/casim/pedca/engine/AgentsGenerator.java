@@ -15,16 +15,18 @@
 package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.context.Context;
 
+@Singleton
 public class AgentsGenerator {
 
     private static final Logger log = Logger.getLogger(AgentsGenerator.class);
 
-	private Context context;
-	private int pedestrianCounter;
+    private Context context;
+    private int pedestrianCounter;
 
     @Inject
     public AgentsGenerator(Context context){

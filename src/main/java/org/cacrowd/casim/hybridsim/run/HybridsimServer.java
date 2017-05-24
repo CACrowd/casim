@@ -14,9 +14,46 @@
 
 package org.cacrowd.casim.hybridsim.run;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import io.grpc.Server;
+import org.apache.log4j.Logger;
+import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
+import org.cacrowd.casim.pedca.engine.AgentMover;
+import org.cacrowd.casim.pedca.engine.CAAgentMover;
+import org.cacrowd.casim.pedca.engine.SimpleAreaTransitionHandler;
+import org.cacrowd.casim.pedca.engine.TransitionHandler;
+import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.visualizer.VisualizerEngine;
+
 public class HybridsimServer {
+    private static Logger log = Logger.getLogger(GRPCServer.class);
+    private Server server;
+    private int port = 9000;
 
-    public static void main(String[] args) {
+    private double simTime = -1;
 
+
+    public static void main(String[] args) throws Exception {
+
+
+        Injector injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+//                bind(Context.class).to(Context.class);
+                bind(AgentMover.class).to(CAAgentMover.class);
+                bind(SimulationObserver.class).to(VisualizerEngine.class);
+                bind(TransitionHandler.class).to(SimpleAreaTransitionHandler.class);
+            }
+        });
+
+
+        GRPCServer server = injector.getInstance(GRPCServer.class);
+        server.run();
     }
+
+
+
+
 }

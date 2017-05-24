@@ -17,6 +17,7 @@ package org.cacrowd.casim.run;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.*;
@@ -64,7 +65,7 @@ public class MyDaganzoRunner {
         Strategy strategy = new ODStrategy(dests.get(6), dests.get(11));
 
 
-        TransitionHandler transistionHandler = new SimpleAreaTransitionHandler(context);
+//        TransitionHandler transistionHandler = new SimpleAreaTransitionHandler(context);
 
 
         Injector injector = Guice.createInjector(new AbstractModule() {
@@ -73,7 +74,7 @@ public class MyDaganzoRunner {
                 bind(Context.class).toInstance(context);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
-                bind(TransitionHandler.class).toInstance(transistionHandler);
+                bind(TransitionHandler.class).to(SimpleAreaTransitionHandler.class).in(Singleton.class);
             }
         });
 

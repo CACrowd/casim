@@ -14,6 +14,8 @@
 
 package org.cacrowd.casim.pedca.context;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.environment.grid.DensityGrid;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
@@ -29,6 +31,7 @@ import org.cacrowd.casim.pedca.io.MarkerConfigurationWriter;
 import java.io.*;
 import java.util.ArrayList;
 
+@Singleton
 public class Context {
     double timeOfDay = 0;
     private Coordinate environmentOrigin = new Coordinate(0, 0);    //shift of this context with respect to the coordinate system of the scenario
@@ -40,11 +43,17 @@ public class Context {
     private ActivePopulation population;
     private CANetwork network;
 
+    @Inject
+    public Context() {
+
+    }
+
     public Context(EnvironmentGrid environmentGrid, MarkerConfiguration markerConfiguration) {
         initializeGrids(environmentGrid, markerConfiguration);
         population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
     }
+
 
     public Context(String path) throws IOException, ClassNotFoundException {
         MarkerConfiguration mc = new MarkerConfigurationImpl();
@@ -53,6 +62,12 @@ public class Context {
         population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
         loadCoordinates(path);
+    }
+
+    public void initialize(EnvironmentGrid grid, MarkerConfiguration markerConfiguration) {
+        initializeGrids(environmentGrid, markerConfiguration);
+        population = new ActivePopulation();
+        network = new CANetwork(markerConfiguration, floorFieldsGrid);
     }
 
     public double getTimeOfDay() {

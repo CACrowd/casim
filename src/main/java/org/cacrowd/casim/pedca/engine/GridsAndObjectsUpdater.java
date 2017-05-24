@@ -15,6 +15,7 @@
 package org.cacrowd.casim.pedca.engine;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.ActiveGrid;
 import org.cacrowd.casim.pedca.environment.markers.DelayedDestination;
@@ -22,7 +23,8 @@ import org.cacrowd.casim.pedca.environment.markers.Destination;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("rawtypes")
+
+@Singleton
 public class GridsAndObjectsUpdater {
     private ArrayList<ActiveGrid> activeGrids;
     private ArrayList<DelayedDestination> activeDestinations;

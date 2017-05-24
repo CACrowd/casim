@@ -12,6 +12,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
@@ -34,6 +35,7 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
     private final Context context;
     private Set<Agent> scheduledArrivals = new LinkedHashSet<>();
 
+    @Inject
     public SimpleAreaTransitionHandler(Context context) {
         this.context = context;
         init();

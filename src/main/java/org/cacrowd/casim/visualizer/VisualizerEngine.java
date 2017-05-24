@@ -15,6 +15,7 @@
 package org.cacrowd.casim.visualizer;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.ActivePopulation;
 import org.cacrowd.casim.pedca.agents.Agent;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+@Singleton
 public class VisualizerEngine implements SimulationObserver {
 
 
@@ -148,7 +150,7 @@ public class VisualizerEngine implements SimulationObserver {
                 Coordinate c = densityGridGrid.rowCol2Coordinate(row, col);
                 double density = densityGridGrid.getDensityAt(new GridPoint(col, row));
 //                double density = ff.getCellValue(1,new GridPoint(col,row)) ;
-                
+
                 int r, g, b, a;
                 boolean fill;
                 if (Double.isNaN(density) || density <= 0.01) {
