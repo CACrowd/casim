@@ -34,14 +34,14 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
     private final List<TransitionArea> transitionAreas = new ArrayList<>();
     private final Context context;
     private Set<Agent> scheduledArrivals = new LinkedHashSet<>();
+    private Queue<Agent> scheduledDepartures = new LinkedList<>();
 
     @Inject
     public SimpleAreaTransitionHandler(Context context) {
         this.context = context;
-        init();
     }
 
-    private void init() {
+    public void init() {
 
 
         final EnvironmentGrid env = this.context.getEnvironmentGrid();
@@ -84,6 +84,13 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
     @Override
     public void step(double time) {
 
+        while (scheduledDepartures.peek() != null) {
+            Agent a = scheduledDepartures.poll();
+            GridPoint desiredStartPosition = a.getPosition();
+            TransitionArea ta = this.gridPointAreaMap.get(desiredStartPosition);
+            ta.scheduleDeparture(a);
+        }
+
         Iterator<Agent> it = context.getPopulation().getPedestrians().iterator();
         while (it.hasNext()) {
             Agent cand = it.next();
@@ -98,10 +105,9 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
     @Override
     public void scheduleForDeparture(Agent a) {
 
-        GridPoint desiredStartPosition = a.getPosition();
-        TransitionArea ta = this.gridPointAreaMap.get(desiredStartPosition);
-        ta.scheduleDeparture(a);
-        
+        this.scheduledDepartures.add(a);
+
+
     }
 
     @Override
@@ -113,5 +119,5 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
     public Map<GridPoint, TransitionArea> getTransitionAreas() {
         return gridPointAreaMap;
     }
-    
+
 }

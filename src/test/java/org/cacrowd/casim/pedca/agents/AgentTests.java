@@ -97,6 +97,7 @@ public class AgentTests {
         AgentsUpdater agentUpdater = injector.getInstance(AgentsUpdater.class);
         AgentMover agentMover = injector.getInstance(AgentMover.class);
         GridsAndObjectsUpdater activeObjectsUpdater = injector.getInstance(GridsAndObjectsUpdater.class);
+        activeObjectsUpdater.init();
 
         agentUpdater.step();
         {
@@ -166,6 +167,7 @@ public class AgentTests {
         AgentsUpdater agentUpdater = injector.getInstance(AgentsUpdater.class);
         AgentMover agentMover = injector.getInstance(AgentMover.class);
         GridsAndObjectsUpdater activeObjectsUpdater = injector.getInstance(GridsAndObjectsUpdater.class);
+        activeObjectsUpdater.init();
         ConflictSolver conflictSolver = injector.getInstance(ConflictSolver.class);
 
         for (int i = 0; i <= 10; i++) {

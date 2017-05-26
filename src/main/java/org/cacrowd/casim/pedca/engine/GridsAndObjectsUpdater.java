@@ -26,11 +26,12 @@ import java.util.ArrayList;
 
 @Singleton
 public class GridsAndObjectsUpdater {
+    @Inject
+    Context context;
     private ArrayList<ActiveGrid> activeGrids;
     private ArrayList<DelayedDestination> activeDestinations;
 
-    @Inject
-    public GridsAndObjectsUpdater(Context context) {
+    public void init() {
         this.activeGrids = new ArrayList<ActiveGrid>();
         this.activeDestinations = new ArrayList<DelayedDestination>();
         activeGrids.addAll(context.getPedestrianGrids());

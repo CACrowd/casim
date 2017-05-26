@@ -64,5 +64,10 @@ public class SimpleTransitionHandler implements TransitionHandler {
         
     }
 
+    @Override
+    public void init() {
+
+    }
+
 
 }
