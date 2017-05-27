@@ -36,8 +36,8 @@ public class Control implements KeyListener, MouseWheelListener {
     private static final Zoom z = new Zoom();
 
     static {
-        z.z = 51.00763820844019;
-        z.o = new PVector(31210.887f, 18397.307f);
+        z.z = 190.4347893570128;
+        z.o = new PVector(121480.26f, 68814.61f);
     }
 
     private final CyclicBarrier pauseBarrier = new CyclicBarrier(2);
@@ -282,6 +282,7 @@ public class Control implements KeyListener, MouseWheelListener {
             this.current.movement.add(z);
             log.info(z);
         }
+
 
     }
 

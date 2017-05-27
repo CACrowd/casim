@@ -15,9 +15,20 @@
 package org.cacrowd.casim.utility.rasterizer;
 
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.pedca.context.Context;
+import org.cacrowd.casim.pedca.engine.AgentMover;
+import org.cacrowd.casim.pedca.engine.CAAgentMover;
+import org.cacrowd.casim.pedca.engine.SimpleAreaTransitionHandler;
+import org.cacrowd.casim.pedca.engine.TransitionHandler;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
 import org.cacrowd.casim.pedca.utility.Constants;
+import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.*;
 
@@ -46,6 +57,47 @@ public class Rasterizer {
             default:
                 throw new RuntimeException("Unknown Cell-Type:" + edgeType);
         }
+    }
+
+    public static void main(String[] args) {
+        LinkedList<Edge> et = new LinkedList<>();
+        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
+        et.add(e0);
+        Edge e1 = new Edge(1, 0, 2.4, 4, 2.4, Rasterizer.EdgeType.WALL);
+        et.add(e1);
+        Edge e2 = new Edge(2, 4, 2.4, 4, 0, Rasterizer.EdgeType.WALL);
+        et.add(e2);
+        Edge e3 = new Edge(3, 4, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        et.add(e3);
+
+        int rows = (int) (2.4 / Constants.CELL_SIZE) + 2;
+        int cols = (int) (4 / Constants.CELL_SIZE) + 2;
+        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                grid.setCellValue(row, col, -1);
+            }
+        }
+        Rasterizer r = new Rasterizer(grid);
+        r.rasterize(et);
+
+
+        //DEBUG
+        Injector injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                //                bind(Context.class).to(Context.class);
+                bind(AgentMover.class).to(CAAgentMover.class);
+                bind(SimulationObserver.class).to(VisualizerEngine.class);
+                bind(TransitionHandler.class).to(SimpleAreaTransitionHandler.class);
+            }
+        });
+        injector.getInstance(Context.class).initialize(grid, new MarkerConfigurationImpl());
+
+
+        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
+        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
+
     }
 
     public void rasterize(Collection<Edge> edges) {
@@ -309,6 +361,7 @@ public class Rasterizer {
             }
         }
     }
+
 
     public enum EdgeType {TRANSITION, TRANSITION_INTERNAL, WALL}
 

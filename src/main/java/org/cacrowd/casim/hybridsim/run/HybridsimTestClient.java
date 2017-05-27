@@ -54,7 +54,7 @@ public class HybridsimTestClient {
         cb.setX(0);
         cb.setY(4);
         eb.setC0(cb.build());
-        cb.setY(0);
+        cb.setY(0.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());

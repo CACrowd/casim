@@ -75,8 +75,8 @@ public class HybridSimulationEngine {
             e.expandToInclude(edge.getX1(), edge.getY1());
         });
 
-        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 2;
-        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 2;
+        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 1;
+        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 1;
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {

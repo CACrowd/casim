@@ -76,6 +76,45 @@ public class RasterizerTest {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
 
+    private static final int[][] REF_RECT = {
+            {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+            {-1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            {-1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            {-1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            {-1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
+    };
+
+    @Test
+    public void testRect() {
+        LinkedList<Edge> et = new LinkedList<>();
+        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
+        et.add(e0);
+        Edge e1 = new Edge(1, 0, 2.4, 4, 2.4, Rasterizer.EdgeType.WALL);
+        et.add(e1);
+        Edge e2 = new Edge(2, 4, 2.4, 4, 0, Rasterizer.EdgeType.WALL);
+        et.add(e2);
+        Edge e3 = new Edge(3, 4, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        et.add(e3);
+
+        int rows = (int) (2.4 / Constants.CELL_SIZE) + 1;
+        int cols = (int) (4 / Constants.CELL_SIZE) + 1;
+        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                grid.setCellValue(row, col, -1);
+            }
+        }
+        Rasterizer r = new Rasterizer(grid);
+        r.rasterize(et);
+
+        for (int row = 0; row < grid.getRows(); row++) {
+            for (int col = 0; col < grid.getColumns(); col++) {
+                assertThat(grid.getCellValue(row, col), is(equalTo(REF_RECT[5 - row][col])));
+            }
+        }
+    }
+
 
     @Test
     public void testSimpleTriangle() {
