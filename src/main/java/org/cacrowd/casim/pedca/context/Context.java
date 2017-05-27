@@ -65,7 +65,7 @@ public class Context {
     }
 
     public void initialize(EnvironmentGrid grid, MarkerConfiguration markerConfiguration) {
-        initializeGrids(environmentGrid, markerConfiguration);
+        initializeGrids(grid, markerConfiguration);
         population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
     }

@@ -54,7 +54,7 @@ public class Rasterizer {
 
         cleanUpET(edgeTable);
 
-        Collections.sort(edgeTable, (o1, o2) -> o1.getY0() < o2.getY0() ? -1 : 1);
+        edgeTable.sort((o1, o2) -> o1.getY0() < o2.getY0() ? -1 : 1);
 
         LinkedList<Edge> activeEdgeTable = new LinkedList<>();
         ListIterator<Edge> it = edgeTable.listIterator();
@@ -74,7 +74,7 @@ public class Rasterizer {
                     break;
                 }
             }
-            Collections.sort(activeEdgeTable, (o1, o2) -> o1.getCurrentX() < o2.getCurrentX() ? -1 : 1);
+            activeEdgeTable.sort((o1, o2) -> o1.getCurrentX() < o2.getCurrentX() ? -1 : 1);
             setPixels(activeEdgeTable, row);
 
         }

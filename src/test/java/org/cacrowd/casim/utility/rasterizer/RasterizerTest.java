@@ -80,11 +80,11 @@ public class RasterizerTest {
     @Test
     public void testSimpleTriangle() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 5, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 5, Rasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(0, 5, 5, 4, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(1, 0, 5, 5, 4, Rasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(5, 4, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(2, 5, 4, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e2);
 
         int rows = (int) (5 / Constants.CELL_SIZE) + 1;
@@ -108,27 +108,27 @@ public class RasterizerTest {
     @Test
     public void testConcaveWithHole() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 10, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 10, Rasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(1, 0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(2, 2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(4, 9, 6, 0, Rasterizer.EdgeType.WALL);
+        Edge e3 = new Edge(3, 4, 9, 6, 0, Rasterizer.EdgeType.WALL);
         et.add(e3);
-        Edge e4 = new Edge(6, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e4 = new Edge(4, 6, 0, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e4);
 
-        Edge e5 = new Edge(2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
+        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
         et.add(e5);
-        Edge e6 = new Edge(2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
+        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
         et.add(e6);
-        Edge e7 = new Edge(2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
+        Edge e7 = new Edge(7, 2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
         et.add(e7);
-        Edge e8 = new Edge(4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
+        Edge e8 = new Edge(8, 4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
         et.add(e8);
 
-        Edge tr = new Edge(2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge tr = new Edge(9, 2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(tr);
 
         int rows = (int) (10 / Constants.CELL_SIZE) + 1;

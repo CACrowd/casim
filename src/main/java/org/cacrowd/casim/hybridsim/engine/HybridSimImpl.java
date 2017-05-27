@@ -30,6 +30,7 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     public void initScenario(HybridSimProto.Scenario request, StreamObserver<HybridSimProto.Empty> responseObserver) {
 
         log.info("Scenario received.");
+        engine.loadEnvironment(request);
 
         HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
         responseObserver.onNext(resp);
