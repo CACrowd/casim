@@ -1,67 +1,129 @@
 /*
  * casim, cellular automaton simulation for multi-destination pedestrian
  * crowds; see www.cacrowd.org
- * Copyright (C) 2016 CACrowd and contributors
+ * Copyright (C) 2016-2017 CACrowd and contributors
  *
  * This file is part of casim.
  * casim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
+ *
+ *
  */
 
 package org.cacrowd.casim.pedca.engine;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import org.cacrowd.casim.pedca.agents.Agent;
+import org.cacrowd.casim.pedca.agents.SingleDestinationTactic;
+import org.cacrowd.casim.pedca.agents.Tactic;
 import org.cacrowd.casim.pedca.context.Context;
-
-import java.io.IOException;
+import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.pedca.environment.grid.GridPoint;
+import org.cacrowd.casim.pedca.environment.markers.Destination;
+import org.cacrowd.casim.pedca.utility.Constants;
+import org.cacrowd.casim.scenarios.ContextGenerator;
+import org.cacrowd.casim.scenarios.EnvironmentGenerator;
+import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 public class SimulationEngine {
-	private final int finalStep;
-	private int step;
-	private AgentsGenerator agentGenerator;
-	private AgentsUpdater agentUpdater;
-	private ConflictSolver conflictSolver;
-	private AgentMover agentMover;
-	private GridsAndObjectsUpdater activeObjectsUpdater;
-	
-	public SimulationEngine(int finalStep, Context context){
-		step = 1;
-		this.finalStep = finalStep;
-		agentGenerator = new AgentsGenerator(context);
-		agentUpdater = new AgentsUpdater(context.getPopulation());
-		conflictSolver = new ConflictSolver(context);
-//		agentMover = new AgentMover(context);
-        activeObjectsUpdater = new GridsAndObjectsUpdater(context);
-	}
-	
-	public SimulationEngine(int finalStep, String path) throws IOException{
-		this(finalStep,new Context(path));
-	}
-	
-	public SimulationEngine(Context context){
-		this(0,context);
-	}
+
+    @Inject
+    private AgentsGenerator agentGenerator;
+    @Inject
+    private AgentsUpdater agentUpdater;
+    @Inject
+    private ConflictSolver conflictSolver;
+    @Inject
+    private AgentMover agentMover;
+    @Inject
+    private Context context;
+    @Inject
+    private GridsAndObjectsUpdater activeObjectsUpdater;
+    @Inject
+    private SimulationObserver observer;
+    @Inject
+    private TransitionHandler transitionHandler;
+
+    public static void main(String[] args) {
+        Context context = ContextGenerator.getBidCorridorContext(8, 150);
+
+        EnvironmentGrid environmentGrid = context.getEnvironmentGrid();
+        Destination east = EnvironmentGenerator.getCorridorEastDestination(environmentGrid);
+        east.setLevel(1);
+
+        TransitionHandler th = new SimpleTransitionHandler(context);
+        int id = 0;
+        for (int col = 0; col < 50; col += 4) {
+            for (int row = 1; row < 7; row += 4) {
+                Tactic tactic = new SingleDestinationTactic(east, context);
+                Agent a1 = new Agent(id++, new GridPoint(col, row), tactic, context);
+                context.getPopulation().addPedestrian(a1);
+                context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), a1);
+            }
+        }
+        Destination west = EnvironmentGenerator.getCorridorWestDestination(environmentGrid);
+        west.setLevel(0);
+        id = -1;
+        for (int col = 149; col > 100; col -= 4) {
+            for (int row = 1; row < 7; row += 4) {
+                Tactic tactic = new SingleDestinationTactic(west, context);
+                Agent b1 = new Agent(id--, new GridPoint(col, row), tactic, context);
+                context.getPopulation().addPedestrian(b1);
+                context.getPedestrianGrid().addPedestrian(new GridPoint(col, row), b1);
+            }
+        }
+
+        Injector injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Context.class).toInstance(context);
+                bind(AgentMover.class).to(CAAgentMover.class);
+                bind(SimulationObserver.class).to(VisualizerEngine.class);
+                bind(TransitionHandler.class).toInstance(th);
+            }
+        });
+
+        SimulationEngine e = injector.getInstance(SimulationEngine.class);
+        e.run();
+    }
+
+    public void run() {
+
+        transitionHandler.init();
+        activeObjectsUpdater.init();
+        observer.observerEnvironmentGrid();
+//        observer.observeTransitionAreas(((SimpleAreaTransitionHandler)transitionHandler).getTransitionAreas());
+        for (double time = 0; time < 1000; time += Constants.STEP_DURATION) {
+            context.setTimeOfDay(time);
 
 
-    //FOR MATSIM CONNECTOR
-	public void doSimStep(double time){
-		//Log.log("STEP at: "+time);
-		agentUpdater.step();
-		conflictSolver.step();
-		agentMover.step(time);		
-		activeObjectsUpdater.step(time);
-		step++;
-	}
-	
-	//FOR MATSIM CONNECTOR
-	public AgentsGenerator getAgentGenerator(){
-		return agentGenerator;
-	}
-	
-	//FOR MATSIM CONNECTOR
-	public void setAgentMover(AgentMover agentMover){
-		this.agentMover = agentMover;
-	}
+            doSimStep(time);
+            observer.observerDensityGrid();
+            observer.observePopulation();
+
+//                       //for movie creation to reach a higher (pseudo) frame rate
+//            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 6) {
+//                context.setTimeOfDay(visTime);
+//                observer.observerDensityGrid();
+//                observer.observePopulation();
+//            }
+        }
+    }
+
+    public void doSimStep(double time) {
+        //Log.log("STEP at: "+time);
+        transitionHandler.step(time);
+        agentUpdater.step();
+        conflictSolver.step();
+        agentMover.step(time);
+        activeObjectsUpdater.step(time);
+
+    }
 
 }

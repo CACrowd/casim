@@ -1,26 +1,32 @@
 /*
  * casim, cellular automaton simulation for multi-destination pedestrian
  * crowds; see www.cacrowd.org
- * Copyright (C) 2016 CACrowd and contributors
+ * Copyright (C) 2016-2017 CACrowd and contributors
  *
  * This file is part of casim.
  * casim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
+ *
+ *
  */
 
 package org.cacrowd.casim.pedca.environment.grid;
 
-import org.cacrowd.casim.matsimconnector.utility.Constants;
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.utility.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Grid<T> {
+
+    private static final Logger log = Logger.getLogger(Grid.class);
+
     protected ArrayList<ArrayList<GridCell<T>>> cells;
     private double offsetY = 0.;
     private double offsetX = 0.;
@@ -60,17 +66,22 @@ public abstract class Grid<T> {
         }
     }
 
+    public Coordinate rowCol2Coordinate(int row, int col) {
+        GridPoint gp = new GridPoint(col, row);
+        return gridPoint2Coordinate(gp);
+    }
+
     public Coordinate gridPoint2Coordinate(GridPoint gp) {
-        return new Coordinate(gp.getX() * Constants.CA_CELL_SIDE + offsetX, gp.getY() * Constants.CA_CELL_SIDE + offsetY);
+        return new Coordinate(gp.getX() * Constants.CELL_SIZE + offsetX, gp.getY() * Constants.CELL_SIZE + offsetY);
     }
 
     public GridPoint coordinate2GridPoint(Coordinate c) {
-        int col = (int) ((c.getX() - offsetX) / Constants.CA_CELL_SIDE);
-        int row = (int) ((c.getY() - offsetY) / Constants.CA_CELL_SIDE);
+        int col = (int) ((c.getX() - offsetX) / Constants.CELL_SIZE);
+        int row = (int) ((c.getY() - offsetY) / Constants.CELL_SIZE);
         return new GridPoint(col, row);
 
     }
-    
+
     public double getOffsetX() {
         return this.offsetX;
     }
@@ -80,11 +91,11 @@ public abstract class Grid<T> {
     }
 
     public int y2Row(double y) {
-        return (int) ((y - offsetY) / Constants.CA_CELL_SIDE);
+        return (int) ((y - offsetY) / Constants.CELL_SIZE);
     }
 
     public int x2Col(double x) {
-        return (int) ((x - offsetX) / Constants.CA_CELL_SIDE);
+        return (int) ((x - offsetX) / Constants.CELL_SIZE);
     }
 
     public void add(int i, int j, T object) {
@@ -92,10 +103,12 @@ public abstract class Grid<T> {
     }
 
     public GridCell<T> get(GridPoint p) {
+
         return cells.get(p.getY()).get(p.getX());
     }
 
     public GridCell<T> get(int row, int col) {
+
         return cells.get(row).get(col);
     }
 
@@ -141,13 +154,12 @@ public abstract class Grid<T> {
     }
 
     public String toString() {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (ArrayList<GridCell<T>> cell : cells) {
-            for (int j = 0; j < cell.size(); j++)
-                res += cell.get(j).toString() + " ";
-            res += "\n";
+            for (GridCell<T> aCell : cell) res.append(aCell.toString()).append(" ");
+            res.append("\n");
         }
-        return res;
+        return res.toString();
     }
 
     protected boolean neighbourCondition(int row, int col) {

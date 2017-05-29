@@ -1,109 +1,111 @@
 /*
  * casim, cellular automaton simulation for multi-destination pedestrian
  * crowds; see www.cacrowd.org
- * Copyright (C) 2016 CACrowd and contributors
+ * Copyright (C) 2016-2017 CACrowd and contributors
  *
  * This file is part of casim.
  * casim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
+ *
+ *
  */
 
 package org.cacrowd.casim.pedca.environment.network;
 
-import org.cacrowd.casim.matsimconnector.utility.MathUtility;
 import org.cacrowd.casim.pedca.environment.grid.FloorFieldsGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.markers.TacticalDestination;
 import org.cacrowd.casim.pedca.utility.Constants;
+import org.cacrowd.casim.pedca.utility.MathUtility;
 
 import java.util.ArrayList;
 
-public class CANetwork{
-	private ArrayList <CANode> nodes;
-	private ArrayList <CAEdge> edges;
-	
-	public CANetwork(MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid){
-		nodes = new ArrayList <CANode>();
-		edges = new ArrayList <CAEdge>();
-		buildNetwork(markerConfiguration, floorFieldsGrid);
-	}
-	
-	private void addNode(CANode node){
-		nodes.add(node);
-	}
-	
-	private void createBidirectionalEdge(MarkerConfiguration markerConfiguration, CANode n1, CANode n2, double ffDistance){
-		boolean isStairs = ((TacticalDestination)markerConfiguration.getDestination(n1.getDestinationId())).isStairsBorder() && ((TacticalDestination)markerConfiguration.getDestination(n2.getDestinationId())).isStairsBorder();
-		edges.add(new CAEdge(n1,n2, ffDistance, isStairs));
-		edges.add(new CAEdge(n2,n1, ffDistance, isStairs));
-	}
-	
-	public void buildNetwork(MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid){
-		for (Destination destination : markerConfiguration.getDestinations())
-			if (destination instanceof TacticalDestination){
-				TacticalDestination td = (TacticalDestination) destination;
-				CANode node = new CANode(td.getID(), td.getCoordinate(), td.getWidth());
-				addNode(node);
-			}
-			
-		for(int i=0;i<nodes.size();i++)
-			for(int j=i+1; j<nodes.size();j++) {
-				double ffDistance = getFFDistance(nodes.get(i), nodes.get(j), markerConfiguration, floorFieldsGrid);
-				//WARNING: TRICK FOR THE HOOGENDOORN EXPERIMENT. REMOVE THIS "IF" AND RESTORE AFTER THE "ELSE" (REMOVE ALSO i>1 &&)
-				/*if (i==0){
-					if (j==1){
+public class CANetwork {
+    private ArrayList<CANode> nodes;
+    private ArrayList<CAEdge> edges;
+
+    public CANetwork(MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
+        nodes = new ArrayList<CANode>();
+        edges = new ArrayList<CAEdge>();
+        buildNetwork(markerConfiguration, floorFieldsGrid);
+    }
+
+    private void addNode(CANode node) {
+        nodes.add(node);
+    }
+
+    private void createBidirectionalEdge(MarkerConfiguration markerConfiguration, CANode n1, CANode n2, double ffDistance) {
+        boolean isStairs = ((TacticalDestination) markerConfiguration.getTacticalDestination(n1.getDestinationId())).isStairsBorder() && ((TacticalDestination) markerConfiguration.getTacticalDestination(n2.getDestinationId())).isStairsBorder();
+        edges.add(new CAEdge(n1, n2, ffDistance, isStairs));
+        edges.add(new CAEdge(n2, n1, ffDistance, isStairs));
+    }
+
+    public void buildNetwork(MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
+        for (Destination destination : markerConfiguration.getTacticalDestinations())
+            if (destination instanceof TacticalDestination) {
+                TacticalDestination td = (TacticalDestination) destination;
+                CANode node = new CANode(td.getID(), td.getCoordinate(), td.getWidth());
+                addNode(node);
+            }
+
+        for (int i = 0; i < nodes.size(); i++)
+            for (int j = i + 1; j < nodes.size(); j++) {
+                double ffDistance = getFFDistance(nodes.get(i), nodes.get(j), markerConfiguration, floorFieldsGrid);
+                //WARNING: TRICK FOR THE HOOGENDOORN EXPERIMENT. REMOVE THIS "IF" AND RESTORE AFTER THE "ELSE" (REMOVE ALSO i>1 &&)
+                /*if (i==0){
+                    if (j==1){
 						ffDistance = MathUtility.average(ffDistance, getFFDistance(nodes.get(j), nodes.get(i), markerConfiguration, floorFieldsGrid));
 						createBidirectionalEdge(nodes.get(i),nodes.get(j), ffDistance*Constants.CELL_SIZE);
 					}
 				}
 				else if (i>1 && ffDistance!= Constants.MAX_FF_VALUE){*/
-				
-				/**
-				 * LC TODO the "tickness" of the shape of Tactical Destinations must still be equal to 1 
-				 * (i.e. all of their cells must be reachable via the Moore Neighbourhood by normal walkable cells).
-				 * This because the spread of the floor field does not continue once found the cells of another Tactical Destination. 
-				 * In this case, so, the distance can be Infinity even if the two targets are directly reachable.
-				 * */
-				if (ffDistance!= Constants.MAX_FF_VALUE){
-					ffDistance = MathUtility.average(ffDistance, getFFDistance(nodes.get(j), nodes.get(i), markerConfiguration, floorFieldsGrid));
-					//the epsilon increasing avoids warnings generated by matsim due to approximation, related to the lenght of links LC
-					double euclideanDistance = MathUtility.EuclideanDistance(nodes.get(j).getCoordinate(), nodes.get(i).getCoordinate()) + .000001; 
-					double linkLength = ffDistance* Constants.CELL_SIZE;					
-					if (linkLength < euclideanDistance)
-						linkLength = euclideanDistance;
-					createBidirectionalEdge(markerConfiguration, nodes.get(i),nodes.get(j), linkLength);
-				}
-			}
-	}
-	
-	private double getFFDistance(CANode caNode1, CANode caNode2, MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
-		int fieldLevel1 = caNode1.getDestinationId();
-		int fieldLevel2 = caNode2.getDestinationId();
-		TacticalDestination td = (TacticalDestination)markerConfiguration.getDestination(fieldLevel2);
-		GridPoint td_center = td.getCells().get(td.getCells().size()/2);
-		return floorFieldsGrid.getCellValue(fieldLevel1, td_center);
-	}
 
-	public ArrayList <CANode> getNodes(){
-		return nodes;
-	}
-	
-	public ArrayList <CAEdge> getEdges(){
-		return edges;
-	}
-	
-	public String toString(){
-		String result = "";
-		result+="NODES\n";
-		for (CANode node : nodes)
-			result+=node.toString()+"\n";
-		result+="\nEDGES\n";
-		for (CAEdge edge : edges)
-			result+=edge.toString()+"\n";
-		return result;
-	}
+                /**
+                 * LC TODO the "tickness" of the shape of Tactical Destinations must still be equal to 1
+                 * (i.e. all of their cells must be reachable via the Moore Neighbourhood by normal walkable cells).
+                 * This because the spread of the floor field does not continue once found the cells of another Tactical Destination.
+                 * In this case, so, the distance can be Infinity even if the two targets are directly reachable.
+                 * */
+                if (ffDistance != Constants.MAX_FF_VALUE) {
+                    ffDistance = MathUtility.average(ffDistance, getFFDistance(nodes.get(j), nodes.get(i), markerConfiguration, floorFieldsGrid));
+                    //the epsilon increasing avoids warnings generated by matsim due to approximation, related to the lenght of links LC
+                    double euclideanDistance = MathUtility.EuclideanDistance(nodes.get(j).getCoordinate(), nodes.get(i).getCoordinate()) + .000001;
+                    double linkLength = ffDistance * Constants.CELL_SIZE;
+                    if (linkLength < euclideanDistance)
+                        linkLength = euclideanDistance;
+                    createBidirectionalEdge(markerConfiguration, nodes.get(i), nodes.get(j), linkLength);
+                }
+            }
+    }
+
+    private double getFFDistance(CANode caNode1, CANode caNode2, MarkerConfiguration markerConfiguration, FloorFieldsGrid floorFieldsGrid) {
+        int fieldLevel1 = caNode1.getDestinationId();
+        int fieldLevel2 = caNode2.getDestinationId();
+        TacticalDestination td = (TacticalDestination) markerConfiguration.getTacticalDestination(fieldLevel2);
+        GridPoint td_center = td.getCells().get(td.getCells().size() / 2);
+        return floorFieldsGrid.getCellValue(fieldLevel1, td_center);
+    }
+
+    public ArrayList<CANode> getNodes() {
+        return nodes;
+    }
+
+    public ArrayList<CAEdge> getEdges() {
+        return edges;
+    }
+
+    public String toString() {
+        String result = "";
+        result += "NODES\n";
+        for (CANode node : nodes)
+            result += node.toString() + "\n";
+        result += "\nEDGES\n";
+        for (CAEdge edge : edges)
+            result += edge.toString() + "\n";
+        return result;
+    }
 }
