@@ -17,19 +17,18 @@ package org.cacrowd.casim.pedca.environment.markers;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Marker implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected ArrayList<GridPoint> cells;
-    //TODO link to matsim node here
+    protected List<GridPoint> cells;
 
-    public Marker(ArrayList<GridPoint> cells) {
+    public Marker(List<GridPoint> cells) {
         this.cells = cells;
     }
 
-    public ArrayList<GridPoint> getCells() {
+    public List<GridPoint> getCells() {
         return cells;
     }
 

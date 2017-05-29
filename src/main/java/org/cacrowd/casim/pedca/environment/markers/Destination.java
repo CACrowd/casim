@@ -16,7 +16,7 @@ package org.cacrowd.casim.pedca.environment.markers;
 
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Destination extends Marker {
 
@@ -24,7 +24,7 @@ public class Destination extends Marker {
     private final int id;
     private int level;
 
-    public Destination(int id, ArrayList<GridPoint> cells) {
+    public Destination(int id, List<GridPoint> cells) {
         super(cells);
         this.id = id;
     }

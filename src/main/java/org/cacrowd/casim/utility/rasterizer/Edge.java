@@ -76,4 +76,8 @@ public final class Edge {
     public Rasterizer.EdgeType getEdgeType() {
         return this.edgeType;
     }
+
+    public int getId() {
+        return id;
+    }
 }

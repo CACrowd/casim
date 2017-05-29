@@ -32,4 +32,6 @@ public interface MarkerConfiguration {
     void addStart(Start start);
 
     ArrayList<Start> getStarts();
+
+    Destination getDestination(int id);
 }

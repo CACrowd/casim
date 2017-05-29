@@ -17,8 +17,11 @@ package org.cacrowd.casim.pedca.environment.markers;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MarkerConfigurationImpl implements MarkerConfiguration {
+    private final Map<Integer, Destination> destinationMap = new HashMap<>();
     private ArrayList<Start> starts;
     private ArrayList<Destination> destinations;
     private ArrayList<GridPoint> destinationsCells;
@@ -44,6 +47,7 @@ public class MarkerConfigurationImpl implements MarkerConfiguration {
 
     @Override
     public void addTacticalDestination(Destination destination) {
+        destinationMap.put(destination.getId(), destination);
         destinations.add(destination);
         destinationsCells.addAll(destination.getCells());
     }
@@ -61,6 +65,11 @@ public class MarkerConfigurationImpl implements MarkerConfiguration {
     @Override
     public ArrayList<Destination> getTacticalDestinations() {
         return destinations;
+    }
+
+    @Override
+    public Destination getDestination(int id) {
+        return this.destinationMap.get(id);
     }
 
 

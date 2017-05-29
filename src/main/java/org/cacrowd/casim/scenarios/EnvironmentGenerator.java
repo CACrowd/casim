@@ -118,18 +118,18 @@ public class EnvironmentGenerator {
         return result;
     }
 
-    public static Coordinate generateCoordinates(ArrayList<GridPoint> cells) {
+    public static Coordinate generateCoordinates(List<GridPoint> cells) {
         return generateCoordinates(cells, new GridPoint(0, 0));
     }
 
-    public static Coordinate generateCoordinates(ArrayList<GridPoint> cells, GridPoint shift) {
+    public static Coordinate generateCoordinates(List<GridPoint> cells, GridPoint shift) {
         Coordinate result = calculateCentroid(cells);
         result.setX(result.getX() + shift.getX());
         result.setY(result.getY() + shift.getY());
         return result;
     }
 
-    public static Coordinate calculateCentroid(ArrayList<GridPoint> cells) {
+    public static Coordinate calculateCentroid(List<GridPoint> cells) {
         Coordinate result = new Coordinate(0, 0);
         for (GridPoint point : cells) {
             result.setX(result.getX() + (point.getX() * Constants.CELL_SIZE) + Constants.CELL_SIZE / 2);

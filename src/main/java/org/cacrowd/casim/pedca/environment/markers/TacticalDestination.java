@@ -18,7 +18,7 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TacticalDestination extends Destination {
 
@@ -28,7 +28,7 @@ public class TacticalDestination extends Destination {
     private double width;
 
 
-    public TacticalDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
+    public TacticalDestination(int id, Coordinate coordinate, List<GridPoint> cells, boolean isStairsBorder) {
         super(id, cells);
         this.coordinate = coordinate;
         this.isStairsBorder = isStairsBorder;

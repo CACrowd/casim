@@ -17,20 +17,23 @@ package org.cacrowd.casim.utility.rasterizer;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.engine.AgentMover;
-import org.cacrowd.casim.pedca.engine.CAAgentMover;
-import org.cacrowd.casim.pedca.engine.SimpleAreaTransitionHandler;
-import org.cacrowd.casim.pedca.engine.TransitionHandler;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
+import org.cacrowd.casim.pedca.environment.grid.GridPoint;
+import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
+import org.cacrowd.casim.pedca.environment.markers.TacticalDestination;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.*;
+
+import static org.cacrowd.casim.scenarios.EnvironmentGenerator.generateCoordinates;
 
 /**
  * Scanline algorithm to rasterize polygonal environment
@@ -40,11 +43,15 @@ public class Rasterizer {
 
 
     private static final Logger log = Logger.getLogger(Rasterizer.class);
-    private final EnvironmentGrid grid;
+    private final Map<Integer, List<GridPoint>> protoDestinations = new LinkedHashMap<>();
+    @Inject
+    Context context;
+    private EnvironmentGrid grid;
+    private MarkerConfiguration markerConfiguration;
 
-    public Rasterizer(EnvironmentGrid grid) {
-        this.grid = grid;
-    }
+//    public Rasterizer(EnvironmentGrid grid) {
+//        this.grid = grid;
+//    }
 
     public static int getColorCode(EdgeType edgeType) {
         switch (edgeType) {
@@ -82,63 +89,51 @@ public class Rasterizer {
         Edge e3 = new Edge(0, 16, 0, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e3);
 
-        int rows = (int) (2.4 / Constants.CELL_SIZE) + 1;
-        int cols = (int) (16 / Constants.CELL_SIZE) + 1;
+        Injector injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(SimulationObserver.class).to(VisualizerEngine.class);
+            }
+        });
 
-//        Edge e0 = new Edge(0, 0, 0, 0, 10, Rasterizer.EdgeType.WALL);
-//        et.add(e0);
-//        Edge e1 = new Edge(1, 0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
-//        et.add(e1);
-//        Edge e2 = new Edge(2, 2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
-//        et.add(e2);
-//        Edge e3 = new Edge(3, 4, 9, 6, 0, Rasterizer.EdgeType.WALL);
-//        et.add(e3);
-//        Edge e4 = new Edge(4, 6, 0, 0, 0, Rasterizer.EdgeType.WALL);
-//        et.add(e4);
-//
-//        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
-//        et.add(e5);
-//        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
-//        et.add(e6);
-//        Edge e7 = new Edge(7, 2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
-//        et.add(e7);
-//        Edge e8 = new Edge(8, 4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
-//        et.add(e8);
-//
-//        Edge tr = new Edge(9, 2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
-//        et.add(tr);
-//
-//        int rows = (int) (10 / Constants.CELL_SIZE) + 1;
-//        int cols = (int) (6 / Constants.CELL_SIZE) + 1;
-        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
+        injector.getInstance(Rasterizer.class).buildContext(et);
+
+        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
+
+    }
+
+    public void buildContext(Collection<Edge> edges) {
+
+        Envelope e = new Envelope();
+        edges.forEach(edge -> {
+            e.expandToInclude(edge.getX0(), edge.getY0());
+            e.expandToInclude(edge.getX1(), edge.getY1());
+        });
+
+        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 1;
+        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 1;
+        this.grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 grid.setCellValue(row, col, -1);
             }
         }
-        Rasterizer r = new Rasterizer(grid);
-        r.rasterize(et);
 
+        rasterize(edges);
+        generateDestinations();
+        context.initialize(grid, markerConfiguration);
 
-        //DEBUG
-        Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                //                bind(Context.class).to(Context.class);
-                bind(AgentMover.class).to(CAAgentMover.class);
-                bind(SimulationObserver.class).to(VisualizerEngine.class);
-                bind(TransitionHandler.class).to(SimpleAreaTransitionHandler.class);
-            }
-        });
-        injector.getInstance(Context.class).initialize(grid, new MarkerConfigurationImpl());
-
-
-        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
-        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
 
     }
 
-    public void rasterize(Collection<Edge> edges) {
+    private void generateDestinations() {
+        markerConfiguration = new MarkerConfigurationImpl();
+        this.protoDestinations.entrySet().stream().map(e ->
+                new TacticalDestination(e.getKey(), generateCoordinates(e.getValue()), e.getValue(), grid.isStairsBorder(e.getValue().get(0))))
+                .forEach(markerConfiguration::addTacticalDestination);
+    }
+
+    private void rasterize(Collection<Edge> edges) {
 
         LinkedList<Edge> edgeTable = new LinkedList<>(edges);
 
@@ -172,6 +167,7 @@ public class Rasterizer {
         traceEdges(edges);
 
     }
+
 
     private void traceEdges(Collection<Edge> edgeTable) {
 
@@ -230,7 +226,10 @@ public class Rasterizer {
             if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
                 if (oldCol != col && oldRow != row) {
                     grid.setCellValue(row, oldCol, colorCode);
+                    protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(oldCol, row));
                 }
+                protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, row));
+
             }
             oldRow = row;
             oldCol = col;
@@ -261,8 +260,10 @@ public class Rasterizer {
             if (e.getEdgeType() == EdgeType.TRANSITION || e.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
                 if (oldCol != col && oldRow != row) {
                     grid.setCellValue(oldRow, col, colorCode);
-
+                    protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, oldRow));
                 }
+                protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, row));
+
             }
             oldRow = row;
             oldCol = col;

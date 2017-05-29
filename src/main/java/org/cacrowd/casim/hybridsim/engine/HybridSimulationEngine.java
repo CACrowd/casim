@@ -15,13 +15,8 @@
 package org.cacrowd.casim.hybridsim.engine;
 
 import com.google.inject.Inject;
-import com.vividsolutions.jts.geom.Envelope;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.*;
-import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
-import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
-import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
-import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
@@ -48,6 +43,8 @@ public class HybridSimulationEngine {
     private SimulationObserver observer;
     @Inject
     private TransitionHandler transitionHandler;
+    @Inject
+    private Rasterizer rasterizer;
 
     public void loadEnvironment(HybridSimProto.Scenario request) {
         List<Edge> res = request.getEdgesList().stream().map(he -> {
@@ -69,25 +66,7 @@ public class HybridSimulationEngine {
 
         }).collect(Collectors.toList());
 
-        Envelope e = new Envelope();
-        res.forEach(edge -> {
-            e.expandToInclude(edge.getX0(), edge.getY0());
-            e.expandToInclude(edge.getX1(), edge.getY1());
-        });
-
-        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 1;
-        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 1;
-        EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                grid.setCellValue(row, col, -1);
-            }
-        }
-        Rasterizer rasterizer = new Rasterizer(grid);
-        rasterizer.rasterize(res);
-
-        MarkerConfiguration markerConfiguration = new MarkerConfigurationImpl();
-        context.initialize(grid, markerConfiguration);
+        rasterizer.buildContext(res);
         observer.observerEnvironmentGrid();
     }
 
