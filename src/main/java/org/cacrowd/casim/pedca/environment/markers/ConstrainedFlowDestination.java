@@ -27,8 +27,8 @@ public class ConstrainedFlowDestination extends DelayedDestination {
     private final float stepToCross;
     private float currentStepToCross;
 
-    public ConstrainedFlowDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, float flowCapacity) {
-        super(coordinate, cells, isStairsBorder, 0);
+    public ConstrainedFlowDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, float flowCapacity) {
+        super(id, coordinate, cells, isStairsBorder, 0);
         if (flowCapacity == 0)
             this.stepToCross = 0;
         else

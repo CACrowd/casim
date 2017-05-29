@@ -28,8 +28,8 @@ public class FinalDestination extends TacticalDestination {
     private GridPoint environmentRef;
     private GridPoint environmentCenter;
 
-    public FinalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, GridPoint environmentCenter) {
-        super(coordinate, cells, false);
+    public FinalDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, GridPoint environmentCenter) {
+        super(id, coordinate, cells, false);
         this.environmentCenter = environmentCenter;
         calculateRotationAndRef();
     }

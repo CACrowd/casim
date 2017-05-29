@@ -28,8 +28,8 @@ public class ScheduledDestination extends DelayedDestination {
     private int scheduleIndex;
     private int timeShift;
 
-    public ScheduledDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, double[] scheduleTimes) {
-        super(coordinate, cells, isStairsBorder, 0);
+    public ScheduledDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, double[] scheduleTimes) {
+        super(Integer.MAX_VALUE, coordinate, cells, isStairsBorder, 0);
         this.scheduledTimes = scheduleTimes;
         this.scheduleIndex = 0;
         this.timeShift = 240;

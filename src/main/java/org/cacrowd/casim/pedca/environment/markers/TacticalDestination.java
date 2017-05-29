@@ -28,8 +28,8 @@ public class TacticalDestination extends Destination {
     private double width;
 
 
-    public TacticalDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
-        super(cells);
+    public TacticalDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder) {
+        super(id, cells);
         this.coordinate = coordinate;
         this.isStairsBorder = isStairsBorder;
         calculateWidth();

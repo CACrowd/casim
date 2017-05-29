@@ -24,8 +24,8 @@ public class DelayedDestination extends TacticalDestination {
     private static final long serialVersionUID = 1L;
     private final int stepToCross;
 
-    public DelayedDestination(Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, int stepToCross) {
-        super(coordinate, cells, isStairsBorder);
+    public DelayedDestination(int id, Coordinate coordinate, ArrayList<GridPoint> cells, boolean isStairsBorder, int stepToCross) {
+        super(id, coordinate, cells, isStairsBorder);
         this.stepToCross = stepToCross;
     }
 

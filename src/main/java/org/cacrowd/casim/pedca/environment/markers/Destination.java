@@ -21,10 +21,16 @@ import java.util.ArrayList;
 public class Destination extends Marker {
 
     private static final long serialVersionUID = 1L;
+    private final int id;
     private int level;
 
-    public Destination(ArrayList<GridPoint> cells) {
+    public Destination(int id, ArrayList<GridPoint> cells) {
         super(cells);
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public int getLevel() {

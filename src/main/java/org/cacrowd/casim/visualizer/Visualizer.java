@@ -328,6 +328,7 @@ public class Visualizer extends PApplet {
             return;
         }
 
+
         stroke(0, 255);
         if (r.fill) {
             fill(r.r, r.g, r.b, r.a);

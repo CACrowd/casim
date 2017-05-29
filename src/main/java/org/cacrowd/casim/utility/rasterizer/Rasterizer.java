@@ -61,43 +61,55 @@ public class Rasterizer {
 
     public static void main(String[] args) {
         LinkedList<Edge> et = new LinkedList<>();
-//        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
-//        et.add(e0);
-//        Edge e1 = new Edge(1, 0, 2.4, 4, 2.4, Rasterizer.EdgeType.WALL);
-//        et.add(e1);
-//        Edge e2 = new Edge(2, 4, 2.4, 4, 0, Rasterizer.EdgeType.WALL);
-//        et.add(e2);
-//        Edge e3 = new Edge(3, 4, 0, 0, 0, Rasterizer.EdgeType.WALL);
-//        et.add(e3);
-//
-//        int rows = (int) (2.4 / Constants.CELL_SIZE) + 1;
-//        int cols = (int) (4 / Constants.CELL_SIZE) + 1;
-
-        Edge e0 = new Edge(0, 0, 0, 0, 10, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(1, 0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
+        Edge e0a = new Edge(1, 0.4, 0.41, 0.4, 1.99, EdgeType.TRANSITION_INTERNAL);
+        et.add(e0a);
+
+        Edge e0b = new Edge(2, 2., 0.41, 2., 1.99, EdgeType.TRANSITION_INTERNAL);
+        et.add(e0b);
+
+        Edge e0c = new Edge(3, 14., 0.41, 14., 1.99, EdgeType.TRANSITION_INTERNAL);
+        et.add(e0c);
+
+        Edge e0d = new Edge(4, 15.6, 0.41, 15.6, 1.99, EdgeType.TRANSITION_INTERNAL);
+        et.add(e0d);
+
+        Edge e1 = new Edge(0, 0, 2.4, 16, 2.4, Rasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2, 2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(0, 16, 2.4, 16, 0, Rasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(3, 4, 9, 6, 0, Rasterizer.EdgeType.WALL);
+        Edge e3 = new Edge(0, 16, 0, 0, 0, Rasterizer.EdgeType.WALL);
         et.add(e3);
-        Edge e4 = new Edge(4, 6, 0, 0, 0, Rasterizer.EdgeType.WALL);
-        et.add(e4);
 
-        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
-        et.add(e5);
-        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
-        et.add(e6);
-        Edge e7 = new Edge(7, 2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
-        et.add(e7);
-        Edge e8 = new Edge(8, 4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
-        et.add(e8);
+        int rows = (int) (2.4 / Constants.CELL_SIZE) + 1;
+        int cols = (int) (16 / Constants.CELL_SIZE) + 1;
 
-        Edge tr = new Edge(9, 2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
-        et.add(tr);
-
-        int rows = (int) (10 / Constants.CELL_SIZE) + 1;
-        int cols = (int) (6 / Constants.CELL_SIZE) + 1;
+//        Edge e0 = new Edge(0, 0, 0, 0, 10, Rasterizer.EdgeType.WALL);
+//        et.add(e0);
+//        Edge e1 = new Edge(1, 0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
+//        et.add(e1);
+//        Edge e2 = new Edge(2, 2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
+//        et.add(e2);
+//        Edge e3 = new Edge(3, 4, 9, 6, 0, Rasterizer.EdgeType.WALL);
+//        et.add(e3);
+//        Edge e4 = new Edge(4, 6, 0, 0, 0, Rasterizer.EdgeType.WALL);
+//        et.add(e4);
+//
+//        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
+//        et.add(e5);
+//        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
+//        et.add(e6);
+//        Edge e7 = new Edge(7, 2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
+//        et.add(e7);
+//        Edge e8 = new Edge(8, 4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
+//        et.add(e8);
+//
+//        Edge tr = new Edge(9, 2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+//        et.add(tr);
+//
+//        int rows = (int) (10 / Constants.CELL_SIZE) + 1;
+//        int cols = (int) (6 / Constants.CELL_SIZE) + 1;
         EnvironmentGrid grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
