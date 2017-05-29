@@ -133,7 +133,7 @@ public class VisualizerEngine implements SimulationObserver {
                     fill = true;
                 }
                 vis.addRectStatic(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
-                vis.addTextStatic(c.getX(), c.getY(), "(" + col + " " + row + ")", 150);
+//                vis.addTextStatic(c.getX(), c.getY(), "(" + col + " " + row + ")", 150);
             }
         }
 
@@ -173,6 +173,8 @@ public class VisualizerEngine implements SimulationObserver {
                     fill = true;
                 }
                 vis.addRect(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
+                double prntDens = ((int) (density * 100. + 0.5)) / 100.;
+                vis.addText(c.getX(), c.getY(), Double.toString(prntDens), 150);
             }
         }
     }

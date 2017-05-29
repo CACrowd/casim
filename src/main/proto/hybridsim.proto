@@ -61,6 +61,11 @@ message Agent {
     int32 id = 1;
     Coordinate enterLocation = 2;
     Coordinate leaveLocation = 3;
+    repeated Destination dests = 4;
+}
+
+message Destination {
+    int32 id = 1;
 }
 
 message Leg {

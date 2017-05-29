@@ -15,8 +15,13 @@
 package org.cacrowd.casim.hybridsim.engine;
 
 import com.google.inject.Inject;
+import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.*;
+import org.cacrowd.casim.pedca.environment.grid.GridPoint;
+import org.cacrowd.casim.pedca.environment.markers.Destination;
+import org.cacrowd.casim.pedca.environment.network.Coordinate;
+import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
@@ -67,7 +72,53 @@ public class HybridSimulationEngine {
         }).collect(Collectors.toList());
 
         rasterizer.buildContext(res);
+        transitionHandler.init();
+        activeObjectsUpdater.init();
         observer.observerEnvironmentGrid();
+    }
+
+    public boolean tryAddAgent(HybridSimProto.Agent request) {
+
+
+        GridPoint enterLocation = context.getEnvironmentGrid().coordinate2GridPoint(new Coordinate(request.getEnterLocation().getX(), request.getEnterLocation().getY()));
+
+
+        Destination orig = context.getMarkerConfiguration().getDestination(request.getDestsList().get(0).getId());
+        Destination dest = context.getMarkerConfiguration().getDestination(request.getDestsList().get(request.getDestsList().size() - 1).getId());
+
+
+        Strategy strategy = new ODStrategy(orig, dest);
+        List<Destination> intermediate = request.getDestsList().stream().limit(request.getDestsList().size() - 1).skip(1).map(d -> context.getMarkerConfiguration().getDestination(d.getId())).collect(Collectors.toList());
+
+
+        Tactic tactic = new SimpleTargetChainTactic(strategy, intermediate, context);
+        Agent a1 = new Agent(request.getId(), enterLocation, tactic, context);
+        transitionHandler.scheduleForDeparture(a1);
+
+        return true;
+    }
+
+    public void doSimInterval(HybridSimProto.LeftClosedRightOpenTimeInterval request) {
+
+        if (context.getTimeOfDay() <= 0) {
+            context.setTimeOfDay(request.getFromTimeIncluding());
+        }
+
+        for (double time = context.getTimeOfDay(); time < request.getToTimeExcluding(); time += Constants.STEP_DURATION) {
+            context.setTimeOfDay(time);
+            doSimStep(time);
+        }
+
+    }
+
+    private void doSimStep(double time) {
+        transitionHandler.step(time);
+        agentUpdater.step();
+        conflictSolver.step();
+        agentMover.step(time);
+        activeObjectsUpdater.step(time);
+        observer.observerDensityGrid();
+        observer.observePopulation();
     }
 
 //    private final Rasterizer rasterizer = new Rasterizer();

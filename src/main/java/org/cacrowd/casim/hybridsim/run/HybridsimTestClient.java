@@ -17,6 +17,9 @@ package org.cacrowd.casim.hybridsim.run;
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.proto.HybridSimProto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HybridsimTestClient {
 
     public static void main(String args[]) {
@@ -26,7 +29,48 @@ public class HybridsimTestClient {
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(sc);
 
+        List<HybridSimProto.Agent> agents = generateAgents();
+        for (HybridSimProto.Agent a : agents) {
+            client.getBlockingStub().transferAgent(a);
+        }
 
+
+        HybridSimProto.LeftClosedRightOpenTimeInterval.Builder tb = HybridSimProto.LeftClosedRightOpenTimeInterval.newBuilder();
+        double incr = 2.;
+        for (double time = 0; time < 10000.; time += incr) {
+            tb.setFromTimeIncluding(time);
+            tb.setToTimeExcluding(time + incr);
+            client.getBlockingStub().simulatedTimeInerval(tb.build());
+        }
+
+    }
+
+    private static List<HybridSimProto.Agent> generateAgents() {
+        HybridSimProto.Agent.Builder ab = HybridSimProto.Agent.newBuilder();
+        HybridSimProto.Destination.Builder db = HybridSimProto.Destination.newBuilder();
+        HybridSimProto.Coordinate.Builder cb = HybridSimProto.Coordinate.newBuilder();
+
+
+        List<HybridSimProto.Agent> ret = new ArrayList<>();
+        for (int i = 0; i < 10000; i++) {
+            cb.setX(0.9);
+            cb.setY(1);
+            ab.setEnterLocation(cb.build());
+            cb.setX(19);
+            ab.setLeaveLocation(cb.build());
+            ab.setId(i);
+            ab.clearDests();
+            db.setId(0);
+            ab.addDests(db.build());
+            db.setId(1);
+            ab.addDests(db.build());
+            db.setId(2);
+            ab.addDests(db.build());
+            db.setId(3);
+            ab.addDests(db.build());
+            ret.add(ab.build());
+        }
+        return ret;
     }
 
     private static HybridSimProto.Scenario createScenario() {
@@ -110,7 +154,6 @@ public class HybridsimTestClient {
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
-
 
         return sb.build();
     }

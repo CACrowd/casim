@@ -97,7 +97,6 @@ public class SimulationEngine {
 
         transitionHandler.init();
         activeObjectsUpdater.init();
-
         observer.observerEnvironmentGrid();
 //        observer.observeTransitionAreas(((SimpleAreaTransitionHandler)transitionHandler).getTransitionAreas());
         for (double time = 0; time < 1000; time += Constants.STEP_DURATION) {

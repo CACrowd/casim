@@ -45,7 +45,7 @@ public class Context {
 
     @Inject
     public Context() {
-
+        population = new ActivePopulation();
     }
 
     public Context(EnvironmentGrid environmentGrid, MarkerConfiguration markerConfiguration) {
@@ -66,7 +66,7 @@ public class Context {
 
     public void initialize(EnvironmentGrid grid, MarkerConfiguration markerConfiguration) {
         initializeGrids(grid, markerConfiguration);
-        population = new ActivePopulation();
+//        population = new ActivePopulation();
         network = new CANetwork(markerConfiguration, floorFieldsGrid);
     }
 

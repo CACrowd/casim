@@ -37,28 +37,28 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
         responseObserver.onCompleted();
     }
 
-    //        @Override
-//        public void simulatedTimeInerval(HybridSimProto.LeftClosedRightOpenTimeInterval request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-//            log.info("simulateTimeInterval called: " + request.getToTimeExcluding() );
-//
-//
-//            engine.doSimStep(request.getToTimeExcluding());
-//
-//
-//            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//        }
-//
-//        @Override
-//        public void transferAgent(HybridSimProto.Agent request, StreamObserver<HybridSimProto.Boolean> responseObserver) {
+    @Override
+    public void simulatedTimeInerval(HybridSimProto.LeftClosedRightOpenTimeInterval request, StreamObserver<HybridSimProto.Empty> responseObserver) {
+//        log.info("simulateTimeInterval called: " + request.getToTimeExcluding());
+
+
+        engine.doSimInterval(request);
+
+
+        HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void transferAgent(HybridSimProto.Agent request, StreamObserver<HybridSimProto.Boolean> responseObserver) {
 //            log.info("transferAgent called");
-//            boolean success = engine.tryAddAgent(request);
-//            HybridSimProto.Boolean resp = HybridSimProto.Boolean.newBuilder().setVal(success).build();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//
-//        }
+        boolean success = engine.tryAddAgent(request);
+        HybridSimProto.Boolean resp = HybridSimProto.Boolean.newBuilder().setVal(success).build();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+
+    }
 //
 //        @Override
 //        public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
