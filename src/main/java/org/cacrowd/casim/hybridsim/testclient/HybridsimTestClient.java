@@ -12,7 +12,7 @@
  *
  */
 
-package org.cacrowd.casim.hybridsim.run;
+package org.cacrowd.casim.hybridsim.testclient;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.proto.HybridSimProto;
@@ -24,7 +24,12 @@ public class HybridsimTestClient {
 
     public static void main(String args[]) {
 
+
         HybridSimProto.Scenario sc = createScenario();
+
+//        VisualizerDummyEngine vis = new VisualizerDummyEngine();
+//        vis.drawEnvironment(sc);
+
 
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(sc);
@@ -36,11 +41,15 @@ public class HybridsimTestClient {
 
 
         HybridSimProto.LeftClosedRightOpenTimeInterval.Builder tb = HybridSimProto.LeftClosedRightOpenTimeInterval.newBuilder();
-        double incr = 2.;
+        double incr = .1;
         for (double time = 0; time < 10000.; time += incr) {
             tb.setFromTimeIncluding(time);
             tb.setToTimeExcluding(time + incr);
             client.getBlockingStub().simulatedTimeInerval(tb.build());
+
+            HybridSimProto.Trajectories trajectories = client.getBlockingStub().receiveTrajectories(HybridSimProto.Empty.getDefaultInstance());
+//            vis.drawTrajectories(trajectories);
+//            vis.updateTime(time);
         }
 
     }

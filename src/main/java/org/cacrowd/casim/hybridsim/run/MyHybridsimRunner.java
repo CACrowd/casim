@@ -16,6 +16,7 @@ package org.cacrowd.casim.hybridsim.run;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.hybridsim.testclient.HybridsimTestClient;
 
 
 public class MyHybridsimRunner {

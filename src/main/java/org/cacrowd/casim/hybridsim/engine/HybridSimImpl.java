@@ -60,13 +60,13 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
 
     }
 //
-//        @Override
-//        public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
+@Override
+public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
 //            log.info("receiveTrajectories called");
-//            HybridSimProto.Trajectories resp = HybridSimProto.Trajectories.getDefaultInstance();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//        }
+    HybridSimProto.Trajectories resp = engine.receiveTrajectories();
+    responseObserver.onNext(resp);
+    responseObserver.onCompleted();
+}
 //
 //        @Override
 //        public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {

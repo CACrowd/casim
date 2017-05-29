@@ -121,6 +121,16 @@ public class HybridSimulationEngine {
         observer.observePopulation();
     }
 
+    public HybridSimProto.Trajectories receiveTrajectories() {
+        HybridSimProto.Trajectories.Builder tbs = HybridSimProto.Trajectories.newBuilder();
+        HybridSimProto.Trajectory.Builder tb = HybridSimProto.Trajectory.newBuilder();
+        context.getPopulation().getPedestrians().forEach(p -> {
+            Coordinate c = context.getEnvironmentGrid().gridPoint2Coordinate(p.getPosition());
+            tbs.addTrajectories(tb.setId(p.getID()).setX(c.getX()).setY(c.getY()).build());
+        });
+        return tbs.build();
+    }
+
 //    private final Rasterizer rasterizer = new Rasterizer();
 
 

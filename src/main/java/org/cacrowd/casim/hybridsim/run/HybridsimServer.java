@@ -17,8 +17,6 @@ package org.cacrowd.casim.hybridsim.run;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import io.grpc.Server;
-import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
 import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.engine.CAAgentMover;
@@ -28,12 +26,6 @@ import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 public class HybridsimServer {
-    private static Logger log = Logger.getLogger(GRPCServer.class);
-    private Server server;
-    private int port = 9000;
-
-    private double simTime = -1;
-
 
     public static void main(String[] args) throws Exception {
 

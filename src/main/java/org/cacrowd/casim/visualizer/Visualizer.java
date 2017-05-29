@@ -32,8 +32,8 @@ public class Visualizer extends PApplet {
     private final JFrame fr;
     private final java.util.List<Text> elementsTextStatic = Collections
             .synchronizedList(new ArrayList<Text>());
-    private final java.util.List<Object> newElements = new ArrayList<Object>();
-    private final java.util.List<Text> newElementsText = new ArrayList<Text>();
+    private final java.util.List<Object> newElements = new ArrayList<>();
+    private final java.util.List<Text> newElementsText = new ArrayList<>();
     private final java.util.List<Object> elementsStatic = Collections
             .synchronizedList(new ArrayList<Object>());
     private final java.util.List<VisDebuggerAdditionalDrawer> additionalDrawers = Collections
@@ -41,7 +41,7 @@ public class Visualizer extends PApplet {
     // ZoomPan zoomer;
     private final FrameSaver fs;
 
-    ZoomPan zoomer;
+    public ZoomPan zoomer;
     double time2;
     int dummy = 0;
     private java.util.List<Object> elements = Collections
@@ -369,8 +369,9 @@ public class Visualizer extends PApplet {
         }
     }
 
-    /* package */void addCircle(double x, double y, float rr, int r, int g,
-                                int b, int a, int minScale, boolean fill) {
+    /* package */
+    public void addCircle(double x, double y, float rr, int r, int g,
+                          int b, int a, int minScale, boolean fill) {
         Circle c = new Circle();
         c.x = (float) (x);
         c.y = (float) -(y);
@@ -498,7 +499,7 @@ public class Visualizer extends PApplet {
         addElementStatic(p);
     }
 
-    /* package */void update(double time) {
+    public void update(double time) {
         if (this.fs != null && this.fs.incrSkipped()) {
             this.fs.await();
         }
@@ -544,8 +545,8 @@ public class Visualizer extends PApplet {
 
     }
 
-    /* package */void addLineStatic(double x0, double y0, double x1, double y1,
-                                    int r, int g, int b, int a, int minScale) {
+    public void addLineStatic(double x0, double y0, double x1, double y1,
+                              int r, int g, int b, int a, int minScale) {
         Line l = new Line();
         l.x0 = (float) (x0);
         l.x1 = (float) (x1);

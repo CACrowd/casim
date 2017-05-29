@@ -89,7 +89,7 @@ message Agents {
 }
 
 message Trajectory {
-    string id = 1;
+    int32 id = 1;
     double x = 2;
     double y = 3;
 }
