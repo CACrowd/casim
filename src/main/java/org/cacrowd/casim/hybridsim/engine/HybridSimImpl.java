@@ -59,22 +59,23 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
         responseObserver.onCompleted();
 
     }
-//
-@Override
-public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
+
+    //
+    @Override
+    public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Trajectories> responseObserver) {
 //            log.info("receiveTrajectories called");
-    HybridSimProto.Trajectories resp = engine.receiveTrajectories();
-    responseObserver.onNext(resp);
-    responseObserver.onCompleted();
-}
-//
-//        @Override
-//        public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
-//            log.info("retrieveAgents called");
-//            HybridSimProto.Agents resp = HybridSimProto.Agents.getDefaultInstance();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//        }
+        HybridSimProto.Trajectories resp = engine.receiveTrajectories();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
+        log.info("retrieveAgents called");
+        HybridSimProto.Agents resp = engine.retrieveArrivedAgents();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+    }
 //
 //        @Override
 //        public void shutdown(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Empty> responseObserver) {
@@ -84,17 +85,6 @@ public void receiveTrajectories(HybridSimProto.Empty request, StreamObserver<Hyb
 //            responseObserver.onCompleted();
 //        }
 //
-//        @Override
-//        public void initScenario(HybridSimProto.Scenario request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-//            log.info("initScenario called");
-//
-//            engine.prepareSim(request);
-//
-//
-//            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//            //onPrepareSim in (Proto)CAEngine
-//        }
+
 }
 

@@ -47,7 +47,7 @@ public class HybridSimulationEngine {
     @Inject
     private SimulationObserver observer;
     @Inject
-    private TransitionHandler transitionHandler;
+    private HybridTransitionHandler transitionHandler;
     @Inject
     private Rasterizer rasterizer;
 
@@ -124,11 +124,17 @@ public class HybridSimulationEngine {
     public HybridSimProto.Trajectories receiveTrajectories() {
         HybridSimProto.Trajectories.Builder tbs = HybridSimProto.Trajectories.newBuilder();
         HybridSimProto.Trajectory.Builder tb = HybridSimProto.Trajectory.newBuilder();
+        HybridSimProto.Destination.Builder db = HybridSimProto.Destination.newBuilder();
         context.getPopulation().getPedestrians().forEach(p -> {
             Coordinate c = context.getEnvironmentGrid().gridPoint2Coordinate(p.getPosition());
-            tbs.addTrajectories(tb.setId(p.getID()).setX(c.getX()).setY(c.getY()).build());
+            tbs.addTrajectories(tb.setId(p.getID()).setX(c.getX()).setY(c.getY()).setCurrentDest(db.setId(p.getCurrentDestination().getId())).build());
         });
         return tbs.build();
+    }
+
+    public HybridSimProto.Agents retrieveArrivedAgents() {
+
+        return null;
     }
 
 //    private final Rasterizer rasterizer = new Rasterizer();

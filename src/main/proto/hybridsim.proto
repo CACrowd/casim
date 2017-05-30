@@ -92,6 +92,7 @@ message Trajectory {
     int32 id = 1;
     double x = 2;
     double y = 3;
+    Destination currentDest = 4;
 }
 
 message Trajectories {

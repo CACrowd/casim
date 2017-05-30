@@ -17,11 +17,11 @@ package org.cacrowd.casim.hybridsim.run;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.cacrowd.casim.hybridsim.engine.HybridTransitionHandler;
+import org.cacrowd.casim.hybridsim.engine.SimpleHybridTransitionHandler;
 import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
 import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.engine.CAAgentMover;
-import org.cacrowd.casim.pedca.engine.SimpleAreaTransitionHandler;
-import org.cacrowd.casim.pedca.engine.TransitionHandler;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
 
@@ -36,7 +36,7 @@ public class HybridsimServer {
 //                bind(Context.class).to(Context.class);
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(VisualizerEngine.class);
-                bind(TransitionHandler.class).to(SimpleAreaTransitionHandler.class);
+                bind(HybridTransitionHandler.class).to(SimpleHybridTransitionHandler.class);
             }
         });
 

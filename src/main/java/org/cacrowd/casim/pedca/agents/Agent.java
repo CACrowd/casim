@@ -20,6 +20,7 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.grid.PedestrianGrid;
 import org.cacrowd.casim.pedca.environment.grid.WeightedCell;
 import org.cacrowd.casim.pedca.environment.grid.neighbourhood.Neighbourhood;
+import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.DirectionUtility;
 import org.cacrowd.casim.pedca.utility.DirectionUtility.Heading;
@@ -321,5 +322,9 @@ public class Agent extends PhysicalObject {
 
     public String toString() {
         return "Pedestrian " + getID();
+    }
+
+    public Destination getCurrentDestination() {
+        return this.tactic.getCurrentDestination();
     }
 }
