@@ -18,6 +18,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.*;
@@ -39,7 +40,11 @@ import java.util.List;
  */
 public class MyDaganzoRunner {
 
+    private static final Logger log = Logger.getLogger(MyDaganzoRunner.class);
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+        log.info("start");
         Context context = createContextWithResourceEnvironmentFileV2("src/main/resources/environmentGrid_Dag12.csv");
 
 
@@ -107,6 +112,7 @@ public class MyDaganzoRunner {
         SimulationEngine e = injector.getInstance(SimulationEngine.class);
         e.run();
 
+        log.info("finished");
 
     }
 

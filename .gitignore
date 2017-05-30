@@ -1,4 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 casim.iml
-/target/
+src/main/.DS_Store
+src/main/java/.DS_Store
+

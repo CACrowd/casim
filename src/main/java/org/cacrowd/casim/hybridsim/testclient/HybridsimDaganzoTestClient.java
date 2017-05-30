@@ -44,10 +44,10 @@ public class HybridsimDaganzoTestClient {
         HybridSimProto.LeftClosedRightOpenTimeInterval.Builder tb = HybridSimProto.LeftClosedRightOpenTimeInterval.newBuilder();
 
 
-        double incr = .3;
-        for (double time = 0; time <= 1000; time += incr) {
+        double incr = 1.;
+        for (double time = 0; time <= 3600; time += incr) {
             //transfer some agents (e.g. 4 at most)
-            for (int i = 0; i < 3 && it.hasNext(); i++) {
+            for (int i = 0; i < 4 && it.hasNext(); i++) {
                 client.getBlockingStub().transferAgent(it.next());
             }
 
@@ -66,7 +66,7 @@ public class HybridsimDaganzoTestClient {
             HybridSimProto.Agents abouteToLeave = client.getBlockingStub().queryRetrievableAgents(HybridSimProto.Empty.getDefaultInstance());
 
             //inform casim which agents are accepted for retrieval (e.g. 3 at most)
-            List<HybridSimProto.Agent> confirmed = abouteToLeave.getAgentsList().subList(0, Math.min(1, abouteToLeave.getAgentsList().size()));
+            List<HybridSimProto.Agent> confirmed = abouteToLeave.getAgentsList().subList(0, Math.min(3, abouteToLeave.getAgentsList().size()));
             client.getBlockingStub().confirmRetrievedAgents(HybridSimProto.Agents.newBuilder().addAllAgents(confirmed).build());
 
 //            if (((int)time)%100 == 0){
@@ -108,7 +108,30 @@ public class HybridsimDaganzoTestClient {
                 db.setId(11);
                 ab.addDests(db.build());
                 ret.add(ab.build());
-            } else {
+            }
+//            else if (i%3 == 0){
+//                cb.setX(1.6);
+//                cb.setY(16);
+//                ab.setLeaveLocation(cb.build());
+//                cb.setX(19);
+//                ab.setEnterLocation(cb.build());
+//                ab.setId(-i);
+//                ab.clearDests();
+//                db.setId(11);
+//                ab.addDests(db.build());
+//                db.setId(10);
+//                ab.addDests(db.build());
+//                db.setId(9);
+//                ab.addDests(db.build());
+//                db.setId(8);
+//                ab.addDests(db.build());
+//                db.setId(7);
+//                ab.addDests(db.build());
+//                db.setId(6);
+//                ab.addDests(db.build());
+//                ret.add(ab.build());
+//            }
+            else {
                 cb.setX(1.6);
                 cb.setY(16);
                 ab.setEnterLocation(cb.build());

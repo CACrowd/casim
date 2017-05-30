@@ -107,6 +107,15 @@ public class HybridSimulationEngine {
         for (double time = context.getTimeOfDay(); time < request.getToTimeExcluding(); time += Constants.STEP_DURATION) {
             context.setTimeOfDay(time);
             doSimStep(time);
+            observer.observerDensityGrid();
+            observer.observePopulation();
+
+//            //for movie creation to reach a higher (pseudo) frame rate
+//            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 3) {
+//                context.setTimeOfDay(visTime);
+//                observer.observerDensityGrid();
+//                observer.observePopulation();
+//            }
         }
 
     }
@@ -117,8 +126,7 @@ public class HybridSimulationEngine {
         conflictSolver.step();
         agentMover.step(time);
         activeObjectsUpdater.step(time);
-        observer.observerDensityGrid();
-        observer.observePopulation();
+
     }
 
     public HybridSimProto.Trajectories receiveTrajectories() {

@@ -99,7 +99,7 @@ public class SimulationEngine {
         activeObjectsUpdater.init();
         observer.observerEnvironmentGrid();
 //        observer.observeTransitionAreas(((SimpleAreaTransitionHandler)transitionHandler).getTransitionAreas());
-        for (double time = 0; time < 1000; time += Constants.STEP_DURATION) {
+        for (double time = 0; time < 3600; time += Constants.STEP_DURATION) {
             context.setTimeOfDay(time);
 
 

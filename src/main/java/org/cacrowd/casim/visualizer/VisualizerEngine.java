@@ -86,7 +86,6 @@ public class VisualizerEngine implements SimulationObserver {
         blue.g = 0;
         blue.b = 255;
         this.densityColorRamp.put(7., blue);
-        this.densityColorRamp.put(100., blue);
         this.densityColorRamp.put(Double.POSITIVE_INFINITY, blue);
     }
 
@@ -157,7 +156,7 @@ public class VisualizerEngine implements SimulationObserver {
                 if (Double.isNaN(density) || density <= 0.01) {
                     continue;
                 } else {
-                    Map.Entry<Double, Color> floor = this.densityColorRamp.floorEntry(density - 0.01);
+                    Map.Entry<Double, Color> floor = this.densityColorRamp.floorEntry(density);
                     Map.Entry<Double, Color> ceiling = this.densityColorRamp.ceilingEntry(density);
 
 //                     log.info("density: " + density);
