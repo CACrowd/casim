@@ -146,36 +146,36 @@ public class HybridsimTestClient {
         sb.addEdges(eb.build());
 
         cb.setX(0.4);
-        cb.setY(3.6);
+        cb.setY(4);
         eb.setC0(cb.build());
-        cb.setY(0.4);
+        cb.setY(0);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(0);
         sb.addEdges(eb.build());
 
         cb.setX(2.);
-        cb.setY(3.6);
+        cb.setY(4);
         eb.setC0(cb.build());
-        cb.setY(0.4);
+        cb.setY(0);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(1);
         sb.addEdges(eb.build());
 
         cb.setX(18.);
-        cb.setY(3.6);
+        cb.setY(4);
         eb.setC0(cb.build());
-        cb.setY(0.4);
+        cb.setY(0);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(2);
         sb.addEdges(eb.build());
 
         cb.setX(19.6);
-        cb.setY(3.6);
+        cb.setY(4);
         eb.setC0(cb.build());
-        cb.setY(0.4);
+        cb.setY(0);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(3);

@@ -16,7 +16,7 @@ package org.cacrowd.casim.hybridsim.run;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.hybridsim.testclient.HybridsimTestClient;
+import org.cacrowd.casim.hybridsim.testclient.HybridsimDaganzoTestClient;
 
 
 public class MyHybridsimRunner {
@@ -50,7 +50,7 @@ public class MyHybridsimRunner {
 
         @Override
         public void run() {
-            HybridsimTestClient.main(null);
+            HybridsimDaganzoTestClient.main(null);
         }
     }
 }
