@@ -14,6 +14,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.agents.PhysicalObject;
 import org.cacrowd.casim.pedca.context.Context;
@@ -25,6 +26,8 @@ import java.util.Queue;
 
 public class SimpleTransitionHandler implements TransitionHandler {
 
+    private static final Logger log = Logger.getLogger(SimpleAreaTransitionHandler.class);
+
     private final Queue<Agent> scheduledForDeparture = new LinkedList<>();
     //    private final Queue<Agent> scheduledForArrival = new LinkedList<>();
     Context context;
@@ -35,7 +38,7 @@ public class SimpleTransitionHandler implements TransitionHandler {
 
     @Override
     public void step(double time) {
-        context.getPopulation().getPedestrians().removeIf(a -> a.isAboutToLeave() && a.delete());
+        context.getPopulation().getPedestriansMap().entrySet().removeIf(a -> a.getValue().isAboutToLeave() && a.getValue().delete());
 
         while (scheduledForDeparture.peek() != null) {
             Agent peek = scheduledForDeparture.peek();
@@ -44,8 +47,10 @@ public class SimpleTransitionHandler implements TransitionHandler {
             GridCell<PhysicalObject> gp = context.getPedestrianGrid().get(pos);
 
             if (gp.size() == 0) {
-                context.getPopulation().addPedestrian(peek);
-                context.getPedestrianGrid().addPedestrian(pos, peek);
+                if (context.getPopulation().addPedestrian(peek)) {
+                    context.getPedestrianGrid().addPedestrian(pos, peek);
+                }
+                log.warn("Agent with ID: " + peek.getID() + " already exist. Agent will not added to simulation.");
                 scheduledForDeparture.poll();
             } else {
                 break;
@@ -58,11 +63,11 @@ public class SimpleTransitionHandler implements TransitionHandler {
         this.scheduledForDeparture.add(a);
     }
 
-    @Override
-    public void scheduleForArrival(Agent a) {
-//        this.scheduledForArrival.add(a);
-        
-    }
+//    @Override
+//    public void scheduleForArrival(Agent a) {
+////        this.scheduledForArrival.add(a);
+//
+//    }
 
     @Override
     public void init() {

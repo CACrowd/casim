@@ -14,28 +14,38 @@
 
 package org.cacrowd.casim.pedca.agents;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ActivePopulation {
-    private LinkedList<Agent> pedestrians;
+    private Map<Integer, Agent> pedestrians;
 
     public ActivePopulation() {
-        pedestrians = new LinkedList<Agent>();
+        pedestrians = new LinkedHashMap<>();
     }
 
-    public void addPedestrian(Agent pedestrian) {
-        pedestrians.add(pedestrian);
+    public boolean addPedestrian(Agent a) {
+        if (pedestrians.containsKey(a.getID())) {
+            return false;
+        }
+        pedestrians.put(a.getID(), a);
+        return true;
     }
 
-    public void remove(Agent pedestrian) {
-        pedestrians.remove(pedestrian);
+    public void remove(Agent a) {
+        pedestrians.remove(a.getID());
     }
 
-    public Agent getPedestrian(int index) {
-        return pedestrians.get(index);
+//    public Agent getPedestrian(int index) {
+//        return pedestrians.get(index);
+//    }
+
+    public Collection<Agent> getPedestrians() {
+        return pedestrians.values();
     }
 
-    public LinkedList<Agent> getPedestrians() {
+    public Map<Integer, Agent> getPedestriansMap() {
         return pedestrians;
     }
 
@@ -45,5 +55,9 @@ public class ActivePopulation {
 
     public boolean isEmpty() {
         return pedestrians.size() == 0;
+    }
+
+    public Agent remove(int id) {
+        return pedestrians.remove(id);
     }
 }

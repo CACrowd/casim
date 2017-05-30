@@ -24,15 +24,15 @@ package org.cacrowd.casim.hybridsim.engine;
 //
 /****************************************************************************/
 
-import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.engine.TransitionHandler;
-
-import java.util.List;
+import org.cacrowd.casim.proto.HybridSimProto;
 
 /**
  * Created by laemmel on 30.05.17.
  */
 public interface HybridTransitionHandler extends TransitionHandler {
 
-    List<Agent> retrieveArrivedAgents();
+    HybridSimProto.Agents queryRetrievableAgents();
+
+    void confirmRetrievedAgents(HybridSimProto.Agents confirmed);
 }

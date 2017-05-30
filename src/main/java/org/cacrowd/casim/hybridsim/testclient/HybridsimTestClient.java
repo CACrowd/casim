@@ -18,6 +18,7 @@ import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.proto.HybridSimProto;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class HybridsimTestClient {
@@ -27,29 +28,37 @@ public class HybridsimTestClient {
 
         HybridSimProto.Scenario sc = createScenario();
 
-//        VisualizerDummyEngine vis = new VisualizerDummyEngine();
-//        vis.drawEnvironment(sc);
-
 
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(sc);
 
-        List<HybridSimProto.Agent> agents = generateAgents();
-        for (HybridSimProto.Agent a : agents) {
-            client.getBlockingStub().transferAgent(a);
-        }
+        Iterator<HybridSimProto.Agent> it = generateAgents().iterator();
 
 
         HybridSimProto.LeftClosedRightOpenTimeInterval.Builder tb = HybridSimProto.LeftClosedRightOpenTimeInterval.newBuilder();
-        double incr = .1;
+
+
+        double incr = .3;
         for (double time = 0; time < 10000.; time += incr) {
+            //transfer some agents (e.g. 4 at most)
+            for (int i = 0; i < 4 && it.hasNext(); i++) {
+                client.getBlockingStub().transferAgent(it.next());
+            }
+
+            //simulate one step (might result in several substeps in casim)
             tb.setFromTimeIncluding(time);
             tb.setToTimeExcluding(time + incr);
             client.getBlockingStub().simulatedTimeInerval(tb.build());
 
+            //receive trajectories and do something meaningful with them
             HybridSimProto.Trajectories trajectories = client.getBlockingStub().receiveTrajectories(HybridSimProto.Empty.getDefaultInstance());
-//            vis.drawTrajectories(trajectories);
-//            vis.updateTime(time);
+
+            //check whether there are agents who are ready to be retrieved
+            HybridSimProto.Agents abouteToLeave = client.getBlockingStub().queryRetrievableAgents(HybridSimProto.Empty.getDefaultInstance());
+
+            //inform casim which agents are accepted for retrieval (e.g. 3 at most)
+            List<HybridSimProto.Agent> confirmed = abouteToLeave.getAgentsList().subList(0, Math.min(3, abouteToLeave.getAgentsList().size()));
+            client.getBlockingStub().confirmRetrievedAgents(HybridSimProto.Agents.newBuilder().addAllAgents(confirmed).build());
         }
 
     }

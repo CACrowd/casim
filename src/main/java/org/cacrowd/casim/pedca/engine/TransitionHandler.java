@@ -22,7 +22,7 @@ public interface TransitionHandler {
 
     void scheduleForDeparture(Agent a);
 
-    void scheduleForArrival(Agent a);
+//    void scheduleForArrival(Agent a);
 
     void init();
 }

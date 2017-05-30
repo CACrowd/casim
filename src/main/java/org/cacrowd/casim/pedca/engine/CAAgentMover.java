@@ -40,8 +40,7 @@ public class CAAgentMover implements AgentMover {
     public void step(double now) {
         Constants.stopOnStairs = !Constants.stopOnStairs;
         //		stairs = !stairs;
-        for (int index = 0; index < population.size(); index++) {
-            Agent pedestrian = population.getPedestrian(index);
+        for (Agent pedestrian : population.getPedestrians()) {
             if (pedestrian.isArrived()) {
                 //Log.log(pedestrian.toString()+" Exited.");
 //                delete(pedestrian);

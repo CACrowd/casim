@@ -14,6 +14,7 @@
 
 package org.cacrowd.casim.pedca.engine;
 
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.Agent;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
@@ -22,6 +23,9 @@ import org.cacrowd.casim.pedca.utility.CASimRandom;
 import java.util.*;
 
 public class SimpleTransitionArea implements TransitionArea {
+
+    private static final Logger log = Logger.getLogger(SimpleAreaTransitionHandler.class);
+
     private final Context context;
     public List<GridPoint> pointList = new ArrayList<>();
 
@@ -73,9 +77,13 @@ public class SimpleTransitionArea implements TransitionArea {
         for (GridPoint gp : this.pointList) {
             if (this.context.getPedestrianGrid().get(gp).size() == 0) {
 
-                cand.enterPedestrianGrid(gp);
-                context.getPopulation().addPedestrian(cand);
-                return true;
+                if (context.getPopulation().addPedestrian(cand)) {
+                    cand.enterPedestrianGrid(gp);
+                    return true;
+                }
+                log.warn("Agent with ID: " + cand.getID() + " already exist. Agent will not added to simulation.");
+
+                return false;
             }
         }
         return false;

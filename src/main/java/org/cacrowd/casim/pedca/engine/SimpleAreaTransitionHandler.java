@@ -91,9 +91,9 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
             ta.scheduleDeparture(a);
         }
 
-        Iterator<Agent> it = context.getPopulation().getPedestrians().iterator();
+        Iterator<Map.Entry<Integer, Agent>> it = context.getPopulation().getPedestriansMap().entrySet().iterator();
         while (it.hasNext()) {
-            Agent cand = it.next();
+            Agent cand = it.next().getValue();
             if (cand.isAboutToLeave()) {
                 context.getPedestrianGrid().removePedestrian(cand.getPosition(), cand);
                 it.remove();
@@ -110,11 +110,11 @@ public class SimpleAreaTransitionHandler implements TransitionHandler {
 
     }
 
-    @Override
-    public void scheduleForArrival(Agent a) {
+//    @Override
+//    public void scheduleForArrival(Agent a) {
 //        log.info(a.getID());
-        this.scheduledArrivals.add(a);
-    }
+//        this.scheduledArrivals.add(a);
+//    }
 
     public Map<GridPoint, TransitionArea> getTransitionAreas() {
         return gridPointAreaMap;

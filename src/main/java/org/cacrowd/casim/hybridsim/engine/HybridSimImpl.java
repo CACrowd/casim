@@ -70,12 +70,29 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     }
 
     @Override
-    public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
-        log.info("retrieveAgents called");
-        HybridSimProto.Agents resp = engine.retrieveArrivedAgents();
+    public void queryRetrievableAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
+        HybridSimProto.Agents resp = engine.getRetrievableAgents();
+
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void confirmRetrievedAgents(HybridSimProto.Agents request, StreamObserver<HybridSimProto.Empty> responseObserver) {
+        engine.confirmRetrievedAgents(request);
+
+        HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+    }
+
+    //    @Override
+//    public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
+//        log.info("retrieveAgents called");
+//        HybridSimProto.Agents resp = engine.retrieveArrivedAgents();
+//        responseObserver.onNext(resp);
+//        responseObserver.onCompleted();
+//    }
 //
 //        @Override
 //        public void shutdown(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Empty> responseObserver) {

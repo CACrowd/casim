@@ -20,12 +20,15 @@ option java_package = "org.cacrowd.casim.proto";
 option java_outer_classname = "HybridSimProto";
 
 service HybridSimulation {
-    rpc simulatedTimeInerval(LeftClosedRightOpenTimeInterval) returns (Empty) {}
-    rpc transferAgent(Agent) returns (Boolean) {}
-    rpc receiveTrajectories(Empty) returns (Trajectories) {}
-    rpc retrieveAgents(Empty) returns (Agents) {}
-    rpc shutdown(Empty) returns (Empty) {}
-    rpc initScenario(Scenario) returns (Empty) {}
+    rpc simulatedTimeInerval (LeftClosedRightOpenTimeInterval) returns (Empty) {}
+    rpc transferAgent (Agent) returns (Boolean) {}
+    rpc receiveTrajectories (Empty) returns (Trajectories) {}
+    rpc queryRetrievableAgents (Empty) returns (Agents) {
+    }
+    rpc confirmRetrievedAgents (Agents) returns (Empty) {
+    }
+    rpc shutdown (Empty) returns (Empty) {}
+    rpc initScenario (Scenario) returns (Empty) {}
 }
 
 

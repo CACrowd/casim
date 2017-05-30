@@ -132,10 +132,14 @@ public class HybridSimulationEngine {
         return tbs.build();
     }
 
-    public HybridSimProto.Agents retrieveArrivedAgents() {
-
-        return null;
+    public HybridSimProto.Agents getRetrievableAgents() {
+        return transitionHandler.queryRetrievableAgents();
     }
+
+    public void confirmRetrievedAgents(HybridSimProto.Agents request) {
+        transitionHandler.confirmRetrievedAgents(request);
+    }
+
 
 //    private final Rasterizer rasterizer = new Rasterizer();
 
