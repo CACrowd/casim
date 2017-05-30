@@ -32,13 +32,17 @@ A demo client-server setup is provided by the class:
 
     org.cacrowd.casim.hybridsim.run.MyHybridsimRunner
     
-## Run hybrid simulation server in docker
+## Run hybrid simulation server in DIY docker container
 **casim** server can also be run in a docker container. You can build and run the docker container by invoking
 
     docker build --rm -t casim .
     docker run casim
    
+## Run hybrid simulation server in provided docker container
+Docker builds are available via [docker hub](https://hub.docker.com/r/grgrlmml/casim/). To run **casim** in a provided docker container enter
 
+    docker pull grgrlmml/casim
+    docker run grgrlmml/casim
     
 
 
