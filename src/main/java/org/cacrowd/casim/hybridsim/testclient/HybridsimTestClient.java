@@ -14,6 +14,7 @@
 
 package org.cacrowd.casim.hybridsim.testclient;
 
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.proto.HybridSimProto;
 
@@ -23,10 +24,15 @@ import java.util.List;
 
 public class HybridsimTestClient {
 
+    private static final Logger log = Logger.getLogger(HybridsimTestClient.class);
+
     public static void main(String args[]) {
 
 
         HybridSimProto.Scenario sc = createScenario();
+
+//                VisualizerDummyEngine vis = new VisualizerDummyEngine();
+//                vis.drawEnvironment(sc);
 
 
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
@@ -39,7 +45,7 @@ public class HybridsimTestClient {
 
 
         double incr = .3;
-        for (double time = 0; time < 10000.; time += incr) {
+        for (double time = 0; time <= 1000; time += incr) {
             //transfer some agents (e.g. 4 at most)
             for (int i = 0; i < 4 && it.hasNext(); i++) {
                 client.getBlockingStub().transferAgent(it.next());
@@ -53,13 +59,23 @@ public class HybridsimTestClient {
             //receive trajectories and do something meaningful with them
             HybridSimProto.Trajectories trajectories = client.getBlockingStub().receiveTrajectories(HybridSimProto.Empty.getDefaultInstance());
 
+//            vis.drawTrajectories(trajectories);
+//            vis.updateTime(time);
+
             //check whether there are agents who are ready to be retrieved
             HybridSimProto.Agents abouteToLeave = client.getBlockingStub().queryRetrievableAgents(HybridSimProto.Empty.getDefaultInstance());
 
             //inform casim which agents are accepted for retrieval (e.g. 3 at most)
             List<HybridSimProto.Agent> confirmed = abouteToLeave.getAgentsList().subList(0, Math.min(3, abouteToLeave.getAgentsList().size()));
             client.getBlockingStub().confirmRetrievedAgents(HybridSimProto.Agents.newBuilder().addAllAgents(confirmed).build());
+
+//            if (((int)time)%100 == 0){
+//                log.info(time);
+//            }
         }
+
+        //send shutdown command
+        client.getBlockingStub().shutdown(HybridSimProto.Empty.getDefaultInstance());
 
     }
 

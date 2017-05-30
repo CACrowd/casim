@@ -31,6 +31,8 @@ public class GRPCServer {
     private int port = 9000;
 
     private void start() throws IOException {
+        hybridSim.setGRPCServer(this);
+
         /* The port on which the server should run */
         server = ServerBuilder.forPort(port)
                 .addService(hybridSim)
@@ -48,7 +50,7 @@ public class GRPCServer {
         });
     }
 
-    private void stop() {
+    public void stop() {
         if (server != null) {
             server.shutdown();
         }

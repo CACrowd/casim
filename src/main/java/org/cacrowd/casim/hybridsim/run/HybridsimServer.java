@@ -22,8 +22,11 @@ import org.cacrowd.casim.hybridsim.engine.SimpleHybridTransitionHandler;
 import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
 import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.engine.CAAgentMover;
+import org.cacrowd.casim.utility.NullObserver;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
+
+import java.awt.*;
 
 public class HybridsimServer {
 
@@ -35,7 +38,13 @@ public class HybridsimServer {
             protected void configure() {
 //                bind(Context.class).to(Context.class);
                 bind(AgentMover.class).to(CAAgentMover.class);
-                bind(SimulationObserver.class).to(VisualizerEngine.class);
+                if (GraphicsEnvironment.isHeadless()) {
+                    //headless mode (e.g. in docker environment)
+                    bind(SimulationObserver.class).to(NullObserver.class);
+                } else {
+                    bind(SimulationObserver.class).to(VisualizerEngine.class);
+                }
+
                 bind(HybridTransitionHandler.class).to(SimpleHybridTransitionHandler.class);
             }
         });
@@ -44,8 +53,6 @@ public class HybridsimServer {
         GRPCServer server = injector.getInstance(GRPCServer.class);
         server.run();
     }
-
-
 
 
 }

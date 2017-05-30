@@ -17,6 +17,7 @@ package org.cacrowd.casim.hybridsim.engine;
 import com.google.inject.Inject;
 import io.grpc.stub.StreamObserver;
 import org.apache.log4j.Logger;
+import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.proto.HybridSimulationGrpc;
 
@@ -25,6 +26,7 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     private static final Logger log = Logger.getLogger(HybridSimImpl.class);
     @Inject
     HybridSimulationEngine engine;
+    private GRPCServer server;
 
     @Override
     public void initScenario(HybridSimProto.Scenario request, StreamObserver<HybridSimProto.Empty> responseObserver) {
@@ -86,21 +88,18 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
         responseObserver.onCompleted();
     }
 
-    //    @Override
-//    public void retrieveAgents(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Agents> responseObserver) {
-//        log.info("retrieveAgents called");
-//        HybridSimProto.Agents resp = engine.retrieveArrivedAgents();
-//        responseObserver.onNext(resp);
-//        responseObserver.onCompleted();
-//    }
-//
-//        @Override
-//        public void shutdown(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Empty> responseObserver) {
-//            log.info("shutdown called");
-//            HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
-//            responseObserver.onNext(resp);
-//            responseObserver.onCompleted();
-//        }
+    @Override
+    public void shutdown(HybridSimProto.Empty request, StreamObserver<HybridSimProto.Empty> responseObserver) {
+        log.info("shutdown called");
+        HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+        this.server.stop();
+    }
+
+    public void setGRPCServer(GRPCServer server) {
+        this.server = server;
+    }
 //
 
 }
