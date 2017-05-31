@@ -44,6 +44,9 @@
         <repository>
             <id>ojo-snapshots</id>
             <url>http://oss.jfrog.org/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>geotools</id>
@@ -132,34 +135,37 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <target>
-                                <property name="protoc.filename" value="protoc-${protobuf.version}-${os.detected.classifier}.exe" />
-                                <property name="protoc.filepath" value="${project.build.directory}/${protoc.filename}" />
-                                <property name="grpc.filename" value="protoc-gen-grpc-java-${grpc.version}-${os.detected.classifier}.exe" />
-                                <property name="grpc.filepath" value="${project.build.directory}/${grpc.filename}" />
-                                <chmod file="${protoc.filepath}" perm="ugo+rx" />
-                                <chmod file="${grpc.filepath}" perm="ugo+rx" />
-                                <mkdir dir="${protobuf.output.directory}" />
+                                <property name="protoc.filename"
+                                          value="protoc-${protobuf.version}-${os.detected.classifier}.exe"/>
+                                <property name="protoc.filepath" value="${project.build.directory}/${protoc.filename}"/>
+                                <property name="grpc.filename"
+                                          value="protoc-gen-grpc-java-${grpc.version}-${os.detected.classifier}.exe"/>
+                                <property name="grpc.filepath" value="${project.build.directory}/${grpc.filename}"/>
+                                <chmod file="${protoc.filepath}" perm="ugo+rx"/>
+                                <chmod file="${grpc.filepath}" perm="ugo+rx"/>
+                                <mkdir dir="${protobuf.output.directory}"/>
                                 <path id="protobuf.input.filepaths.path">
                                     <fileset dir="${protobuf.input.directory}">
                                         <include name="**/*.proto"/>
                                     </fileset>
                                 </path>
-                                <pathconvert pathsep=" " property="protobuf.input.filepaths" refid="protobuf.input.filepaths.path" />
+                                <pathconvert pathsep=" " property="protobuf.input.filepaths"
+                                             refid="protobuf.input.filepaths.path"/>
                                 <exec executable="${protoc.filepath}" failonerror="true">
                                     <arg value="-I"/>
-                                    <arg value="${protobuf.input.directory}" />
-                                    <arg value="--grpc_out" />
-                                    <arg value="${protobuf.output.directory}" />
-                                    <arg value="--plugin=protoc-gen-grpc=${grpc.filepath}" />
+                                    <arg value="${protobuf.input.directory}"/>
+                                    <arg value="--grpc_out"/>
+                                    <arg value="${protobuf.output.directory}"/>
+                                    <arg value="--plugin=protoc-gen-grpc=${grpc.filepath}"/>
                                     <!--<arg value="${grpc.filename}" />-->
-                                    <arg line="${protobuf.input.filepaths}" />
+                                    <arg line="${protobuf.input.filepaths}"/>
                                 </exec>
                                 <exec executable="${protoc.filepath}" failonerror="true">
                                     <arg value="-I"/>
-                                    <arg value="${protobuf.input.directory}" />
-                                    <arg value="--java_out" />
-                                    <arg value="${protobuf.output.directory}" />
-                                    <arg line="${protobuf.input.filepaths}" />
+                                    <arg value="${protobuf.input.directory}"/>
+                                    <arg value="--java_out"/>
+                                    <arg value="${protobuf.output.directory}"/>
+                                    <arg line="${protobuf.input.filepaths}"/>
                                 </exec>
                             </target>
                         </configuration>
@@ -330,7 +336,8 @@
         <dependency>
             <groupId>org.matsim</groupId>
             <artifactId>matsim</artifactId>
-            <version>0.8.1</version>
+            <version>0.9.0-SNAPSHOT</version>
+            <!--<version>0.8.1</version>-->
         </dependency>
     </dependencies>
 </project>

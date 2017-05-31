@@ -63,10 +63,10 @@ public class HybridsimTestClient {
 //            vis.updateTime(time);
 
             //check whether there are agents who are ready to be retrieved
-            HybridSimProto.Agents abouteToLeave = client.getBlockingStub().queryRetrievableAgents(HybridSimProto.Empty.getDefaultInstance());
+            HybridSimProto.Agents aboutToLeave = client.getBlockingStub().queryRetrievableAgents(HybridSimProto.Empty.getDefaultInstance());
 
             //inform casim which agents are accepted for retrieval (e.g. 3 at most)
-            List<HybridSimProto.Agent> confirmed = abouteToLeave.getAgentsList().subList(0, Math.min(3, abouteToLeave.getAgentsList().size()));
+            List<HybridSimProto.Agent> confirmed = aboutToLeave.getAgentsList().subList(0, Math.min(3, aboutToLeave.getAgentsList().size()));
             client.getBlockingStub().confirmRetrievedAgents(HybridSimProto.Agents.newBuilder().addAllAgents(confirmed).build());
 
 //            if (((int)time)%100 == 0){

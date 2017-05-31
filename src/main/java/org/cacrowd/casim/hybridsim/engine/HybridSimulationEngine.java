@@ -100,7 +100,7 @@ public class HybridSimulationEngine {
 
     public void doSimInterval(HybridSimProto.LeftClosedRightOpenTimeInterval request) {
 
-        if (context.getTimeOfDay() <= 0) {
+        if (context.getTimeOfDay() <= 0 || context.getTimeOfDay() > request.getFromTimeIncluding()) {
             context.setTimeOfDay(request.getFromTimeIncluding());
         }
 
