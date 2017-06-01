@@ -14,7 +14,6 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.utils;
 
-import javafx.util.Pair;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
