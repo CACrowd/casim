@@ -24,6 +24,8 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
 
     @Inject
     Context context;
+    private String runInfo2 = null;
+    private String runInfo1 = null;
 
 
     @Override
@@ -51,8 +53,11 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
         String tm = Time.writeTime(t, Time.TIMEFORMAT_HHMMSS);
         String stm = "time: " + tm;
         float w = p.textWidth(stm);
-//		p.rect(5, 5, 5+15+w+round, 5+round+ts+round + ts + ts/2 + ts + ts/2,round);
-        p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round, round);
+        if (runInfo1 != null && runInfo2 != null) {
+            p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round + ts + ts / 2 + ts + ts / 2, round);
+        } else {
+            p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round, round);
+        }
 
         p.fill(255);
         p.textAlign(PConstants.LEFT);
@@ -60,10 +65,19 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
 //		double sph = this.speedup > .98 ? Math.round(this.speedup) : this.speedup;
 //		String tt = Integer.toString(ttt);
 //		String dec = Integer.toString((int)((this.speedup-ttt)*100));
-//		p.text("# 2D agents: " + this.nrAgents , x, y+ts+ts/2);
-//		p.text("fps: " + (int)(p.frameRate+.5) , x, y+ts+ts/2 + ts + ts/2);
+        if (runInfo1 != null && runInfo2 != null) {
+            p.text(runInfo1, x, y + ts + ts / 2);
+            p.text(runInfo2, x, y + ts + ts / 2 + ts + ts / 2);
+        }
 
     }
 
 
+    public void setRunInfo1(String runInfo) {
+        this.runInfo1 = runInfo;
+    }
+
+    public void setRunInfo2(String runInfo) {
+        this.runInfo2 = runInfo;
+    }
 }

@@ -20,12 +20,18 @@ import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.proto.HybridSimulationGrpc;
+import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase {
 
     private static final Logger log = Logger.getLogger(HybridSimImpl.class);
     @Inject
     HybridSimulationEngine engine;
+
+    @Inject
+    SimulationObserver simulationObserver;
+
     private GRPCServer server;
 
     @Override
@@ -95,6 +101,19 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
         this.server.stop();
+    }
+
+    @Override
+    public void runInfo(HybridSimProto.RunInfo request, StreamObserver<HybridSimProto.Empty> responseObserver) {
+
+        if (simulationObserver instanceof VisualizerEngine) {
+            ((VisualizerEngine) simulationObserver).setRunInfo1(request.getRunInfo1());
+            ((VisualizerEngine) simulationObserver).setRunInfo2(request.getRunInfo2());
+        }
+
+        HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
     }
 
     public void setGRPCServer(GRPCServer server) {

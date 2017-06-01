@@ -43,7 +43,7 @@ public class VisualizerEngine implements SimulationObserver {
 
     private final Control keyControl;
     private final double dT;
-    //    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 0);
+    //        private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 2);
     private final FrameSaver fs = null;
 
     private final Visualizer vis = new Visualizer(fs);
@@ -101,6 +101,16 @@ public class VisualizerEngine implements SimulationObserver {
 //        }
 //    }
 
+
+    public void setRunInfo1(String info) {
+        infoBox.setRunInfo1(info);
+//        this.fs.incrIteration();
+    }
+
+    public void setRunInfo2(String info) {
+        infoBox.setRunInfo2(info);
+
+    }
 
     @Override
     public void observerEnvironmentGrid() {

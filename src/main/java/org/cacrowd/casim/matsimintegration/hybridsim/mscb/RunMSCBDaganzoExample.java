@@ -17,7 +17,7 @@
  *                                                                         *
  * *********************************************************************** */
 
-package org.cacrowd.casim.matsimintegration.hybridsim.run;
+package org.cacrowd.casim.matsimintegration.hybridsim.mscb;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -58,10 +58,10 @@ import java.util.Set;
 /**
  * Created by laemmel on 09.03.16.
  */
-public class RunExample {
+public class RunMSCBDaganzoExample {
 
 
-    private static final Logger log = Logger.getLogger(RunExample.class);
+    private static final Logger log = Logger.getLogger(RunMSCBDaganzoExample.class);
     private static final IdIntMapper idIntMapper = new IdIntMapper();
     public static String REMOTE_HOST = "localhost";
     public static int REMOTE_PORT = 9000;
@@ -97,6 +97,9 @@ public class RunExample {
 
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
+        final MSCBTravelDisutility tc = new MSCBTravelDisutility();
+        final MSCBCongestionObserver obs = new MSCBCongestionObserver();
+
         Injector mobsimProviderInjector = Guice.createInjector(new com.google.inject.AbstractModule() {
             @Override
             protected void configure() {
@@ -114,6 +117,12 @@ public class RunExample {
 
             @Override
             public void install() {
+                addEventHandlerBinding().toInstance(tc);
+                addEventHandlerBinding().toInstance(obs);
+                addMobsimListenerBinding().toInstance(obs);
+                bind(MSCBTravelDisutility.class).toInstance(tc);
+                addControlerListenerBinding().toInstance(tc);
+                bindCarTravelDisutilityFactory().to(MSCBTravelDisutilityFactory.class);
                 bindEventsManager().toInstance(eventsManager);
                 addControlerListenerBinding().toProvider(new Provider<IterationStartsListener>() {
                     @Override
@@ -438,9 +447,9 @@ public class RunExample {
         c.strategy().addParam("ModuleProbability_2", "0.9");
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
-        //        c.travelTimeCalculator().setTravelTimeAggregatorType("experimental_LastMile");
+//        c.travelTimeCalculator().setTravelTimeAggregatorType("experimental_LastMile");
         c.travelTimeCalculator().setTraveltimeBinSize(60);
-         
+
         pre.setTypicalDuration(49); // needs to be geq 49, otherwise when
         // running a simulation one gets
         // "java.lang.RuntimeException: zeroUtilityDuration of type pre-evac must be greater than 0.0. Did you forget to specify the typicalDuration?"

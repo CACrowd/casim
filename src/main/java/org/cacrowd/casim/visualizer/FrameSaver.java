@@ -27,6 +27,9 @@ public class FrameSaver {
     private int frameSkip;
     private int skiped;
 
+    private long frame = 0;
+    private int it = 0;
+
     public FrameSaver(String path, String extension, int frameSkip) {
         this.path = path;
         this.extension = extension;
@@ -43,10 +46,12 @@ public class FrameSaver {
 //	}
 
 
-    public void saveFrame(PApplet p, String identifier) {
+    public void saveFrame(PApplet p) {
+
         if (this.skiped < this.frameSkip) {
             return;
         }
+        String identifier = String.format("%010d", frame++);
 //		this.await();
         this.skiped = 0;
         StringBuffer bf = new StringBuffer();
@@ -57,6 +62,9 @@ public class FrameSaver {
         bf.append(this.extension);
         p.saveFrame(bf.toString());
         this.await();
+//        if (frame > 120 && frame < 140) {
+//            frameSkip++;
+//        }
     }
 
     public boolean incrSkipped() {
@@ -68,9 +76,7 @@ public class FrameSaver {
     public void await() {
         try {
             this.barrier.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (BrokenBarrierException e) {
+        } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
         }
     }
@@ -80,5 +86,22 @@ public class FrameSaver {
 
     }
 
+    public int getSkiped() {
+        return this.frameSkip;
+    }
 
+
+    public void incrIteration() {
+        if (this.it > 0 && this.it < 5) {
+            this.frameSkip += 20;
+        }
+        if (this.it > 15) {
+            this.frameSkip -= 20;
+        }
+        if (this.it == 20) {
+            this.frameSkip = 2;
+        }
+
+        this.it++;
+    }
 }

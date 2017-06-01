@@ -15,7 +15,6 @@
 package org.cacrowd.casim.visualizer;
 
 import org.gicentre.utils.move.ZoomPan;
-import org.matsim.core.utils.misc.Time;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -216,11 +215,7 @@ public class Visualizer extends PApplet {
         }
 
         if (this.fs != null) {
-            this.fs.saveFrame(
-                    this,
-                    this.it
-                            + Time.writeTime(this.time2,
-                            Time.TIMEFORMAT_HHMMSSDOTSS));
+            this.fs.saveFrame(this);
         }
 
     }
