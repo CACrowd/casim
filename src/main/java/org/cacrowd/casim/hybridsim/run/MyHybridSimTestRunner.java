@@ -16,10 +16,10 @@ package org.cacrowd.casim.hybridsim.run;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.hybridsim.testclient.HybridsimDaganzoTestClient;
+import org.cacrowd.casim.hybridsim.testclient.HybridsimTestClient;
 
 
-public class MyHybridsimRunner {
+public class MyHybridSimTestRunner {
 
     public static void main(String[] args) throws InterruptedException {
         Logger.getRootLogger().setLevel(Level.INFO);
@@ -50,7 +50,7 @@ public class MyHybridsimRunner {
 
         @Override
         public void run() {
-            HybridsimDaganzoTestClient.main(null);
+            HybridsimTestClient.main(null);
         }
     }
 }

@@ -17,7 +17,10 @@ package org.cacrowd.casim.hybridsim.engine;
 import com.google.inject.Inject;
 import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
-import org.cacrowd.casim.pedca.engine.*;
+import org.cacrowd.casim.pedca.engine.AgentMover;
+import org.cacrowd.casim.pedca.engine.AgentsUpdater;
+import org.cacrowd.casim.pedca.engine.ConflictSolver;
+import org.cacrowd.casim.pedca.engine.GridsAndObjectsUpdater;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.markers.Destination;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
@@ -32,8 +35,6 @@ import java.util.stream.Collectors;
 
 public class HybridSimulationEngine {
 
-    @Inject
-    private AgentsGenerator agentGenerator;
     @Inject
     private AgentsUpdater agentUpdater;
     @Inject
@@ -107,15 +108,11 @@ public class HybridSimulationEngine {
         for (double time = context.getTimeOfDay(); time < request.getToTimeExcluding(); time += Constants.STEP_DURATION) {
             context.setTimeOfDay(time);
             doSimStep(time);
-            observer.observerDensityGrid();
-            observer.observePopulation();
 
-//            //for movie creation to reach a higher (pseudo) frame rate
-//            for (double visTime = time; visTime < time + Constants.STEP_DURATION; visTime += Constants.STEP_DURATION / 3) {
-//                context.setTimeOfDay(visTime);
-//                observer.observerDensityGrid();
-//                observer.observePopulation();
-//            }
+            if (context.getIteration() % 10 == 0) {
+                observer.observerDensityGrid();
+                observer.observePopulation();
+            }
         }
 
     }
@@ -147,9 +144,6 @@ public class HybridSimulationEngine {
     public void confirmRetrievedAgents(HybridSimProto.Agents request) {
         transitionHandler.confirmRetrievedAgents(request);
     }
-
-
-//    private final Rasterizer rasterizer = new Rasterizer();
 
 
 }

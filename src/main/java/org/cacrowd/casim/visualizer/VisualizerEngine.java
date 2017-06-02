@@ -43,8 +43,8 @@ public class VisualizerEngine implements SimulationObserver {
 
     private final Control keyControl;
     private final double dT;
-    //        private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 2);
-    private final FrameSaver fs = null;
+    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 4);
+//    private final FrameSaver fs = null;
 
     private final Visualizer vis = new Visualizer(fs);
     @Inject
@@ -52,6 +52,7 @@ public class VisualizerEngine implements SimulationObserver {
     @Inject
     InfoBox infoBox;
     private long lastUpdate;
+    private String runInfo0;
 
     @Inject
     public VisualizerEngine() {
@@ -100,6 +101,11 @@ public class VisualizerEngine implements SimulationObserver {
 //            vis.addRectStatic(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
 //        }
 //    }
+
+
+    public void setRunInfo0(String info) {
+        infoBox.setRunInfo0(info);
+    }
 
 
     public void setRunInfo1(String info) {
@@ -243,4 +249,6 @@ public class VisualizerEngine implements SimulationObserver {
     private static final class Color {
         int r, g, b, a;
     }
+
+
 }

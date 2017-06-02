@@ -22,6 +22,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by laemmel on 07/03/2017.
@@ -54,6 +55,7 @@ public class Visualizer extends PApplet {
     public Visualizer(FrameSaver fs) {
         this.fs = fs;
         this.fr = new JFrame();
+        this.fr.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // this.fr.setSize(1024,788);
         //		this.fr.setSize(1024, 788);
         this.fr.setSize(1280, 740);
@@ -175,6 +177,8 @@ public class Visualizer extends PApplet {
                 drawTriangle((Triangle) obj);
             } else if (obj instanceof Rect) {
                 drawRect((Rect) obj);
+            } else if (obj instanceof Polygon) {
+                drawPolygon((Polygon) obj);
             }
         }
 
@@ -492,6 +496,26 @@ public class Visualizer extends PApplet {
         p.a = a;
         p.minScale = minScale;
         addElementStatic(p);
+    }
+
+    public void addPolygon(List<Double> x, List<Double> y, int r, int g, int b,
+                           int a, int minScale) {
+        Polygon p = new Polygon();
+        float[] fx = new float[x.size()];
+        float[] fy = new float[x.size()];
+        for (int i = 0; i < x.size(); i++) {
+            fx[i] = (float) (+x.get(i));
+            fy[i] = (float) (-y.get(i));
+        }
+
+        p.x = fx;
+        p.y = fy;
+        p.r = r;
+        p.g = g;
+        p.b = b;
+        p.a = a;
+        p.minScale = minScale;
+        addElement(p);
     }
 
     public void update(double time) {

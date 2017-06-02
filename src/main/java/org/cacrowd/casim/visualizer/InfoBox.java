@@ -26,6 +26,7 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
     Context context;
     private String runInfo2 = null;
     private String runInfo1 = null;
+    private String runInfo0;
 
 
     @Override
@@ -53,8 +54,8 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
         String tm = Time.writeTime(t, Time.TIMEFORMAT_HHMMSS);
         String stm = "time: " + tm;
         float w = p.textWidth(stm);
-        if (runInfo1 != null && runInfo2 != null) {
-            p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round + ts + ts / 2 + ts + ts / 2, round);
+        if (runInfo0 != null && runInfo1 != null && runInfo2 != null) {
+            p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round + ts + ts / 2 + ts + ts / 2 + ts + ts / 2, round);
         } else {
             p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round, round);
         }
@@ -66,8 +67,9 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
 //		String tt = Integer.toString(ttt);
 //		String dec = Integer.toString((int)((this.speedup-ttt)*100));
         if (runInfo1 != null && runInfo2 != null) {
-            p.text(runInfo1, x, y + ts + ts / 2);
-            p.text(runInfo2, x, y + ts + ts / 2 + ts + ts / 2);
+            p.text(runInfo0, x, y + ts + ts / 2);
+            p.text(runInfo1, x, y + ts + ts / 2 + ts + ts / 2);
+            p.text(runInfo2, x, y + ts + ts / 2 + ts + ts / 2 + ts + ts / 2);
         }
 
     }
@@ -79,5 +81,9 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
 
     public void setRunInfo2(String runInfo) {
         this.runInfo2 = runInfo;
+    }
+
+    public void setRunInfo0(String runInfo0) {
+        this.runInfo0 = runInfo0;
     }
 }

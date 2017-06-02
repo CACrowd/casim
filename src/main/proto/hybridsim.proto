@@ -35,14 +35,22 @@ service HybridSimulation {
     rpc initScenario (Scenario) returns (Empty) {
     }
     rpc runInfo (RunInfo) returns (Empty) {
-
     }
+    rpc reset (Reset) returns (Empty) {
+    }
+
+
 }
 
 
 message RunInfo {
-    string runInfo1 = 1;
-    string runInfo2 = 2;
+    string runInfo0 = 1;
+    string runInfo1 = 2;
+    string runInfo2 = 3;
+}
+
+message Reset {
+    int32 iteration = 1;
 }
 
 message Scenario {

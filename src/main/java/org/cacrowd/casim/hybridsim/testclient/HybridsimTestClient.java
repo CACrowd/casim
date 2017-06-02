@@ -44,8 +44,8 @@ public class HybridsimTestClient {
         HybridSimProto.LeftClosedRightOpenTimeInterval.Builder tb = HybridSimProto.LeftClosedRightOpenTimeInterval.newBuilder();
 
 
-        double incr = .3;
-        for (double time = 0; time <= 1000; time += incr) {
+        double incr = 1.;
+        for (double time = 0; time <= 3600; time += incr) {
             //transfer some agents (e.g. 4 at most)
             for (int i = 0; i < 4 && it.hasNext(); i++) {
                 client.getBlockingStub().transferAgent(it.next());
@@ -86,23 +86,81 @@ public class HybridsimTestClient {
 
 
         List<HybridSimProto.Agent> ret = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            cb.setX(0.9);
-            cb.setY(1);
-            ab.setEnterLocation(cb.build());
-            cb.setX(19);
-            ab.setLeaveLocation(cb.build());
-            ab.setId(i);
-            ab.clearDests();
-            db.setId(0);
-            ab.addDests(db.build());
-            db.setId(1);
-            ab.addDests(db.build());
-            db.setId(2);
-            ab.addDests(db.build());
-            db.setId(3);
-            ab.addDests(db.build());
-            ret.add(ab.build());
+        for (int i = 0; i < 200; i++) {
+            if (i % 2 == 0) {
+                cb.setX(1.6);
+                cb.setY(16);
+                ab.setEnterLocation(cb.build());
+                cb.setX(19);
+                ab.setLeaveLocation(cb.build());
+                ab.setId(i);
+                ab.clearDests();
+                db.setId(6);
+                ab.addDests(db.build());
+                db.setId(7);
+                ab.addDests(db.build());
+                db.setId(8);
+                ab.addDests(db.build());
+                db.setId(9);
+                ab.addDests(db.build());
+                db.setId(10);
+                ab.addDests(db.build());
+                db.setId(11);
+                ab.addDests(db.build());
+                ret.add(ab.build());
+            }
+//            else if (i%3 == 0){
+//                cb.setX(1.6);
+//                cb.setY(16);
+//                ab.setLeaveLocation(cb.build());
+//                cb.setX(19);
+//                ab.setEnterLocation(cb.build());
+//                ab.setId(-i);
+//                ab.clearDests();
+//                db.setId(11);
+//                ab.addDests(db.build());
+//                db.setId(10);
+//                ab.addDests(db.build());
+//                db.setId(9);
+//                ab.addDests(db.build());
+//                db.setId(8);
+//                ab.addDests(db.build());
+//                db.setId(7);
+//                ab.addDests(db.build());
+//                db.setId(6);
+//                ab.addDests(db.build());
+//                ret.add(ab.build());
+//            }
+            else {
+                cb.setX(1.6);
+                cb.setY(16);
+                ab.setEnterLocation(cb.build());
+                cb.setX(19);
+                ab.setLeaveLocation(cb.build());
+                ab.setId(-i);
+                ab.clearDests();
+                db.setId(6);
+                ab.addDests(db.build());
+                db.setId(7);
+                ab.addDests(db.build());
+                db.setId(4);
+                ab.addDests(db.build());
+                db.setId(2);
+                ab.addDests(db.build());
+                db.setId(0);
+                ab.addDests(db.build());
+                db.setId(1);
+                ab.addDests(db.build());
+                db.setId(3);
+                ab.addDests(db.build());
+                db.setId(5);
+                ab.addDests(db.build());
+                db.setId(10);
+                ab.addDests(db.build());
+                db.setId(11);
+                ab.addDests(db.build());
+                ret.add(ab.build());
+            }
         }
         return ret;
     }
@@ -116,77 +174,258 @@ public class HybridsimTestClient {
         cb.setX(0);
         cb.setY(0);
         eb.setC0(cb.build());
-        cb.setX(20);
+        cb.setY(17.3);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+
+        eb.setC0(cb.build());
+        cb.setX(23.2);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        eb.setC0(cb.build());
+        cb.setY(0.);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        eb.setC0(cb.build());
+        cb.setX(0.);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+
+        cb.setX(8.4);
+        cb.setY(16.9);
+        eb.setC0(cb.build());
+        cb.setX(14.8);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+
+        cb.setX(8.4);
+        cb.setY(15.3);
+        eb.setC0(cb.build());
+        cb.setX(14.8);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
 
         cb.setX(0);
-        cb.setY(0);
+        cb.setY(14.9);
         eb.setC0(cb.build());
-        cb.setX(20);
+        cb.setX(3.2);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(5.7);
+        eb.setC0(cb.build());
+        cb.setX(17);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setY(14.5);
+        cb.setX(5.7);
+        eb.setC0(cb.build());
+        cb.setX(17.4);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(.5);
+        cb.setY(15.3);
+        eb.setC0(cb.build());
+        cb.setY(16.8);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(6);
+        sb.addEdges(eb.build());
+
+        cb.setX(3.2);
+        cb.setY(15.3);
+        eb.setC0(cb.build());
+        cb.setY(16.7);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(7);
+        sb.addEdges(eb.build());
+
+        cb.setX(3.6);
+        cb.setY(14.8);
+        eb.setC0(cb.build());
+        cb.setX(5.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(4);
         sb.addEdges(eb.build());
 
         cb.setX(0);
-        cb.setY(4);
+        cb.setY(14.5);
         eb.setC0(cb.build());
-        cb.setX(20);
+        cb.setX(3.2);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
 
-        cb.setX(0);
-        cb.setY(4);
+        cb.setX(5.7);
+        cb.setY(15.3);
         eb.setC0(cb.build());
+        cb.setY(16.7);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(8);
+        sb.addEdges(eb.build());
+
+        cb.setX(3.5);
         cb.setY(0);
+        eb.setC0(cb.build());
+        cb.setY(14.6);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
 
-        cb.setX(0.4);
-        cb.setY(4);
-        eb.setC0(cb.build());
+        cb.setX(.5);
         cb.setY(0);
+        eb.setC0(cb.build());
+        cb.setY(14.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(5.7);
+        cb.setY(2.5);
+        eb.setC0(cb.build());
+        cb.setY(14.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+//        cb.setX(6.1);
+//        cb.setY(2.5);
+//        eb.setC0(cb.build());
+//        cb.setY(14.6);
+//        eb.setC1(cb.build());
+//        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+//        sb.addEdges(eb.build());
+
+        cb.setX(5.7);
+        cb.setY(2.5);
+        eb.setC0(cb.build());
+        cb.setX(17.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+
+        cb.setX(5.7);
+        cb.setY(2.3);
+        eb.setC0(cb.build());
+        cb.setY(0.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(0);
         sb.addEdges(eb.build());
 
-        cb.setX(2.);
-        cb.setY(4);
+        cb.setX(5.2);
+        cb.setY(2.5);
         eb.setC0(cb.build());
-        cb.setY(0);
-        eb.setC1(cb.build());
-        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
-        eb.setId(1);
-        sb.addEdges(eb.build());
-
-        cb.setX(18.);
-        cb.setY(4);
-        eb.setC0(cb.build());
-        cb.setY(0);
+        cb.setX(3.8);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(2);
         sb.addEdges(eb.build());
 
-        cb.setX(19.6);
-        cb.setY(4);
+        cb.setX(17.6);
+        cb.setY(2.5);
         eb.setC0(cb.build());
-        cb.setY(0);
+        cb.setY(14.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(17.6);
+        cb.setY(2.3);
+        eb.setC0(cb.build());
+        cb.setY(0.5);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(1);
+        sb.addEdges(eb.build());
+
+        cb.setX(18);
+        cb.setY(2.7);
+        eb.setC0(cb.build());
+        cb.setX(19.6);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
         eb.setId(3);
         sb.addEdges(eb.build());
 
-        cb.setX(20);
+        cb.setX(20.);
         cb.setY(0);
         eb.setC0(cb.build());
-        cb.setY(4);
+        cb.setY(15);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(18);
+        cb.setY(14.9);
+        eb.setC0(cb.build());
+        cb.setX(19.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(5);
+        sb.addEdges(eb.build());
+
+        cb.setX(14.8);
+        cb.setY(14.9);
+        eb.setC0(cb.build());
+        cb.setX(17.6);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(20.);
+        cb.setY(15);
+        eb.setC0(cb.build());
+        cb.setX(23.2);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
+        sb.addEdges(eb.build());
+
+        cb.setX(17.6);
+        cb.setY(15.4);
+        eb.setC0(cb.build());
+        cb.setY(16.9);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(9);
+        sb.addEdges(eb.build());
+
+        cb.setX(20);
+        cb.setY(15.4);
+        eb.setC0(cb.build());
+        cb.setY(16.9);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(10);
+        sb.addEdges(eb.build());
+
+        cb.setX(22.5);
+        cb.setY(15.4);
+        eb.setC0(cb.build());
+        cb.setY(16.9);
+        eb.setC1(cb.build());
+        eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(11);
         sb.addEdges(eb.build());
 
         return sb.build();

@@ -12,27 +12,38 @@
  *
  */
 
-package org.cacrowd.casim.matsimintegration.hybridsim.events;
+package org.cacrowd.casim.matsimintegration.scenarios;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.matsim.core.controler.events.IterationStartsEvent;
 import org.matsim.core.controler.listener.IterationStartsListener;
 
-public class RunInfoSender implements IterationStartsListener {
+public class DaganzoExperimentRunInfoSender implements IterationStartsListener {
 
 
+    private final double bottleneckWidth;
+    private final String scenario;
     GRPCExternalClient client;
 
-    public RunInfoSender(GRPCExternalClient client) {
+    public DaganzoExperimentRunInfoSender(GRPCExternalClient client, double bottleneckWidth, String scenario) {
         this.client = client;
+        this.bottleneckWidth = bottleneckWidth;
+        this.scenario = scenario;
     }
 
     @Override
     public void notifyIterationStarts(IterationStartsEvent event) {
+
+        HybridSimProto.Reset.Builder reset = HybridSimProto.Reset.newBuilder();
+        reset.setIteration(event.getIteration());
+        client.getBlockingStub().reset(reset.build());
+
         HybridSimProto.RunInfo.Builder ri = HybridSimProto.RunInfo.newBuilder();
-        ri.setRunInfo1("width = 0.8 m");
+        ri.setRunInfo0(scenario);
+        ri.setRunInfo1("width = " + bottleneckWidth + "m");
         ri.setRunInfo2("iteration: " + event.getIteration());
         client.getBlockingStub().runInfo(ri.build());
+
     }
 }

@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 import io.grpc.stub.StreamObserver;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.grpc.GRPCServer;
+import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.proto.HybridSimulationGrpc;
 import org.cacrowd.casim.utility.SimulationObserver;
@@ -31,6 +32,9 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
 
     @Inject
     SimulationObserver simulationObserver;
+
+    @Inject
+    Context context;
 
     private GRPCServer server;
 
@@ -107,6 +111,7 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     public void runInfo(HybridSimProto.RunInfo request, StreamObserver<HybridSimProto.Empty> responseObserver) {
 
         if (simulationObserver instanceof VisualizerEngine) {
+            ((VisualizerEngine) simulationObserver).setRunInfo0(request.getRunInfo0());
             ((VisualizerEngine) simulationObserver).setRunInfo1(request.getRunInfo1());
             ((VisualizerEngine) simulationObserver).setRunInfo2(request.getRunInfo2());
         }
@@ -119,7 +124,14 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     public void setGRPCServer(GRPCServer server) {
         this.server = server;
     }
-//
 
+    @Override
+    public void reset(HybridSimProto.Reset request, StreamObserver<HybridSimProto.Empty> responseObserver) {
+        context.setIteration(request.getIteration());
+
+        HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
+        responseObserver.onNext(resp);
+        responseObserver.onCompleted();
+    }
 }
 

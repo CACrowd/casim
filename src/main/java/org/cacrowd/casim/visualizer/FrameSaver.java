@@ -86,22 +86,4 @@ public class FrameSaver {
 
     }
 
-    public int getSkiped() {
-        return this.frameSkip;
-    }
-
-
-    public void incrIteration() {
-        if (this.it > 0 && this.it < 5) {
-            this.frameSkip += 20;
-        }
-        if (this.it > 15) {
-            this.frameSkip -= 20;
-        }
-        if (this.it == 20) {
-            this.frameSkip = 2;
-        }
-
-        this.it++;
-    }
 }

@@ -30,6 +30,7 @@ public class NullObserver implements SimulationObserver {
         //intentionally empty
     }
 
+
 //    @Override
 //    public void observeTransitionAreas(Map<GridPoint, TransitionArea> areaMap) {
 //        //intentionally empty

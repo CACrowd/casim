@@ -42,6 +42,7 @@ public class Context {
     private MarkerConfiguration markerConfiguration;
     private ActivePopulation population;
     private CANetwork network;
+    private int iteration = 0;
 
     @Inject
     public Context() {
@@ -157,5 +158,13 @@ public class Context {
 
     public int getColumns() {
         return environmentGrid.getColumns();
+    }
+
+    public int getIteration() {
+        return iteration;
+    }
+
+    public void setIteration(int iteration) {
+        this.iteration = iteration;
     }
 }

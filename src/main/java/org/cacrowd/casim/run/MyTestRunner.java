@@ -38,9 +38,9 @@ import java.util.List;
 /**
  * Created by Gregor Laemmel on 16.05.2017.
  */
-public class MyDaganzoRunner {
+public class MyTestRunner {
 
-    private static final Logger log = Logger.getLogger(MyDaganzoRunner.class);
+    private static final Logger log = Logger.getLogger(MyTestRunner.class);
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
