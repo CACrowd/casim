@@ -40,7 +40,7 @@ public class DaganzoExperimentRunner {
             exit(-1);
         }
 
-        if (!args[1].equals("0.4") && !args[1].equals("0.8") && !args[1].equals("0.4")) {
+        if (!args[1].equals("0.4") && !args[1].equals("0.8") && !args[1].equals("1.2")) {
             printUsage();
             exit(-1);
         }
