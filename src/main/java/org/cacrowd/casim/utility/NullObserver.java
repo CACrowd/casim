@@ -30,6 +30,11 @@ public class NullObserver implements SimulationObserver {
         //intentionally empty
     }
 
+    @Override
+    public void reset(int iteration) {
+        //intentionally empty
+    }
+
 
 //    @Override
 //    public void observeTransitionAreas(Map<GridPoint, TransitionArea> areaMap) {

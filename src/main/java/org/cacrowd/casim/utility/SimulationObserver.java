@@ -26,6 +26,8 @@ public interface SimulationObserver {
 
     void observePopulation();
 
+    void reset(int iteration);
+
     //Debug
 //    void observeTransitionAreas(Map<GridPoint,TransitionArea> areaMap);
 }

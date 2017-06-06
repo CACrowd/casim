@@ -128,7 +128,7 @@ public class HybridSimImpl extends HybridSimulationGrpc.HybridSimulationImplBase
     @Override
     public void reset(HybridSimProto.Reset request, StreamObserver<HybridSimProto.Empty> responseObserver) {
         context.setIteration(request.getIteration());
-
+        simulationObserver.reset(request.getIteration());
         HybridSimProto.Empty resp = HybridSimProto.Empty.getDefaultInstance();
         responseObserver.onNext(resp);
         responseObserver.onCompleted();

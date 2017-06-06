@@ -42,9 +42,15 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
         int round = 10;
 
 
-        float ts = 18;
+        float ts = 36;
         float x = 5 + round;
         float y = 5 + round + ts;
+
+        p.pushMatrix();
+        int height = p.height;
+        int width = p.width;
+
+
         p.textSize(ts);
 //		PVector cv = p.zoomer.getCoordToDisp(new PVector((float)(li.tx+p.offsetX),(float)-(li.ty+p.offsetY)));
 //		p.fill(0,0,0,255);
@@ -54,7 +60,9 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
         String tm = Time.writeTime(t, Time.TIMEFORMAT_HHMMSS);
         String stm = "time: " + tm;
         float w = p.textWidth(stm);
+
         if (runInfo0 != null && runInfo1 != null && runInfo2 != null) {
+            p.translate(width / 2.f - (5 + 15 + w + round) / 2.f, height / 2 - (y + ts + ts / 2 + ts + ts / 2 + ts + ts / 2) / 2.f);
             p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round + ts + ts / 2 + ts + ts / 2 + ts + ts / 2, round);
         } else {
             p.rect(5, 5, 5 + 15 + w + round, 5 + round + ts + round, round);
@@ -71,6 +79,8 @@ public class InfoBox implements VisDebuggerAdditionalDrawer, VisDebuggerOverlay 
             p.text(runInfo1, x, y + ts + ts / 2 + ts + ts / 2);
             p.text(runInfo2, x, y + ts + ts / 2 + ts + ts / 2 + ts + ts / 2);
         }
+
+        p.popMatrix();
 
     }
 

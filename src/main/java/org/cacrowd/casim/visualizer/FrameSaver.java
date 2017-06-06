@@ -16,6 +16,7 @@ package org.cacrowd.casim.visualizer;
 
 import processing.core.PApplet;
 
+import java.io.File;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -28,7 +29,7 @@ public class FrameSaver {
     private int skiped;
 
     private long frame = 0;
-    private int it = 0;
+    private String it = "";
 
     public FrameSaver(String path, String extension, int frameSkip) {
         this.path = path;
@@ -56,6 +57,8 @@ public class FrameSaver {
         this.skiped = 0;
         StringBuffer bf = new StringBuffer();
         bf.append(this.path);
+        bf.append("/");
+        bf.append(it);
         bf.append("/");
         bf.append(identifier);
         bf.append(".");
@@ -86,4 +89,14 @@ public class FrameSaver {
 
     }
 
+    public void setIteration(int iteration) {
+        String strIt = String.format("%010d", iteration);
+        StringBuffer bf = new StringBuffer();
+        bf.append(this.path);
+        bf.append("/");
+        bf.append(strIt);
+        new File(bf.toString()).mkdirs();
+        frame = 0;
+        this.it = strIt;
+    }
 }

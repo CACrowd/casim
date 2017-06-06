@@ -58,7 +58,8 @@ public class Visualizer extends PApplet {
         this.fr.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // this.fr.setSize(1024,788);
         //		this.fr.setSize(1024, 788);
-        this.fr.setSize(1280, 740);
+//        this.fr.setSize(1280, 740);
+        this.fr.setSize(950, 740);
         // this.fr.setSize(720,740);
         JPanel compositePanel = new JPanel();
         compositePanel.setLayout(new OverlayLayout(compositePanel));
@@ -83,7 +84,8 @@ public class Visualizer extends PApplet {
     @Override
     public void setup() {
         //		size(1024, 768);
-        size(1280, 720);
+//        size(1280, 720);
+        size(950, 720);
         // size(720,720);
         background(0);
 

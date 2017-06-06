@@ -43,16 +43,15 @@ public class VisualizerEngine implements SimulationObserver {
 
     private final Control keyControl;
     private final double dT;
-    //    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 4);
-    private final FrameSaver fs = null;
-
+    private final FrameSaver fs = new FrameSaver("/Users/laemmel/tmp/vis/", "png", 4);
+    //    private final FrameSaver fs = null;
+//
     private final Visualizer vis = new Visualizer(fs);
     @Inject
     Context context;
     @Inject
     InfoBox infoBox;
     private long lastUpdate;
-    private String runInfo0;
 
     @Inject
     public VisualizerEngine() {
@@ -201,6 +200,11 @@ public class VisualizerEngine implements SimulationObserver {
         double time = context.getTimeOfDay();
         update(time);
 
+    }
+
+    @Override
+    public void reset(int iteration) {
+        fs.setIteration(iteration);
     }
 
 
