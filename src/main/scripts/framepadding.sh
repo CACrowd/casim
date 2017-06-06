@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#/bin/bash
 DIR=`pwd`
 cd nash04
-for i in 0*; do
+for i in 0*100; do
 	cnt1=`ls $i | wc -l`
 	if [ $cnt1 -le 0 ]; then
 		continue
@@ -10,7 +10,7 @@ for i in 0*; do
 	cd nash08
 	cnt2=`ls $i | wc -l`
 
-	if [ $cnt1 -lt $cnt2 ]; then
+	if [ $cnt1 -le $cnt2 ]; then
 		cnt=$cnt2
 	else
 		cnt=$cnt1
@@ -26,7 +26,7 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
 			ln -s $ref $i/$padding
 		done
@@ -41,7 +41,7 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr  $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
                         ln -s $ref $i/$padding
 		done
@@ -56,7 +56,7 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr  $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
                         ln -s $ref $i/$padding
 		done
@@ -71,7 +71,7 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr  $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
                         ln -s $ref $i/$padding
 		done
@@ -86,7 +86,7 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr  $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
                         ln -s $ref $i/$padding
 		done
@@ -101,11 +101,11 @@ for i in 0*; do
 		tmp=$(($curr - 1))
 		ref=$(printf %010d $tmp).png
 		echo $ref
-		for j in `seq $curr $cnt`; do
+		for j in `seq $curr  $(($cnt - 1))`; do
 			padding=$(printf %010d $j).png
                         ln -s $ref $i/$padding
 		done
 	fi
 	echo "========================="	
-
+	sleep 1
 done
