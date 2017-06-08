@@ -29,6 +29,7 @@ import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
 import org.cacrowd.casim.utility.rasterizer.Rasterizer;
+import org.cacrowd.casim.utility.rasterizer.ScanlineRasterizer;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.List;
@@ -57,16 +58,16 @@ public class HybridSimulationEngine {
         List<Edge> res = request.getEdgesList().stream().map(he -> {
 
 
-            Rasterizer.EdgeType type;
+            ScanlineRasterizer.EdgeType type;
             switch (he.getType()) {
                 case OBSTACLE:
-                    type = Rasterizer.EdgeType.WALL;
+                    type = ScanlineRasterizer.EdgeType.WALL;
                     break;
                 case TRANSITION:
-                    type = Rasterizer.EdgeType.TRANSITION_INTERNAL;
+                    type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
                     break;
                 default:
-                    type = Rasterizer.EdgeType.WALL;
+                    type = ScanlineRasterizer.EdgeType.WALL;
             }
             return new Edge(he.getId(), he.getC0().getX(), he.getC0().getY(),
                     he.getC1().getX(), he.getC1().getY(), type);

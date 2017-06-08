@@ -25,13 +25,13 @@ public final class Edge {
 
     private final double x0, x1, y0, y1;
     private final double dx;
-    private final Rasterizer.EdgeType edgeType;
+    private final ScanlineRasterizer.EdgeType edgeType;
     private final int id;
     private double currentX;
 
     private boolean rightOfWallOpen = true;
 
-    public Edge(int id, double x0, double y0, double x1, double y1, Rasterizer.EdgeType edgeType) {
+    public Edge(int id, double x0, double y0, double x1, double y1, ScanlineRasterizer.EdgeType edgeType) {
         this.id = id;
         this.edgeType = edgeType;
         if (y0 < y1) {
@@ -79,7 +79,7 @@ public final class Edge {
         return this.x1;
     }
 
-    public Rasterizer.EdgeType getEdgeType() {
+    public ScanlineRasterizer.EdgeType getEdgeType() {
         return this.edgeType;
     }
 
