@@ -29,6 +29,8 @@ public final class Edge {
     private final int id;
     private double currentX;
 
+    private boolean rightOfWallOpen = true;
+
     public Edge(int id, double x0, double y0, double x1, double y1, Rasterizer.EdgeType edgeType) {
         this.id = id;
         this.edgeType = edgeType;
@@ -42,12 +44,16 @@ public final class Edge {
             this.y1 = y0;
             this.x0 = x1;
             this.y0 = y1;
+            rightOfWallOpen = false;
         }
 
         dx = Constants.CELL_SIZE * (this.x1 - this.x0) / (this.y1 - this.y0);
         currentX = this.x0;
     }
 
+    public boolean isRightOfWallOpen() {
+        return rightOfWallOpen;
+    }
 
     public double getY0() {
         return this.y0;

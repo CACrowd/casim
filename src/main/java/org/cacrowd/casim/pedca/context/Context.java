@@ -124,6 +124,10 @@ public class Context {
         return environmentGrid;
     }
 
+    public void setEnvironmentGrid(EnvironmentGrid environmentGrid) {
+        this.environmentGrid = environmentGrid;
+    }
+
     public FloorFieldsGrid getFloorFieldsGrid() {
         return floorFieldsGrid;
     }

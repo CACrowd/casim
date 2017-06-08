@@ -26,6 +26,7 @@ import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.utility.rasterizer.Edge;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -147,7 +148,7 @@ public class VisualizerEngine implements SimulationObserver {
                     a = 128;
                     fill = true;
                 }
-                vis.addRectStatic(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
+                vis.addRect(c.getX() - Constants.CELL_SIZE / 2, c.getY() + Constants.CELL_SIZE / 2, Constants.CELL_SIZE, Constants.CELL_SIZE, r, g, b, a, 0, fill);
 //                vis.addTextStatic(c.getX(), c.getY(), "(" + col + " " + row + ")", 150);
             }
         }
@@ -155,6 +156,11 @@ public class VisualizerEngine implements SimulationObserver {
         vis.update(0);
 
     }
+
+//    @Override
+//     public void observerDynamicEnvironmentGrid() {
+//
+//     }
 
     @Override
     public void observerDensityGrid() {
@@ -244,6 +250,10 @@ public class VisualizerEngine implements SimulationObserver {
 
         vis.addCircle(c.getX(), c.getY(), .2f, color.r, color.g, color.b, color.a, 0, true);
 
+    }
+
+    public void drawStatic(Edge edge) {
+        vis.addLineStatic((float) edge.getX0(), (float) edge.getY0(), (float) edge.getX1(), (float) edge.getY1(), 255, 0, 0, 255, 0);
     }
 
     private static final class Color {

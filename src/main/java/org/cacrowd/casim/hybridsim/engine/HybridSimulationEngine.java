@@ -29,6 +29,7 @@ import org.cacrowd.casim.proto.HybridSimProto;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
 import org.cacrowd.casim.utility.rasterizer.Rasterizer;
+import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,10 +73,15 @@ public class HybridSimulationEngine {
 
         }).collect(Collectors.toList());
 
+        if (observer instanceof VisualizerEngine) {
+            VisualizerEngine vis = (VisualizerEngine) observer;
+            res.stream().forEach(vis::drawStatic);
+        }
+
         rasterizer.buildContext(res);
+        observer.observerEnvironmentGrid();
         transitionHandler.init();
         activeObjectsUpdater.init();
-        observer.observerEnvironmentGrid();
     }
 
     public boolean tryAddAgent(HybridSimProto.Agent request) {

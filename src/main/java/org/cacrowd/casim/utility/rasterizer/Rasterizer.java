@@ -46,6 +46,10 @@ public class Rasterizer {
     private final Map<Integer, List<GridPoint>> protoDestinations = new LinkedHashMap<>();
     @Inject
     Context context;
+
+    @Inject
+    SimulationObserver observer;
+
     private EnvironmentGrid grid;
     private MarkerConfiguration markerConfiguration;
 
@@ -110,15 +114,16 @@ public class Rasterizer {
             e.expandToInclude(edge.getX1(), edge.getY1());
         });
 
-        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 1;
-        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 1;
-        this.grid = new EnvironmentGrid(rows, cols, 0, 0);
+        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 2;
+        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 2;
+        this.grid = new EnvironmentGrid(rows, cols, e.getMinX(), e.getMinY());
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 grid.setCellValue(row, col, -1);
             }
         }
 
+        context.setEnvironmentGrid(grid);
         rasterize(edges);
         generateDestinations();
         context.initialize(grid, markerConfiguration);
@@ -162,6 +167,12 @@ public class Rasterizer {
             activeEdgeTable.sort((o1, o2) -> o1.getCurrentX() < o2.getCurrentX() ? -1 : 1);
             setPixels(activeEdgeTable, row);
 
+            observer.observerEnvironmentGrid();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         traceEdges(edges);
@@ -347,7 +358,7 @@ public class Rasterizer {
         Iterator<Edge> it = edgeTable.iterator();
         while (it.hasNext()) {
             Edge next = it.next();
-            if (next.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
+            if (next.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {// ||next.getEdgeType() == EdgeType.TRANSITION ) {
                 it.remove();
             } else {
                 int row1 = this.grid.y2Row(next.getY0());
@@ -375,9 +386,14 @@ public class Rasterizer {
             int nextCol = this.grid.x2Col(second.getCurrentX());
             for (int i = col; i <= nextCol; i++) {
 
-                if (this.grid.getCellValue(row, i) == -1) {
+                if (first.isRightOfWallOpen() || first.getEdgeType() == EdgeType.TRANSITION || second.getEdgeType() == EdgeType.TRANSITION) {
                     this.grid.setCellValue(row, i, 0);
                 }
+
+
+//                if (this.grid.getCellValue(row, i) == -1) {
+//                    this.grid.setCellValue(row, i, 0);
+//                }
             }
             if (it.hasNext()) {
                 first = it.next();
