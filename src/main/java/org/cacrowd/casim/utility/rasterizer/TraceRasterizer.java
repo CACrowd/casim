@@ -62,7 +62,7 @@ public class TraceRasterizer implements Rasterizer {
             case WALL:
                 return -1;
             case TRANSITION:
-                return -3;
+                return 0;
             case TRANSITION_INTERNAL:
                 return -2;
             default:
@@ -204,11 +204,13 @@ public class TraceRasterizer implements Rasterizer {
             grid.setCellValue(row, col, colorCode);
             if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {
                 if (oldCol != col && oldRow != row) {
-                    grid.setCellValue(row, oldCol, colorCode);
                     protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(oldCol, row));
                 }
                 protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, row));
 
+            }
+            if (oldCol != col && oldRow != row) {
+                grid.setCellValue(row, oldCol, colorCode);
             }
             oldRow = row;
             oldCol = col;
@@ -238,11 +240,13 @@ public class TraceRasterizer implements Rasterizer {
             grid.setCellValue(row, col, colorCode);
             if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {
                 if (oldCol != col && oldRow != row) {
-                    grid.setCellValue(oldRow, col, colorCode);
                     protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, oldRow));
                 }
                 protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, row));
 
+            }
+            if (oldCol != col && oldRow != row) {
+                grid.setCellValue(oldRow, col, colorCode);
             }
             oldRow = row;
             oldCol = col;

@@ -25,6 +25,8 @@ import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.engine.CAAgentMover;
 import org.cacrowd.casim.utility.NullObserver;
 import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.utility.rasterizer.Rasterizer;
+import org.cacrowd.casim.utility.rasterizer.ScanlineRasterizer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,6 +51,7 @@ public class TestHybridSim {
                 bind(AgentMover.class).to(CAAgentMover.class);
                 bind(SimulationObserver.class).to(NullObserver.class);
                 bind(HybridTransitionHandler.class).to(SimpleHybridTransitionHandler.class);
+                bind(Rasterizer.class).to(ScanlineRasterizer.class);
             }
         });
 

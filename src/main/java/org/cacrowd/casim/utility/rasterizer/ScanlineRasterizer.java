@@ -15,10 +15,7 @@
 package org.cacrowd.casim.utility.rasterizer;
 
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.vividsolutions.jts.geom.Envelope;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.context.Context;
@@ -28,8 +25,6 @@ import org.cacrowd.casim.pedca.environment.markers.MarkerConfiguration;
 import org.cacrowd.casim.pedca.environment.markers.MarkerConfigurationImpl;
 import org.cacrowd.casim.pedca.environment.markers.TacticalDestination;
 import org.cacrowd.casim.pedca.utility.Constants;
-import org.cacrowd.casim.utility.SimulationObserver;
-import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.*;
 
@@ -42,20 +37,16 @@ import static org.cacrowd.casim.scenarios.EnvironmentGenerator.generateCoordinat
 public class ScanlineRasterizer implements Rasterizer {
 
 
-    private static final Logger log = Logger.getLogger(ScanlineRasterizer.class);
+    private static final Logger log = Logger.getLogger(Rasterizer.class);
     private final Map<Integer, List<GridPoint>> protoDestinations = new LinkedHashMap<>();
     @Inject
     Context context;
-
-    @Inject
-    SimulationObserver observer;
-
     private EnvironmentGrid grid;
     private MarkerConfiguration markerConfiguration;
 
-//    public ScanlineRasterizer(EnvironmentGrid grid) {
-//        this.grid = grid;
-//    }
+    //    public Rasterizer(EnvironmentGrid grid) {
+    //        this.grid = grid;
+    //    }
 
     public static int getColorCode(EdgeType edgeType) {
         switch (edgeType) {
@@ -70,42 +61,6 @@ public class ScanlineRasterizer implements Rasterizer {
         }
     }
 
-    public static void main(String[] args) {
-        LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 0, 2.4, ScanlineRasterizer.EdgeType.WALL);
-        et.add(e0);
-        Edge e0a = new Edge(1, 0.4, 0.41, 0.4, 1.99, EdgeType.TRANSITION_INTERNAL);
-        et.add(e0a);
-
-        Edge e0b = new Edge(2, 2., 0.41, 2., 1.99, EdgeType.TRANSITION_INTERNAL);
-        et.add(e0b);
-
-        Edge e0c = new Edge(3, 14., 0.41, 14., 1.99, EdgeType.TRANSITION_INTERNAL);
-        et.add(e0c);
-
-        Edge e0d = new Edge(4, 15.6, 0.41, 15.6, 1.99, EdgeType.TRANSITION_INTERNAL);
-        et.add(e0d);
-
-        Edge e1 = new Edge(0, 0, 2.4, 16, 2.4, ScanlineRasterizer.EdgeType.WALL);
-        et.add(e1);
-        Edge e2 = new Edge(0, 16, 2.4, 16, 0, ScanlineRasterizer.EdgeType.WALL);
-        et.add(e2);
-        Edge e3 = new Edge(0, 16, 0, 0, 0, ScanlineRasterizer.EdgeType.WALL);
-        et.add(e3);
-
-        Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SimulationObserver.class).to(VisualizerEngine.class);
-            }
-        });
-
-        injector.getInstance(ScanlineRasterizer.class).buildContext(et);
-
-        injector.getInstance(SimulationObserver.class).observerEnvironmentGrid();
-
-    }
-
     public void buildContext(Collection<Edge> edges) {
 
         Envelope e = new Envelope();
@@ -114,16 +69,15 @@ public class ScanlineRasterizer implements Rasterizer {
             e.expandToInclude(edge.getX1(), edge.getY1());
         });
 
-        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 2;
-        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 2;
-        this.grid = new EnvironmentGrid(rows, cols, e.getMinX(), e.getMinY());
+        int rows = (int) (e.getHeight() / Constants.CELL_SIZE) + 1;
+        int cols = (int) (e.getWidth() / Constants.CELL_SIZE) + 1;
+        this.grid = new EnvironmentGrid(rows, cols, 0, 0);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 grid.setCellValue(row, col, -1);
             }
         }
 
-        context.setEnvironmentGrid(grid);
         rasterize(edges);
         generateDestinations();
         context.initialize(grid, markerConfiguration);
@@ -167,12 +121,6 @@ public class ScanlineRasterizer implements Rasterizer {
             activeEdgeTable.sort((o1, o2) -> o1.getCurrentX() < o2.getCurrentX() ? -1 : 1);
             setPixels(activeEdgeTable, row);
 
-            observer.observerEnvironmentGrid();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
 
         traceEdges(edges);
@@ -293,9 +241,9 @@ public class ScanlineRasterizer implements Rasterizer {
 
     private void closeTransition(int col, int row, int colorCode) {
         if (!connectsToWall(col, row)) {
-//            if (col == 0 && row == 24) {
-//                System.out.println("Gotcha!");
-//            }
+            //            if (col == 0 && row == 24) {
+            //                System.out.println("Gotcha!");
+            //            }
             if (connectsToWall(col - 1, row)) {
                 grid.setCellValue(row, col - 1, colorCode);
                 return;
@@ -323,9 +271,9 @@ public class ScanlineRasterizer implements Rasterizer {
             return false;
         }
 
-//        if (grid.getCellValue(row,col) == Constants.ENV_OBSTACLE) {
-//            return true;
-//        }
+        //        if (grid.getCellValue(row,col) == Constants.ENV_OBSTACLE) {
+        //            return true;
+        //        }
 
         if (col == 0) {
             return false;
@@ -358,7 +306,7 @@ public class ScanlineRasterizer implements Rasterizer {
         Iterator<Edge> it = edgeTable.iterator();
         while (it.hasNext()) {
             Edge next = it.next();
-            if (next.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {// ||next.getEdgeType() == EdgeType.TRANSITION ) {
+            if (next.getEdgeType() == EdgeType.TRANSITION_INTERNAL) {
                 it.remove();
             } else {
                 int row1 = this.grid.y2Row(next.getY0());
@@ -386,14 +334,9 @@ public class ScanlineRasterizer implements Rasterizer {
             int nextCol = this.grid.x2Col(second.getCurrentX());
             for (int i = col; i <= nextCol; i++) {
 
-                if (first.isRightOfWallOpen() || first.getEdgeType() == EdgeType.TRANSITION || second.getEdgeType() == EdgeType.TRANSITION) {
+                if (this.grid.getCellValue(row, i) == -1) {
                     this.grid.setCellValue(row, i, 0);
                 }
-
-
-//                if (this.grid.getCellValue(row, i) == -1) {
-//                    this.grid.setCellValue(row, i, 0);
-//                }
             }
             if (it.hasNext()) {
                 first = it.next();

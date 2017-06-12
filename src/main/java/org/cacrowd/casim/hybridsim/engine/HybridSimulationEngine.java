@@ -30,7 +30,6 @@ import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
 import org.cacrowd.casim.utility.rasterizer.Rasterizer;
 import org.cacrowd.casim.utility.rasterizer.ScanlineRasterizer;
-import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,6 +65,9 @@ public class HybridSimulationEngine {
                 case TRANSITION:
                     type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
                     break;
+                case TRANSITION_INTERNAL:
+                    type = ScanlineRasterizer.EdgeType.TRANSITION;
+                    break;
                 default:
                     type = ScanlineRasterizer.EdgeType.WALL;
             }
@@ -74,15 +76,17 @@ public class HybridSimulationEngine {
 
         }).collect(Collectors.toList());
 
-        if (observer instanceof VisualizerEngine) {
-            VisualizerEngine vis = (VisualizerEngine) observer;
-            res.stream().forEach(vis::drawStatic);
-        }
+//        if (observer instanceof VisualizerEngine) {
+//            VisualizerEngine vis = (VisualizerEngine) observer;
+//            res.stream().forEach(vis::drawStatic);
+//        }
 
         rasterizer.buildContext(res);
         observer.observerEnvironmentGrid();
+
         transitionHandler.init();
         activeObjectsUpdater.init();
+
     }
 
     public boolean tryAddAgent(HybridSimProto.Agent request) {
