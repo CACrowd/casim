@@ -25,12 +25,11 @@ import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
+import org.cacrowd.casim.pedca.utility.Distances;
 import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Singleton
 public class VisualizerEngine implements SimulationObserver {
@@ -75,7 +74,7 @@ public class VisualizerEngine implements SimulationObserver {
         yellow.r = 255;
         yellow.g = 255;
         yellow.b = 0;
-        this.densityColorRamp.put(1., yellow);
+        this.densityColorRamp.put(0.5, yellow);
         Color red = new Color();
         red.a = 128;
         red.r = 255;
@@ -166,11 +165,22 @@ public class VisualizerEngine implements SimulationObserver {
     public void observerDensityGrid() {
         DensityGrid densityGridGrid = context.getDensityGrid();
 //        FloorFieldsGrid ff = context.getFloorFieldsGrid();
+        Set<GridPoint> toDraw = new HashSet<>();
+        for (Agent a : context.getPopulation().getPedestrians()) {
 
-        for (int row = 0; row < densityGridGrid.getRows(); row++) {
-            for (int col = 0; col < densityGridGrid.getColumns(); col++) {
-                Coordinate c = densityGridGrid.rowCol2Coordinate(row, col);
-                double density = densityGridGrid.getDensityAt(new GridPoint(col, row));
+            for (GridPoint gp : context.getDensityGrid().getPedestrianFootprint().getValuesMap().keySet()) {
+                GridPoint positionToWrite = Distances.gridPointDifference(a.getPosition(), gp);
+                if (context.getDensityGrid().neighbourCondition(positionToWrite.getY(), positionToWrite.getX())) {
+                    toDraw.add(positionToWrite);
+                }
+            }
+
+        }
+
+//        for (int row = 0; row < densityGridGrid.getRows(); row++) {
+        for (GridPoint gp : toDraw) {
+            Coordinate c = densityGridGrid.gridPoint2Coordinate(gp);
+            double density = densityGridGrid.getDensityAt(gp);
 //                double density = ff.getCellValue(1,new GridPoint(col,row)) ;
 
                 int r, g, b, a;
@@ -197,7 +207,7 @@ public class VisualizerEngine implements SimulationObserver {
                 double prntDens = ((int) (density * 100. + 0.5)) / 100.;
                 vis.addText(c.getX(), c.getY(), Double.toString(prntDens), 150);
             }
-        }
+//        }
     }
 
     @Override

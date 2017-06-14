@@ -27,11 +27,14 @@ public class DensityGrid extends Grid<Double> {
     private static double cellArea = Math.pow(Constants.CELL_SIZE, 2);
     private final PedestrianFootprint pedestrianFootprint;
     private final EnvironmentGrid environmentGrid;
-
     public DensityGrid(int rows, int cols, EnvironmentGrid environmentGrid) {
         super(rows, cols);
         this.pedestrianFootprint = new PedestrianFootprint(Constants.DENSITY_GRID_RADIUS);
         this.environmentGrid = environmentGrid;
+    }
+
+    public PedestrianFootprint getPedestrianFootprint() {
+        return pedestrianFootprint;
     }
 
     protected void diffuse(GridPoint position) {
