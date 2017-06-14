@@ -143,7 +143,36 @@ public class HybridSimulationEngine {
         HybridSimProto.Destination.Builder db = HybridSimProto.Destination.newBuilder();
         context.getPopulation().getPedestrians().forEach(p -> {
             Coordinate c = context.getEnvironmentGrid().gridPoint2Coordinate(p.getPosition());
-            tbs.addTrajectories(tb.setId(p.getID()).setX(c.getX()).setY(c.getY()).setCurrentDest(db.setId(p.getCurrentDestination().getId())).build());
+            double phi;
+            switch (p.getHeading()) {
+                case E:
+                    phi = 0;
+                    break;
+                case NE:
+                    phi = Math.PI / 4;
+                    break;
+                case N:
+                    phi = Math.PI / 2;
+                    break;
+                case NW:
+                    phi = 3 * Math.PI / 4;
+                    break;
+                case W:
+                    phi = Math.PI;
+                    break;
+                case SW:
+                    phi = 5 * Math.PI / 4;
+                    break;
+                case S:
+                    phi = 3 * Math.PI / 2;
+                    break;
+                case SE:
+                    phi = 7 * Math.PI / 4;
+                    break;
+                default:
+                    phi = 0;
+            }
+            tbs.addTrajectories(tb.setId(p.getID()).setX(c.getX()).setY(c.getY()).setCurrentDest(db.setId(p.getCurrentDestination().getId())).setPhi(phi).build());
         });
         return tbs.build();
     }
