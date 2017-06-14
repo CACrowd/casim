@@ -64,6 +64,7 @@ message Edge {
     enum Type {
         OBSTACLE = 0;
         TRANSITION = 1;
+        TRANSITION_INTERNAL = 2;
     }
     Type type = 3;
     int32 id = 4;
@@ -118,6 +119,7 @@ message Trajectory {
     double x = 2;
     double y = 3;
     Destination currentDest = 4;
+    double phi = 5;
 }
 
 message Trajectories {

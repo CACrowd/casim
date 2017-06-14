@@ -24,6 +24,8 @@ import org.cacrowd.casim.pedca.engine.AgentMover;
 import org.cacrowd.casim.pedca.engine.CAAgentMover;
 import org.cacrowd.casim.utility.NullObserver;
 import org.cacrowd.casim.utility.SimulationObserver;
+import org.cacrowd.casim.utility.rasterizer.Rasterizer;
+import org.cacrowd.casim.utility.rasterizer.TraceRasterizer;
 import org.cacrowd.casim.visualizer.VisualizerEngine;
 
 import java.awt.*;
@@ -38,6 +40,7 @@ public class HybridsimServer {
             protected void configure() {
 //                bind(Context.class).to(Context.class);
                 bind(AgentMover.class).to(CAAgentMover.class);
+                bind(Rasterizer.class).to(TraceRasterizer.class);
                 if (GraphicsEnvironment.isHeadless()) {
                     //headless mode (e.g. in docker environment)
                     bind(SimulationObserver.class).to(NullObserver.class);

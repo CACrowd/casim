@@ -97,9 +97,9 @@ public class RasterizerTest {
     @Test
     public void testMarkerConfiguruations() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 2.4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e0a = new Edge(1, 0.4, 0.41, 0.4, 1.99, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge e0a = new Edge(1, 0.4, 0.41, 0.4, 1.99, ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(e0a);
 
         List<GridPoint> dest1Ref = new ArrayList<>();
@@ -109,7 +109,7 @@ public class RasterizerTest {
         dest1Ref.add(new GridPoint(1, 4));
 
 
-        Edge e0b = new Edge(2, 2., 0.41, 2., 1.99, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge e0b = new Edge(2, 2., 0.41, 2., 1.99, ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(e0b);
 
         List<GridPoint> dest2Ref = new ArrayList<>();
@@ -118,7 +118,7 @@ public class RasterizerTest {
         dest2Ref.add(new GridPoint(5, 3));
         dest2Ref.add(new GridPoint(5, 4));
 
-        Edge e0c = new Edge(3, 14., 0.41, 14., 1.99, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge e0c = new Edge(3, 14., 0.41, 14., 1.99, ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(e0c);
 
         List<GridPoint> dest3Ref = new ArrayList<>();
@@ -127,7 +127,7 @@ public class RasterizerTest {
         dest3Ref.add(new GridPoint(35, 3));
         dest3Ref.add(new GridPoint(35, 4));
 
-        Edge e0d = new Edge(4, 15.6, 0.41, 15.6, 1.99, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge e0d = new Edge(4, 15.6, 0.41, 15.6, 1.99, ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(e0d);
 
         List<GridPoint> dest4Ref = new ArrayList<>();
@@ -136,16 +136,16 @@ public class RasterizerTest {
         dest4Ref.add(new GridPoint(39, 3));
         dest4Ref.add(new GridPoint(39, 4));
 
-        Edge e1 = new Edge(0, 0, 2.4, 16, 2.4, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(0, 0, 2.4, 16, 2.4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(0, 16, 2.4, 16, 0, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(0, 16, 2.4, 16, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(0, 16, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e3 = new Edge(0, 16, 0, 0, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e3);
 
 
         Injector injector = Guice.createInjector();
-        injector.getInstance(Rasterizer.class).buildContext(et);
+        injector.getInstance(ScanlineRasterizer.class).buildContext(et);
         MarkerConfiguration markerConfiguration = injector.getInstance(Context.class).getMarkerConfiguration();
         ArrayList<Destination> destinations = markerConfiguration.getTacticalDestinations();
         assertThat(destinations.size(), is(equalTo(4)));
@@ -172,17 +172,17 @@ public class RasterizerTest {
     @Test
     public void testRect() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 0, 2.4, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 2.4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(1, 0, 2.4, 4, 2.4, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(1, 0, 2.4, 4, 2.4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2, 4, 2.4, 4, 0, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(2, 4, 2.4, 4, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(3, 4, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e3 = new Edge(3, 4, 0, 0, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e3);
 
         Injector injector = Guice.createInjector();
-        injector.getInstance(Rasterizer.class).buildContext(et);
+        injector.getInstance(ScanlineRasterizer.class).buildContext(et);
         EnvironmentGrid grid = injector.getInstance(Context.class).getEnvironmentGrid();
 
         for (int row = 0; row < grid.getRows(); row++) {
@@ -197,15 +197,15 @@ public class RasterizerTest {
     @Test
     public void testSimpleTriangle() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 0, 5, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 5, ScanlineRasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(1, 0, 5, 5, 4, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(1, 0, 5, 5, 4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2, 5, 4, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(2, 5, 4, 0, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e2);
 
         Injector injector = Guice.createInjector();
-        injector.getInstance(Rasterizer.class).buildContext(et);
+        injector.getInstance(ScanlineRasterizer.class).buildContext(et);
         EnvironmentGrid grid = injector.getInstance(Context.class).getEnvironmentGrid();
 
         for (int row = 0; row < grid.getRows(); row++) {
@@ -218,31 +218,31 @@ public class RasterizerTest {
     @Test
     public void testConcaveWithHole() {
         LinkedList<Edge> et = new LinkedList<>();
-        Edge e0 = new Edge(0, 0, 0, 0, 10, Rasterizer.EdgeType.WALL);
+        Edge e0 = new Edge(0, 0, 0, 0, 10, ScanlineRasterizer.EdgeType.WALL);
         et.add(e0);
-        Edge e1 = new Edge(1, 0, 10, 2.5, 7, Rasterizer.EdgeType.WALL);
+        Edge e1 = new Edge(1, 0, 10, 2.5, 7, ScanlineRasterizer.EdgeType.WALL);
         et.add(e1);
-        Edge e2 = new Edge(2, 2.5, 7, 4, 9, Rasterizer.EdgeType.WALL);
+        Edge e2 = new Edge(2, 2.5, 7, 4, 9, ScanlineRasterizer.EdgeType.WALL);
         et.add(e2);
-        Edge e3 = new Edge(3, 4, 9, 6, 0, Rasterizer.EdgeType.WALL);
+        Edge e3 = new Edge(3, 4, 9, 6, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e3);
-        Edge e4 = new Edge(4, 6, 0, 0, 0, Rasterizer.EdgeType.WALL);
+        Edge e4 = new Edge(4, 6, 0, 0, 0, ScanlineRasterizer.EdgeType.WALL);
         et.add(e4);
 
-        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, Rasterizer.EdgeType.TRANSITION);
+        Edge e5 = new Edge(5, 2.5, 1, 4.5, 1, ScanlineRasterizer.EdgeType.TRANSITION);
         et.add(e5);
-        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, Rasterizer.EdgeType.WALL);
+        Edge e6 = new Edge(6, 2.5, 1, 2.5, 5, ScanlineRasterizer.EdgeType.WALL);
         et.add(e6);
-        Edge e7 = new Edge(7, 2.5, 5, 4, 4, Rasterizer.EdgeType.WALL);
+        Edge e7 = new Edge(7, 2.5, 5, 4, 4, ScanlineRasterizer.EdgeType.WALL);
         et.add(e7);
-        Edge e8 = new Edge(8, 4, 4, 4.5, 1, Rasterizer.EdgeType.WALL);
+        Edge e8 = new Edge(8, 4, 4, 4.5, 1, ScanlineRasterizer.EdgeType.WALL);
         et.add(e8);
 
-        Edge tr = new Edge(9, 2.5, 7, 4, 4, Rasterizer.EdgeType.TRANSITION_INTERNAL);
+        Edge tr = new Edge(9, 2.5, 7, 4, 4, ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL);
         et.add(tr);
 
         Injector injector = Guice.createInjector();
-        injector.getInstance(Rasterizer.class).buildContext(et);
+        injector.getInstance(ScanlineRasterizer.class).buildContext(et);
         EnvironmentGrid grid = injector.getInstance(Context.class).getEnvironmentGrid();
 
         for (int row = 0; row < grid.getRows(); row++) {
