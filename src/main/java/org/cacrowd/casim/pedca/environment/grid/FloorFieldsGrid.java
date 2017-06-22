@@ -47,6 +47,8 @@ public class FloorFieldsGrid extends Grid<Double> {
         for (Destination destination : markerConfiguration.getTacticalDestinations()) {
             generateField(destination);
         }
+
+
     }
 
     private void generateField(Destination destArea) {
@@ -56,6 +58,7 @@ public class FloorFieldsGrid extends Grid<Double> {
         for (int i = 0; i < destArea.size(); i++) {
             L.add(destArea.get(i));
             setCellValue(fieldLevel, L.get(i), 0);
+
         }
 
         while (L.size() != 0) {

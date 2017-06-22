@@ -53,6 +53,7 @@ public class HybridSimulationEngine {
     @Inject
     private Rasterizer rasterizer;
 
+
     public void loadEnvironment(HybridSimProto.Scenario request) {
         List<Edge> res = request.getEdgesList().stream().map(he -> {
 
@@ -69,7 +70,7 @@ public class HybridSimulationEngine {
                     type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
                     break;
                 case TRANSITION_HOLDOVER:
-                    type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
+                    type = ScanlineRasterizer.EdgeType.TRANSITION_HOLDOVER;
                     break;
                 default:
                     type = ScanlineRasterizer.EdgeType.WALL;
@@ -85,7 +86,10 @@ public class HybridSimulationEngine {
 //        }
 
         rasterizer.buildContext(res);
+
+
         observer.observerEnvironmentGrid();
+
 
         transitionHandler.init();
         activeObjectsUpdater.init();

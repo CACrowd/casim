@@ -361,6 +361,6 @@ public class ScanlineRasterizer implements Rasterizer {
     }
 
 
-    public enum EdgeType {TRANSITION, TRANSITION_INTERNAL, WALL}
+    public enum EdgeType {TRANSITION, TRANSITION_INTERNAL, TRANSITION_HOLDOVER, WALL}
 
 }

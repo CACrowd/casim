@@ -23,6 +23,9 @@ import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.environment.grid.DensityGrid;
 import org.cacrowd.casim.pedca.environment.grid.EnvironmentGrid;
 import org.cacrowd.casim.pedca.environment.grid.GridPoint;
+import org.cacrowd.casim.pedca.environment.network.CAEdge;
+import org.cacrowd.casim.pedca.environment.network.CANetwork;
+import org.cacrowd.casim.pedca.environment.network.CANode;
 import org.cacrowd.casim.pedca.environment.network.Coordinate;
 import org.cacrowd.casim.pedca.utility.Constants;
 import org.cacrowd.casim.pedca.utility.Distances;
@@ -151,6 +154,16 @@ public class VisualizerEngine implements SimulationObserver {
 //                vis.addTextStatic(c.getX(), c.getY(), "(" + col + " " + row + ")", 150);
             }
         }
+
+        CANetwork network = context.getNetwork();
+        for (CAEdge edge : network.getEdges()) {
+            CANode n1 = edge.getN1();
+            CANode n2 = edge.getN2();
+            Coordinate c1 = n1.getCoordinate();
+            Coordinate c2 = n2.getCoordinate();
+            vis.addLineStatic(c1.getX(), c1.getY(), c2.getX(), c2.getY(), 0, 0, 0, 255, 0);
+        }
+
 
         vis.update(0);
 

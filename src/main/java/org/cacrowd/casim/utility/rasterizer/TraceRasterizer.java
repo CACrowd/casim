@@ -65,8 +65,8 @@ public class TraceRasterizer implements Rasterizer {
                 return -2;
             case TRANSITION_INTERNAL:
                 return 0;
-//            case TRANSITION_HOLDOVER:
-//                return 0;
+            case TRANSITION_HOLDOVER:
+                return -7;
             default:
                 throw new RuntimeException("Unknown Cell-Type:" + edgeType);
         }
@@ -204,7 +204,7 @@ public class TraceRasterizer implements Rasterizer {
         for (int col = frCol; col <= toCol; col++) {
             int row = grid.y2Row(currentY);
             grid.setCellValue(row, col, colorCode);
-            if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {
+            if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_HOLDOVER) {
                 if (oldCol != col && oldRow != row) {
                     protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(oldCol, row));
                 }
@@ -219,7 +219,7 @@ public class TraceRasterizer implements Rasterizer {
             currentY += dy;
         }
 
-        if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {//test if transition is connected to a wall, close it if not
+        if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_HOLDOVER) {//test if transition is connected to a wall, close it if not
             int row = grid.y2Row(currentY - dy);
 
             closeTransition(toCol, row, colorCode);
@@ -240,7 +240,7 @@ public class TraceRasterizer implements Rasterizer {
 
 
             grid.setCellValue(row, col, colorCode);
-            if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {
+            if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_HOLDOVER) {
                 if (oldCol != col && oldRow != row) {
                     protoDestinations.computeIfAbsent(e.getId(), k -> new ArrayList<>()).add(new GridPoint(col, oldRow));
                 }
@@ -256,7 +256,7 @@ public class TraceRasterizer implements Rasterizer {
             currentX += dx;
         }
 
-        if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL) {//test if transition is connected to a wall, close it if not
+        if (e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL || e.getEdgeType() == ScanlineRasterizer.EdgeType.TRANSITION_HOLDOVER) {//test if transition is connected to a wall, close it if not
             int col = grid.x2Col(currentX - dx);
             closeTransition(col, toRow, colorCode);
             closeTransition(grid.x2Col(x0), frRow, colorCode);
