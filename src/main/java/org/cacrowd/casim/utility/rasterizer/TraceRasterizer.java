@@ -62,9 +62,11 @@ public class TraceRasterizer implements Rasterizer {
             case WALL:
                 return -1;
             case TRANSITION:
-                return 0;
-            case TRANSITION_INTERNAL:
                 return -2;
+            case TRANSITION_INTERNAL:
+                return 0;
+//            case TRANSITION_HOLDOVER:
+//                return 0;
             default:
                 throw new RuntimeException("Unknown Cell-Type:" + edgeType);
         }

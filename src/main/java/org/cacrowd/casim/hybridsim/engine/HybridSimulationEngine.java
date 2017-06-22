@@ -63,10 +63,13 @@ public class HybridSimulationEngine {
                     type = ScanlineRasterizer.EdgeType.WALL;
                     break;
                 case TRANSITION:
-                    type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
+                    type = ScanlineRasterizer.EdgeType.TRANSITION;
                     break;
                 case TRANSITION_INTERNAL:
-                    type = ScanlineRasterizer.EdgeType.TRANSITION;
+                    type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
+                    break;
+                case TRANSITION_HOLDOVER:
+                    type = ScanlineRasterizer.EdgeType.TRANSITION_INTERNAL;
                     break;
                 default:
                     type = ScanlineRasterizer.EdgeType.WALL;
@@ -103,7 +106,12 @@ public class HybridSimulationEngine {
         List<Destination> intermediate = request.getDestsList().stream().limit(request.getDestsList().size() - 1).skip(1).map(d -> context.getMarkerConfiguration().getDestination(d.getId())).collect(Collectors.toList());
 
 
-        Tactic tactic = new SimpleTargetChainTactic(strategy, intermediate, context);
+        Tactic tactic;
+        if (intermediate.size() > 0) {
+            tactic = new SimpleTargetChainTactic(strategy, intermediate, context);
+        } else {
+            tactic = new SingleDestinationTactic(dest, context);
+        }
         Agent a1 = new Agent(request.getId(), enterLocation, tactic, context);
         transitionHandler.scheduleForDeparture(a1);
 
