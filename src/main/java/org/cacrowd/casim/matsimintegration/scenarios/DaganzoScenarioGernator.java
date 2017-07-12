@@ -161,7 +161,7 @@ public class DaganzoScenarioGernator {
         sb.addEdges(eb.build());
 
         cb.setX(3.6);
-        cb.setY(14.8);
+        cb.setY(14.4);
         eb.setC0(cb.build());
         cb.setX(5.6);
         eb.setC1(cb.build());
@@ -227,7 +227,8 @@ public class DaganzoScenarioGernator {
         sb.addEdges(eb.build());
 
 
-        cb.setX(5.7);
+//        cb.setX(5.7);
+        cb.setX(6.1);
         cb.setY(2.3);
         eb.setC0(cb.build());
         cb.setY(0.5);
@@ -253,7 +254,7 @@ public class DaganzoScenarioGernator {
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
 
-        cb.setX(17.6);
+        cb.setX(17.2);
         cb.setY(2.3);
         eb.setC0(cb.build());
         cb.setY(0.5);
@@ -280,7 +281,7 @@ public class DaganzoScenarioGernator {
         sb.addEdges(eb.build());
 
         cb.setX(18);
-        cb.setY(14.9);
+        cb.setY(14.4);
         eb.setC0(cb.build());
         cb.setX(19.6);
         eb.setC1(cb.build());

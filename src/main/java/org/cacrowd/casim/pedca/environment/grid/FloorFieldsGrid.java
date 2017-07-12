@@ -23,7 +23,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class FloorFieldsGrid extends Grid<Double> {
 
@@ -47,21 +47,24 @@ public class FloorFieldsGrid extends Grid<Double> {
         for (Destination destination : markerConfiguration.getTacticalDestinations()) {
             generateField(destination);
         }
+
+
     }
 
     private void generateField(Destination destArea) {
         int fieldLevel = levels;
         destArea.setLevel(fieldLevel);
-        ArrayList<GridPoint> L = new ArrayList<GridPoint>();
+        LinkedList<GridPoint> L = new LinkedList<>();
         for (int i = 0; i < destArea.size(); i++) {
             L.add(destArea.get(i));
             setCellValue(fieldLevel, L.get(i), 0);
+
         }
 
         while (L.size() != 0) {
             GridPoint pivot = L.get(0);
             double pivotValue = getCellValue(fieldLevel, pivot);
-            L.remove(0); //TODO slow operation on array lists, consider using linked list instead [GL May '17]
+            L.removeFirst(); 
             Neighbourhood N = getNeighbourhood(pivot);
             for (int i = 0; i < N.size(); i++) {
                 GridPoint neighbour = N.get(i);
