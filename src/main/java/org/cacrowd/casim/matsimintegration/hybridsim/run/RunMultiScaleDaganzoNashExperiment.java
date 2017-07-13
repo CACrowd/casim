@@ -14,7 +14,6 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
-import com.google.inject.Provider;
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -28,7 +27,6 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.events.EventsUtils;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
@@ -58,25 +56,7 @@ public class RunMultiScaleDaganzoNashExperiment {
 
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
-//        Injector mobsimProviderInjector = Guice.createInjector(new com.google.inject.AbstractModule() {
-//            @Override
-//            protected void configure() {
-//                bind(Scenario.class).toInstance(sc);
-//                bind(EventsManager.class).toInstance(eventsManager);
-//                bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
-//                bind(QNetworkFactory.class).to(HybridNetworkFactory.class);
-//                bind(IdIntMapper.class).toInstance(idIntMapper);
-//                bind(GRPCExternalClient.class).toInstance(client);
-//                bind(Controler.class).toInstance(controller);
-//
-//            }
-//
-//        });
-//
-//        MultiScaleMobsimProvider myMultiScaleMobismProvider = mobsimProviderInjector.getInstance(MultiScaleMobsimProvider.class);
-
         controller.addOverridingModule(new AbstractModule() {
-
 
             @Override
             public void install() {
@@ -86,13 +66,7 @@ public class RunMultiScaleDaganzoNashExperiment {
                 bind(GRPCExternalClient.class).toInstance(client);
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
-                addControlerListenerBinding().toProvider(new Provider<IterationStartsListener>() {
-                    @Override
-                    public IterationStartsListener get() {
-                        return new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach");
-                    }
-                });
-
+                addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
             }
 
