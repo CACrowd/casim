@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.run.HybridsimServer;
 import org.cacrowd.casim.matsimintegration.hybridsim.run.RunDaganzoMSCBExperiment;
 import org.cacrowd.casim.matsimintegration.hybridsim.run.RunDaganzoNashExperiment;
+import org.cacrowd.casim.matsimintegration.hybridsim.run.RunMultiScaleDaganzoMSCBExperiment;
 import org.cacrowd.casim.matsimintegration.hybridsim.run.RunMultiScaleDaganzoNashExperiment;
 
 import java.io.IOException;
@@ -58,7 +59,11 @@ public class DaganzoExperimentRunner {
             System.out.println("Running MSCB approach experiment with bottleneck width: " + Double.parseDouble(args[1]));
             runType = RunType.MSCB;
         } else if (args[0].equalsIgnoreCase("ms_nash")) {
+            System.out.println("Running multi-scale Nash equilibrium experiment with bottleneck width: " + Double.parseDouble(args[1]));
             runType = RunType.MultiScaleNash;
+        } else if (args[0].equalsIgnoreCase("ms_mscb")) {
+            System.out.println("Running multi-scale MSCB approach experiment with bottleneck width: " + Double.parseDouble(args[1]));
+            runType = RunType.MultiScaleMSCB;
         }
 
         Logger.getRootLogger().setLevel(Level.INFO);
@@ -84,7 +89,7 @@ public class DaganzoExperimentRunner {
         System.out.println("(<bottlneck width> must be one of: {0.4, 0.8, 1.2})");
     }
 
-    private enum RunType {Nash, MSCB, MultiScaleNash}
+    private enum RunType {Nash, MSCB, MultiScaleNash, MultiScaleMSCB}
 
     private static final class Server implements Runnable {
 
@@ -110,6 +115,8 @@ public class DaganzoExperimentRunner {
                     RunDaganzoNashExperiment.run(BOTTLENECK_WIDTH);
                 } else if (runType == RunType.MultiScaleNash) {
                     RunMultiScaleDaganzoNashExperiment.run(BOTTLENECK_WIDTH);
+                } else if (runType == RunType.MultiScaleMSCB) {
+                    RunMultiScaleDaganzoMSCBExperiment.run(BOTTLENECK_WIDTH);
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();

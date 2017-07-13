@@ -36,11 +36,11 @@ public class Control implements KeyListener, MouseWheelListener {
     private static final Zoom z = new Zoom();
 
     static {
-        z.z = 13.01172395266951;
-        z.o = new PVector(7037.6274f, 5958.983f);
+//        z.z = 13.01172395266951;
+//        z.o = new PVector(7037.6274f, 5958.983f);
         //Daganzo
-//        z.z = 39.96581922606923;
-//        z.o = new PVector(25172.95f, 14724.147f);
+        z.z = 39.96581922606923;
+        z.o = new PVector(25172.95f, 14724.147f);
     }
 
     private final CyclicBarrier pauseBarrier = new CyclicBarrier(2);
@@ -278,7 +278,7 @@ public class Control implements KeyListener, MouseWheelListener {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent arg0) {
-        if (!this.recordCameraMovement) {
+        if (this.recordCameraMovement) {
             Zoom z = new Zoom();
             z.o = this.zoomer.getPanOffset();
             z.z = this.zoomer.getZoomScale();

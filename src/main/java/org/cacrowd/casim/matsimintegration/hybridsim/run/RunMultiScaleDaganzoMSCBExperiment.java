@@ -15,6 +15,9 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
+import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBCongestionObserver;
+import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBTravelDisutility;
+import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBTravelDisutilityFactory;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -36,7 +39,7 @@ import org.matsim.core.scenario.ScenarioUtils;
 
 import java.io.IOException;
 
-public class RunMultiScaleDaganzoNashExperiment {
+public class RunMultiScaleDaganzoMSCBExperiment {
     public static void run(double bottleneckWidth) throws IOException, InterruptedException {
 
         Config c = ConfigUtils.createConfig();
@@ -57,10 +60,19 @@ public class RunMultiScaleDaganzoNashExperiment {
 
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
+        final MSCBTravelDisutility tc = new MSCBTravelDisutility();
+        final MSCBCongestionObserver obs = new MSCBCongestionObserver();
+
         controller.addOverridingModule(new AbstractModule() {
 
             @Override
             public void install() {
+                addEventHandlerBinding().toInstance(tc);
+                addEventHandlerBinding().toInstance(obs);
+                addMobsimListenerBinding().toInstance(obs);
+                bind(MSCBTravelDisutility.class).toInstance(tc);
+                addControlerListenerBinding().toInstance(tc);
+                bindCarTravelDisutilityFactory().to(MSCBTravelDisutilityFactory.class);
                 bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
                 bind(QNetworkFactory.class).toProvider(MultiScaleNetworkProvider.class);
                 bind(IdIntMapper.class).toInstance(idIntMapper);
