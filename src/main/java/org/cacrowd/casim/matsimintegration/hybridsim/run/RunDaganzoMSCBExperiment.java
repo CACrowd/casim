@@ -19,9 +19,6 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBCongestionObserver;
 import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBTravelDisutility;
@@ -38,7 +35,6 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.events.EventsUtils;
 import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
@@ -74,18 +70,6 @@ public class RunDaganzoMSCBExperiment {
         final MSCBTravelDisutility tc = new MSCBTravelDisutility();
         final MSCBCongestionObserver obs = new MSCBCongestionObserver();
 
-        Injector mobsimProviderInjector = Guice.createInjector(new com.google.inject.AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(Scenario.class).toInstance(sc);
-                bind(EventsManager.class).toInstance(eventsManager);
-                bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
-                bind(QNetworkFactory.class).to(HybridNetworkFactory.class);
-                bind(IdIntMapper.class).toInstance(idIntMapper);
-                bind(GRPCExternalClient.class).toInstance(client);
-            }
-
-        });
 
         controller.addOverridingModule(new AbstractModule() {
 
@@ -98,19 +82,13 @@ public class RunDaganzoMSCBExperiment {
                 addControlerListenerBinding().toInstance(tc);
                 bindCarTravelDisutilityFactory().to(MSCBTravelDisutilityFactory.class);
                 bindEventsManager().toInstance(eventsManager);
-                addControlerListenerBinding().toProvider(new Provider<IterationStartsListener>() {
-                    @Override
-                    public IterationStartsListener get() {
-                        return new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "MSCB approach");
-                    }
-                });
-                bind(Mobsim.class).toProvider(new Provider<Mobsim>() {
-                    @Override
-                    public Mobsim get() {
-                        HybridMobsimProvider provider = mobsimProviderInjector.getInstance(HybridMobsimProvider.class);
-                        return provider.get(controller);
-                    }
-                });
+                addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "MSCB approach"));
+                bind(Mobsim.class).toProvider(HybridMobsimProvider.class);
+                bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
+                bind(QNetworkFactory.class).to(HybridNetworkFactory.class);
+                bind(IdIntMapper.class).toInstance(idIntMapper);
+                bind(GRPCExternalClient.class).toInstance(client);
+                bind(Controler.class).toInstance(controller);
             }
         });
 

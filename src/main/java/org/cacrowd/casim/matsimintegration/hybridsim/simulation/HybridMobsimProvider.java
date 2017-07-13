@@ -21,6 +21,7 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.simulation;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -41,9 +42,10 @@ import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetsimEngine;
 
 @Singleton
-public class HybridMobsimProvider {
+public class HybridMobsimProvider implements Provider<Mobsim> {
 
 
+    private final Controler controler;
     private HybridNetworkFactory netFac;
 
 
@@ -52,16 +54,16 @@ public class HybridMobsimProvider {
 
     private GRPCExternalClient client;
 
-
     @Inject
-    HybridMobsimProvider(HybridNetworkFactory netFac, IdIntMapper mapper, GRPCExternalClient client) {
+    HybridMobsimProvider(HybridNetworkFactory netFac, IdIntMapper mapper, GRPCExternalClient client, Controler controler) {
         this.netFac = netFac;
         this.mapper = mapper;
         this.client = client;
+        this.controler = controler;
 
     }
 
-    public Mobsim get(Controler controler) {
+    public Mobsim get() {
         QSimConfigGroup conf = controler.getConfig().qsim();
         if (conf == null) {
             throw new NullPointerException(

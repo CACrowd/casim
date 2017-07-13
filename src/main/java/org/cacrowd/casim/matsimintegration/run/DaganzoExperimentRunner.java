@@ -14,11 +14,13 @@
 
 package org.cacrowd.casim.matsimintegration.run;
 
+import com.google.inject.Singleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.cacrowd.casim.hybridsim.run.HybridsimServer;
 import org.cacrowd.casim.matsimintegration.hybridsim.run.RunDaganzoMSCBExperiment;
 import org.cacrowd.casim.matsimintegration.hybridsim.run.RunDaganzoNashExperiment;
+import org.cacrowd.casim.matsimintegration.hybridsim.run.RunMultiScaleDaganzoNashExperiment;
 
 import java.io.IOException;
 
@@ -28,9 +30,10 @@ import static java.lang.System.exit;
 // Crociani, L. & Lämmel, G.: Multidestination Pedestrian Flows in Equilibrium: A Cellular Automaton-Based Approach.
 // Computer-Aided Civil and Infrastructure Engineering 00 (2016) 1–17
 // DOI: 10.1111/mice.12209
+@Singleton
 public class DaganzoExperimentRunner {
 
-    private static boolean RUN_MSCB = false;
+    private static RunType runType;
     private static double BOTTLENECK_WIDTH;
 
     public static void main(String[] args) throws InterruptedException {
@@ -49,10 +52,13 @@ public class DaganzoExperimentRunner {
 
         if (args[0].equalsIgnoreCase("nash")) {
             System.out.println("Running Nash equilibrium experiment with bottleneck width: " + Double.parseDouble(args[1]));
+            runType = RunType.Nash;
 
-        } else {
-            RUN_MSCB = true;
+        } else if (args[0].equalsIgnoreCase("mscb")) {
             System.out.println("Running MSCB approach experiment with bottleneck width: " + Double.parseDouble(args[1]));
+            runType = RunType.MSCB;
+        } else if (args[0].equalsIgnoreCase("ms_nash")) {
+            runType = RunType.MultiScaleNash;
         }
 
         Logger.getRootLogger().setLevel(Level.INFO);
@@ -78,6 +84,8 @@ public class DaganzoExperimentRunner {
         System.out.println("(<bottlneck width> must be one of: {0.4, 0.8, 1.2})");
     }
 
+    private enum RunType {Nash, MSCB, MultiScaleNash}
+
     private static final class Server implements Runnable {
 
 
@@ -96,10 +104,12 @@ public class DaganzoExperimentRunner {
         @Override
         public void run() {
             try {
-                if (RUN_MSCB) {
+                if (runType == RunType.MSCB) {
                     RunDaganzoMSCBExperiment.run(BOTTLENECK_WIDTH);
-                } else {
+                } else if (runType == RunType.Nash) {
                     RunDaganzoNashExperiment.run(BOTTLENECK_WIDTH);
+                } else if (runType == RunType.MultiScaleNash) {
+                    RunMultiScaleDaganzoNashExperiment.run(BOTTLENECK_WIDTH);
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
