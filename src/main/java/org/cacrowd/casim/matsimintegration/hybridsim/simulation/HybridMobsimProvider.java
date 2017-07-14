@@ -40,13 +40,14 @@ import org.matsim.core.mobsim.qsim.pt.ComplexTransitStopHandlerFactory;
 import org.matsim.core.mobsim.qsim.pt.TransitQSimEngine;
 import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetsimEngine;
+import org.matsim.core.mobsim.qsim.qnetsimengine.QNetworkFactory;
 
 @Singleton
 public class HybridMobsimProvider implements Provider<Mobsim> {
 
 
     private final Controler controler;
-    private HybridNetworkFactory netFac;
+    private QNetworkFactory netFac;
 
 
     private IdIntMapper mapper;
@@ -55,7 +56,7 @@ public class HybridMobsimProvider implements Provider<Mobsim> {
     private GRPCExternalClient client;
 
     @Inject
-    HybridMobsimProvider(HybridNetworkFactory netFac, IdIntMapper mapper, GRPCExternalClient client, Controler controler) {
+    HybridMobsimProvider(QNetworkFactory netFac, IdIntMapper mapper, GRPCExternalClient client, Controler controler) {
         this.netFac = netFac;
         this.mapper = mapper;
         this.client = client;
@@ -77,7 +78,7 @@ public class HybridMobsimProvider implements Provider<Mobsim> {
         qSim.addActivityHandler(activityEngine);
 
         ExternalEngine e = new ExternalEngine(controler.getEvents(), qSim, mapper, client);
-        this.netFac.setExternalEngine(e);
+        ((HybridNetworkFactory) this.netFac).setExternalEngine(e);
 //		HybridQSimExternalNetworkFactory eFac = new HybridQSimExternalNetworkFactory(e);
 //		this.netFac.putNetsimNetworkFactory("2ext", eFac);
 //		this.netFac.putNetsimNetworkFactory("ext2", eFac);

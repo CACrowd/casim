@@ -18,6 +18,7 @@ import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBCongestionObserver;
 import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBTravelDisutility;
 import org.cacrowd.casim.matsimintegration.hybridsim.mscb.MSCBTravelDisutilityFactory;
+import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -63,6 +64,8 @@ public class RunMultiScaleDaganzoMSCBExperiment {
         final MSCBTravelDisutility tc = new MSCBTravelDisutility();
         final MSCBCongestionObserver obs = new MSCBCongestionObserver();
 
+        MultiScaleManger manager = new MultiScaleManger();
+
         controller.addOverridingModule(new AbstractModule() {
 
             @Override
@@ -80,8 +83,10 @@ public class RunMultiScaleDaganzoMSCBExperiment {
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
-                addControlerListenerBinding().to(MultiScaleMobsimProvider.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
+                bind(MultiScaleManger.class).toInstance(manager);
+                addControlerListenerBinding().to(MultiScaleManger.class);
+
             }
 
         });

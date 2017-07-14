@@ -17,17 +17,17 @@ package org.cacrowd.casim.matsimintegration.hybridsim.simulation;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.controler.events.IterationStartsEvent;
-import org.matsim.core.controler.listener.IterationStartsListener;
 import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.MyQNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetworkFactory;
 
-public class MultiScaleNetworkProvider implements Provider<QNetworkFactory>, IterationStartsListener {
+@Singleton
+public class MultiScaleNetworkProvider implements Provider<QNetworkFactory>, MultiScaleProvider {
 
-    private boolean evenIt = false;
+    private boolean runCA = true;
 
 
     private HybridNetworkFactory hybridNetworkFactory;
@@ -38,20 +38,22 @@ public class MultiScaleNetworkProvider implements Provider<QNetworkFactory>, Ite
     public MultiScaleNetworkProvider(Injector injector) {
         this.hybridNetworkFactory = injector.getInstance(HybridNetworkFactory.class);
         this.defaultQNetworkFactory = new MyQNetworkFactory(injector.getInstance(EventsManager.class), injector.getInstance(Scenario.class));
+        injector.getInstance(MultiScaleManger.class).subscribe(this);
 
     }
 
     @Override
     public QNetworkFactory get() {
-        if (evenIt) {
+        if (runCA) {
             return hybridNetworkFactory;
         } else {
             return defaultQNetworkFactory;
         }
     }
 
+
     @Override
-    public void notifyIterationStarts(IterationStartsEvent iterationStartsEvent) {
-        evenIt = iterationStartsEvent.getIteration() % 10 == 0;
+    public void setRunCAIteration(boolean runCA) {
+        this.runCA = runCA;
     }
 }
