@@ -44,6 +44,8 @@ public class RunMultiScaleDaganzoMSCBExperiment {
     public static void run(double bottleneckWidth) throws IOException, InterruptedException {
 
         Config c = ConfigUtils.createConfig();
+        c.network().setTimeVariantNetwork(true);
+
         c.controler().setLastIteration(20);
         c.controler().setWriteEventsInterval(1);
 

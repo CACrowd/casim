@@ -170,7 +170,14 @@ public class VisualizerEngine implements SimulationObserver {
 
             for (GridPoint gp : context.getDensityGrid().getPedestrianFootprint().getValuesMap().keySet()) {
                 GridPoint positionToWrite = Distances.gridPointDifference(a.getPosition(), gp);
+
+
                 if (context.getDensityGrid().neighbourCondition(positionToWrite.getY(), positionToWrite.getX())) {
+                    double val = context.getFloorFieldsGrid().getCellValue(a.getCurrentDestination().getLevel(), positionToWrite);
+                    if (val == Constants.MAX_FF_VALUE) {
+                        continue;
+                    }
+
                     toDraw.add(positionToWrite);
                 }
             }

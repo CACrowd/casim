@@ -26,9 +26,13 @@ import org.matsim.api.core.v01.network.Node;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
+import org.matsim.core.network.NetworkChangeEvent;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.utils.geometry.CoordUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 // generates simulation scenarios as presented in Fig 9b in
@@ -39,9 +43,27 @@ public class DaganzoScenarioGernator {
 
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper, double bottleneckWidth) {
         enrichConfig(sc.getConfig());
-        createNetwork(sc, mapper);
+        createNetwork(sc, mapper, bottleneckWidth);
+//        createNetworkChangeEvents(sc);
         createPopulation(sc);
         return createScenario(bottleneckWidth);
+    }
+
+    private static void createNetworkChangeEvents(Scenario sc) {
+
+
+//        Collection<NetworkChangeEvent> chanageEvents = NetworkUtils.getNetworkChangeEvents(sc.getNetwork());
+        List<NetworkChangeEvent> events = new ArrayList<>();
+        NetworkChangeEvent ev = new NetworkChangeEvent(0);
+        NetworkChangeEvent.ChangeValue cv = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, 0.001);
+        ev.setFlowCapacityChange(cv);
+        Link link = sc.getNetwork().getLinks().get(Id.createLinkId("8->9"));
+        ev.addLink(link);
+        events.add(ev);
+//        NetworkUtils.addNetworkChangeEvent(sc.getNetwork(),ev);
+        NetworkUtils.setNetworkChangeEvents(sc.getNetwork(), events);
+
+
     }
 
     private static HybridSimProto.Scenario createScenario(double bottleneckWidth) {
@@ -352,7 +374,7 @@ public class DaganzoScenarioGernator {
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
         //        c.travelTimeCalculator().setTravelTimeAggregatorType("experimental_LastMile");
-        c.travelTimeCalculator().setTraveltimeBinSize(60);
+        c.travelTimeCalculator().setTraveltimeBinSize(900);
 
         pre.setTypicalDuration(49); // needs to be geq 49, otherwise when
         // running a simulation one gets
@@ -410,7 +432,7 @@ public class DaganzoScenarioGernator {
         //		}
     }
 
-    private static void createNetwork(Scenario sc, IdIntMapper idIntMapper) {
+    private static void createNetwork(Scenario sc, IdIntMapper idIntMapper, double bottleneckWidth) {
         Network net = sc.getNetwork();
         net.setCapacityPeriod(1);
         net.setEffectiveLaneWidth(0.71);
@@ -418,6 +440,8 @@ public class DaganzoScenarioGernator {
         NetworkFactory fac = net.getFactory();
         //        Node nm2 = fac.createNode(Id.createNodeId(-2), CoordUtils.createCoord(-9.5, 16.2));
         //        net.addNode(nm2);
+
+
         Node nm1 = fac.createNode(Id.createNodeId(-1), CoordUtils.createCoord(-4.5, 16.2));
         net.addNode(nm1);
         Node n6 = fac.createNode(Id.createNodeId(6), CoordUtils.createCoord(.5, 16.2));
@@ -516,6 +540,24 @@ public class DaganzoScenarioGernator {
             l.setNumberOfLanes(2 * 1.33 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));
         }
+
+//        if (bottleneckWidth == 1.2) {
+////            final double cap = 1;
+//
+////            l89.setCapacity(1.2*1.33);
+//            l89.setNumberOfLanes(1.2 * 1.33 / 0.71);
+//        } else if (bottleneckWidth == 0.8){
+//            l89.setCapacity(0.8*1.33);
+//            l89.setNumberOfLanes(0.6 * 1.33 / 0.71);
+//        } else {
+////            l89.setCapacity(0.4*1.33);
+//            l89.setNumberOfLanes(0.4 * 1.33 / 0.71);
+//
+//
+//        }
+
+        
+
         Set<String> ext = new HashSet<>();
         ext.add("car");
         ext.add("ext");

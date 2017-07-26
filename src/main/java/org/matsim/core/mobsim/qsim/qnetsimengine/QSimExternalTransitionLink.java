@@ -75,7 +75,7 @@ public class QSimExternalTransitionLink extends AbstractQLink {
 
     @Override
     public void recalcTimeVariantAttributes() {
-        throw new RuntimeException("not yet implemented");
+//        throw new RuntimeException("not yet implemented");
     }
 
     @Override
