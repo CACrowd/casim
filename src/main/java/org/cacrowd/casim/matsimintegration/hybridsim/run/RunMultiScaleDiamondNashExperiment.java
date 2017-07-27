@@ -20,7 +20,7 @@ import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsim
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoExperimentRunInfoSender;
-import org.cacrowd.casim.matsimintegration.scenarios.DaganzoScenarioGernator;
+import org.cacrowd.casim.matsimintegration.scenarios.DiamondScenarioGenerator;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.matsim.analysis.VolumesAnalyzer;
 import org.matsim.api.core.v01.Scenario;
@@ -38,11 +38,11 @@ import org.matsim.core.scenario.ScenarioUtils;
 
 import java.io.IOException;
 
-public class RunMultiScaleDaganzoNashExperiment {
-    public static void run(double bottleneckWidth) throws IOException, InterruptedException {
+public class RunMultiScaleDiamondNashExperiment {
+    public static void run(double scWidth, double scHeight, double passagesWidth) throws IOException, InterruptedException {
 
         Config c = ConfigUtils.createConfig();
-        c.network().setTimeVariantNetwork(true);  
+        c.network().setTimeVariantNetwork(true);
         c.controler().setLastIteration(20);
         c.controler().setWriteEventsInterval(1);
 
@@ -50,7 +50,7 @@ public class RunMultiScaleDaganzoNashExperiment {
 
         final IdIntMapper idIntMapper = new IdIntMapper();
         final Scenario sc = ScenarioUtils.createScenario(c);
-        HybridSimProto.Scenario hsc = DaganzoScenarioGernator.generateScenario(sc, idIntMapper, bottleneckWidth);
+        HybridSimProto.Scenario hsc = DiamondScenarioGenerator.generateScenario(sc, idIntMapper, scWidth, scHeight, passagesWidth);
 
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(hsc);
@@ -74,7 +74,7 @@ public class RunMultiScaleDaganzoNashExperiment {
                 bind(GRPCExternalClient.class).toInstance(client);
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
-                addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
+                addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, passagesWidth, "Nash approach"));
                 addControlerListenerBinding().to(MultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
                 bind(MultiScaleManger.class).toInstance(manger);
