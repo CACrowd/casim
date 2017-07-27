@@ -24,6 +24,7 @@ import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoExperimentRunInfoSender;
 import org.cacrowd.casim.matsimintegration.scenarios.DiamondScenarioGenerator;
 import org.cacrowd.casim.proto.HybridSimProto;
+import org.matsim.analysis.VolumesAnalyzer;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
@@ -41,6 +42,7 @@ public class RunMultiScaleDaganzoNashExperiment {
     public static void run(double bottleneckWidth) throws IOException, InterruptedException {
 
         Config c = ConfigUtils.createConfig();
+        c.network().setTimeVariantNetwork(true);  
         c.controler().setLastIteration(20);
         c.controler().setWriteEventsInterval(1);
 
@@ -61,6 +63,7 @@ public class RunMultiScaleDaganzoNashExperiment {
 
 
         MultiScaleManger manger = new MultiScaleManger();
+        VolumesAnalyzer va = new VolumesAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60, sc.getNetwork());
 
         controller.addOverridingModule(new AbstractModule() {
 
@@ -76,6 +79,8 @@ public class RunMultiScaleDaganzoNashExperiment {
                 addControlerListenerBinding().to(MultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
                 bind(MultiScaleManger.class).toInstance(manger);
+                bind(VolumesAnalyzer.class).toInstance(va);
+                addEventHandlerBinding().toInstance(va);
             }
 
         });
