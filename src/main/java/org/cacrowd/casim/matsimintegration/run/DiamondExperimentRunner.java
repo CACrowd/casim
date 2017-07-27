@@ -95,9 +95,9 @@ public class DiamondExperimentRunner {
         public void run() {
             try {
                 if (runType == RunType.Nash) {
-                    RunDiamondNashExperiment.run(30., 20., 1.2);
+                    RunDiamondNashExperiment.run(30., 20., 0.62);
                 } else if (runType == RunType.MultiScaleNash) {
-                    RunMultiScaleDiamondNashExperiment.run(30., 20., 1.2);
+                    RunMultiScaleDiamondNashExperiment.run(30., 20., 0.62);
                 }
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
