@@ -14,13 +14,15 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
+import java.io.IOException;
+
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoExperimentRunInfoSender;
-import org.cacrowd.casim.matsimintegration.scenarios.DaganzoScenarioGernator;
+import org.cacrowd.casim.matsimintegration.scenarios.DiamondScenarioGenerator;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -35,8 +37,6 @@ import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetworkFactory;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import java.io.IOException;
-
 public class RunMultiScaleDaganzoNashExperiment {
     public static void run(double bottleneckWidth) throws IOException, InterruptedException {
 
@@ -48,8 +48,9 @@ public class RunMultiScaleDaganzoNashExperiment {
 
         final IdIntMapper idIntMapper = new IdIntMapper();
         final Scenario sc = ScenarioUtils.createScenario(c);
-        HybridSimProto.Scenario hsc = DaganzoScenarioGernator.generateScenario(sc, idIntMapper, bottleneckWidth);
-
+//        HybridSimProto.Scenario hsc = DaganzoScenarioGernator.generateScenario(sc, idIntMapper, bottleneckWidth);
+        HybridSimProto.Scenario hsc = DiamondScenarioGenerator.generateScenario(sc, idIntMapper, 30., 20., 1.2);
+        
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(hsc);
 
