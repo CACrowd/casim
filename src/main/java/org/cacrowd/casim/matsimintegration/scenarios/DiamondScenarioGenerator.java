@@ -31,17 +31,13 @@ import org.matsim.core.utils.geometry.CoordUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-// generates simulation scenarios as presented in Fig 9b in
-// Crociani, L. & Lämmel, G.: Multidestination Pedestrian Flows in Equilibrium: A Cellular Automaton-Based Approach.
-// Computer-Aided Civil and Infrastructure Engineering 00 (2016) 1–17
-// DOI: 10.1111/mice.12209
 public class DiamondScenarioGenerator {
 	
 	
 	/*    _________________________   scenarioHeigth
 	 *   |			   |		   | A
 	 * 	 |passagesWidth			   | |
-	 * 	 |			   |		   | |
+	 * 	  			   |		     |
 	 * 				   |		     | 
 	 * 	 |			   |		   | |
 	 * 	 |						   | |
@@ -95,25 +91,28 @@ public class DiamondScenarioGenerator {
 
         //BEGIN entrance
         cb.setX(0.5);
-        cb.setY(scenarioHeight/2-passagesWidth/2);
+        cb.setY(scenarioHeight/2-passagesWidth*1.5);
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2+passagesWidth/2);
+        cb.setY(scenarioHeight/2+passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(0);
         sb.addEdges(eb.build());
                 
         cb.setX(4.5);
         cb.setY(0);
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2-passagesWidth/2);
+        cb.setY(scenarioHeight/2-passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
         
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2+passagesWidth/2);
+        cb.setY(scenarioHeight/2+passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(1);
+        
         sb.addEdges(eb.build());
         
         eb.setC0(cb.build());
@@ -123,7 +122,7 @@ public class DiamondScenarioGenerator {
         sb.addEdges(eb.build());
         
         cb.setX(0.5);
-        cb.setY(scenarioHeight/2-(passagesWidth/2+0.4));
+        cb.setY(scenarioHeight/2-(passagesWidth*1.5+0.4));
         eb.setC0(cb.build());
         cb.setX(4.5);
         eb.setC1(cb.build());
@@ -131,7 +130,7 @@ public class DiamondScenarioGenerator {
         sb.addEdges(eb.build());
         
         cb.setX(0.5);
-        cb.setY(scenarioHeight/2+(passagesWidth/2+0.4));
+        cb.setY(scenarioHeight/2+(passagesWidth*1.5+0.4));
         eb.setC0(cb.build());
         cb.setX(4.5);
         eb.setC1(cb.build());
@@ -141,25 +140,27 @@ public class DiamondScenarioGenerator {
         
         //BEGIN exit
         cb.setX(scenarioWidth-.4);
-        cb.setY(scenarioHeight/2-passagesWidth/2);
+        cb.setY(scenarioHeight/2-passagesWidth*1.5);
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2+passagesWidth/2);
+        cb.setY(scenarioHeight/2+passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(5);
         sb.addEdges(eb.build());
         
         cb.setX(scenarioWidth - 4.5);
         cb.setY(0);
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2-passagesWidth/2);
+        cb.setY(scenarioHeight/2-passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.OBSTACLE);
         sb.addEdges(eb.build());
         
         eb.setC0(cb.build());
-        cb.setY(scenarioHeight/2+passagesWidth/2);
+        cb.setY(scenarioHeight/2+passagesWidth*1.5);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(4);
         sb.addEdges(eb.build());
         
         eb.setC0(cb.build());
@@ -169,7 +170,7 @@ public class DiamondScenarioGenerator {
         sb.addEdges(eb.build());
                 
         cb.setX(scenarioWidth - 0.4);
-        cb.setY(scenarioHeight/2-(passagesWidth/2+0.4));
+        cb.setY(scenarioHeight/2-(passagesWidth*1.5+0.4));
         eb.setC0(cb.build());
         cb.setX(scenarioWidth - 4.5);
         eb.setC1(cb.build());
@@ -177,7 +178,7 @@ public class DiamondScenarioGenerator {
         sb.addEdges(eb.build());
         
         cb.setX(scenarioWidth - 0.4);
-        cb.setY(scenarioHeight/2+(passagesWidth/2+0.4));
+        cb.setY(scenarioHeight/2+(passagesWidth*1.5+0.4));
         eb.setC0(cb.build());
         cb.setX(scenarioWidth - 4.5);
         eb.setC1(cb.build());
@@ -197,6 +198,7 @@ public class DiamondScenarioGenerator {
         cb.setY(distanceToWalls+passagesWidth);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(2);
         sb.addEdges(eb.build());
 
         eb.setC0(cb.build());
@@ -209,6 +211,7 @@ public class DiamondScenarioGenerator {
         cb.setY(scenarioHeight-distanceToWalls);
         eb.setC1(cb.build());
         eb.setType(HybridSimProto.Edge.Type.TRANSITION);
+        eb.setId(3);
         sb.addEdges(eb.build());
 
         eb.setC0(cb.build());
@@ -274,12 +277,20 @@ public class DiamondScenarioGenerator {
             pop.addPerson(pers);
             Plan plan = fac.createPlan();
             pers.addPlan(plan);
-            Activity a0 = fac.createActivityFromLinkId("origin", Id.createLinkId("originWest"));
+            Activity a0;
+            if (i%2 == 0)
+            	a0 = fac.createActivityFromLinkId("origin", Id.createLinkId("originWest"));
+            else
+            	a0 = fac.createActivityFromLinkId("origin", Id.createLinkId("originEast"));
             a0.setEndTime(0);
             plan.addActivity(a0);
             Leg leg = fac.createLeg("car");
             plan.addLeg(leg);
-            Activity a1 = fac.createActivityFromLinkId("destination", Id.createLinkId("destinationEast"));
+            Activity a1;
+            if (i%2 == 0)
+            	a1 = fac.createActivityFromLinkId("destination", Id.createLinkId("destinationEast"));
+            else
+            	a1 = fac.createActivityFromLinkId("destination", Id.createLinkId("destinationWest"));
             plan.addActivity(a1);
         }
        
@@ -311,38 +322,61 @@ public class DiamondScenarioGenerator {
 
         Link lm1_w = fac.createLink(Id.createLinkId("originWest"), nm1, nw);
         net.addLink(lm1_w);
-
+        Link lw_m1 = fac.createLink(Id.createLinkId("destinationWest"), nw, nm1);
+        net.addLink(lw_m1);
+        
         Link lin_w = fac.createLink(Id.createLinkId("inWest"), nw, n1);
         net.addLink(lin_w);
         idIntMapper.addDestinationsLinkMapping(0, 1, lin_w);
-
+        Link lout_w = fac.createLink(Id.createLinkId("outWest"), n1, nw);
+        net.addLink(lout_w);
+        idIntMapper.addDestinationsLinkMapping(1, 0, lout_w);
+        
         Link l1_2 = fac.createLink(Id.createLinkId("1->2"), n1, n2);
         net.addLink(l1_2);
         idIntMapper.addDestinationsLinkMapping(1, 2, l1_2);
-
+        Link l2_1 = fac.createLink(Id.createLinkId("2->1"), n2, n1);
+        net.addLink(l2_1);
+        idIntMapper.addDestinationsLinkMapping(2, 1, l2_1);
+        
         Link l1_3 = fac.createLink(Id.createLinkId("1->3"), n1, n3);
         net.addLink(l1_3);
         idIntMapper.addDestinationsLinkMapping(1, 3, l1_3);
+        Link l3_1 = fac.createLink(Id.createLinkId("3->1"), n3, n1);
+        net.addLink(l3_1);
+        idIntMapper.addDestinationsLinkMapping(3, 1, l3_1);
         
         Link l3_4 = fac.createLink(Id.createLinkId("3->4"), n3, n4);
         net.addLink(l3_4);
         idIntMapper.addDestinationsLinkMapping(3, 4, l3_4);
+        Link l4_3 = fac.createLink(Id.createLinkId("4->3"), n4, n3);
+        net.addLink(l4_3);
+        idIntMapper.addDestinationsLinkMapping(4, 3, l4_3);
 
         Link l2_4 = fac.createLink(Id.createLinkId("2->4"), n2, n4);
         net.addLink(l2_4);
         idIntMapper.addDestinationsLinkMapping(2, 4, l2_4);
+        Link l4_2 = fac.createLink(Id.createLinkId("4->2"), n4, n2);
+        net.addLink(l4_2);
+        idIntMapper.addDestinationsLinkMapping(4, 2, l4_2);
         
         Link lout_e = fac.createLink(Id.createLinkId("outEast"), n4, ne);
         net.addLink(lout_e);
         idIntMapper.addDestinationsLinkMapping(4, 5, lout_e);
+        Link lin_e = fac.createLink(Id.createLinkId("inEast"), ne, n4);
+        net.addLink(lin_e);
+        idIntMapper.addDestinationsLinkMapping(5, 4, lin_e);
 
-        Link l11m3 = fac.createLink(Id.createLinkId("destinationEast"), ne, nm2);
-        net.addLink(l11m3);
+        Link le_m2 = fac.createLink(Id.createLinkId("destinationEast"), ne, nm2);
+        net.addLink(le_m2);
+        Link lm2_e = fac.createLink(Id.createLinkId("originEast"), nm2, ne);
+        net.addLink(lm2_e);
+        
 
         for (Link l : net.getLinks().values()) {
             l.setFreespeed(1.33);
-            l.setCapacity(2 * 1.33);
-            l.setNumberOfLanes(2 * 1.33 / 0.71);
+            l.setCapacity(4 * 1.33);
+            l.setNumberOfLanes(4 * 1.33 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));
         }
         Set<String> ext = new HashSet<>();
@@ -350,10 +384,12 @@ public class DiamondScenarioGenerator {
         ext.add("ext");
         ext.add("2ext");
         lin_w.setAllowedModes(ext);
+        lin_e.setAllowedModes(ext);
         Set<String> ext2 = new HashSet<>();
         ext2.add("car");
         ext2.add("ext2");
         lout_e.setAllowedModes(ext2);
+        lout_w.setAllowedModes(ext2);
 
     }
 }
