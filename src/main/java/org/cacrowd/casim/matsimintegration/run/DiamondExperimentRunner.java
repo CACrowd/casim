@@ -50,7 +50,7 @@ public class DiamondExperimentRunner {
             System.out.println("Running Nash equilibrium experiment");
             runType = RunType.Nash;
         } else if (args[0].equalsIgnoreCase("ms_nash")) {
-            System.out.println("Running multi-scale Nash equilibrium experiment with bottleneck width: " + Double.parseDouble(args[1]));
+            System.out.println("Running multi-scale Nash equilibrium experiment");
             runType = RunType.MultiScaleNash;
         }
 
