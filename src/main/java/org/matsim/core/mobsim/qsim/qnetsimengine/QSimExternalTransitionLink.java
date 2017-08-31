@@ -21,7 +21,6 @@ package org.matsim.core.mobsim.qsim.qnetsimengine;
 
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.ExternalEngine;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -118,7 +117,7 @@ public class QSimExternalTransitionLink extends AbstractQLink {
             Id<Node> leaveId = toQNode.getNode().getId();
 //			e.addFromUpstream( getLink().getFromNode().getId(), leaveId, veh);
             e.addFromUpstream(veh);
-            em.processEvent(new LinkEnterEvent(now, veh.getId(), getLink().getId()));
+//            em.processEvent(new LinkEnterEvent(now, veh.getId(), getLink().getId()));
         }
 
         @Override
