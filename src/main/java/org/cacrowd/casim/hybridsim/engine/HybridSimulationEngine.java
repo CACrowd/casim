@@ -15,6 +15,7 @@
 package org.cacrowd.casim.hybridsim.engine;
 
 import com.google.inject.Inject;
+import org.apache.log4j.Logger;
 import org.cacrowd.casim.pedca.agents.*;
 import org.cacrowd.casim.pedca.context.Context;
 import org.cacrowd.casim.pedca.engine.AgentMover;
@@ -30,11 +31,15 @@ import org.cacrowd.casim.utility.SimulationObserver;
 import org.cacrowd.casim.utility.rasterizer.Edge;
 import org.cacrowd.casim.utility.rasterizer.Rasterizer;
 import org.cacrowd.casim.utility.rasterizer.ScanlineRasterizer;
+import org.matsim.core.gbl.Gbl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HybridSimulationEngine {
+
+    private static final Logger log = Logger.getLogger(HybridSimulationEngine.class);
+
 
     @Inject
     private AgentsUpdater agentUpdater;
@@ -53,6 +58,8 @@ public class HybridSimulationEngine {
     @Inject
     private Rasterizer rasterizer;
 
+
+    private boolean warn = true;
 
     public void loadEnvironment(HybridSimProto.Scenario request) {
         List<Edge> res = request.getEdgesList().stream().map(he -> {
@@ -118,6 +125,13 @@ public class HybridSimulationEngine {
         }
         Agent a1 = new Agent(request.getId(), enterLocation, tactic, context);
         transitionHandler.scheduleForDeparture(a1);
+
+        if (warn) {
+            log.warn("There is no capacity restriction in the transition handler. Thus, there will never be a spill back to queue simulation. This needs to be fixed [GL Aug '17]");
+            log.warn(Gbl.ONLYONCE);
+            warn = false;
+        }
+
 
         return true;
     }
