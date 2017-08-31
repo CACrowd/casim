@@ -15,6 +15,8 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.FlowAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.QuantityAnalyzer;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
@@ -22,7 +24,6 @@ import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoExperimentRunInfoSender;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoScenarioGernator;
 import org.cacrowd.casim.proto.HybridSimProto;
-import org.matsim.analysis.VolumesAnalyzer;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.config.Config;
@@ -61,13 +62,17 @@ public class RunMultiScaleDaganzoNashExperiment {
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
 
-        MultiScaleManger manger = new MultiScaleManger();
-        VolumesAnalyzer va = new VolumesAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60, sc.getNetwork());
+//        VolumesAnalyzer va = new VolumesAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60, sc.getNetwork());
+        QuantityAnalyzer qa = new QuantityAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
+        FlowAnalyzer fa = new FlowAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
+
+        MultiScaleManger manger = new MultiScaleManger(qa, fa);
 
         controller.addOverridingModule(new AbstractModule() {
 
             @Override
             public void install() {
+                bind(QuantityAnalyzer.class).toInstance(qa);
                 bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
                 bind(QNetworkFactory.class).toProvider(MultiScaleNetworkProvider.class);
                 bind(IdIntMapper.class).toInstance(idIntMapper);
@@ -78,8 +83,12 @@ public class RunMultiScaleDaganzoNashExperiment {
                 addControlerListenerBinding().to(MultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
                 bind(MultiScaleManger.class).toInstance(manger);
-                bind(VolumesAnalyzer.class).toInstance(va);
-                addEventHandlerBinding().toInstance(va);
+//                bind(VolumesAnalyzer.class).toInstance(va);
+//                addEventHandlerBinding().toInstance(va);
+                addEventHandlerBinding().toInstance(qa);
+                addControlerListenerBinding().toInstance(qa);
+                addEventHandlerBinding().toInstance(fa);
+                addControlerListenerBinding().toInstance(fa);
             }
 
         });

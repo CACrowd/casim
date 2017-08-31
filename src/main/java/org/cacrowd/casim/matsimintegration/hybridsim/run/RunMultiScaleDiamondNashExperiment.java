@@ -61,8 +61,9 @@ public class RunMultiScaleDiamondNashExperiment {
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
 
-        MultiScaleManger manger = new MultiScaleManger();
+//        MultiScaleManger manger = new MultiScaleManger();
         VolumesAnalyzer va = new VolumesAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60, sc.getNetwork());
+
 
         controller.addOverridingModule(new AbstractModule() {
 
@@ -77,7 +78,7 @@ public class RunMultiScaleDiamondNashExperiment {
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, passagesWidth, "Nash approach"));
                 addControlerListenerBinding().to(MultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
-                bind(MultiScaleManger.class).toInstance(manger);
+//                bind(MultiScaleManger.class).toInstance(manger);
                 bind(VolumesAnalyzer.class).toInstance(va);
                 addEventHandlerBinding().toInstance(va);
             }

@@ -374,7 +374,7 @@ public class DaganzoScenarioGernator {
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
         //        c.travelTimeCalculator().setTravelTimeAggregatorType("experimental_LastMile");
-        c.travelTimeCalculator().setTraveltimeBinSize(900);
+        c.travelTimeCalculator().setTraveltimeBinSize(60);
 
         pre.setTypicalDuration(49); // needs to be geq 49, otherwise when
         // running a simulation one gets

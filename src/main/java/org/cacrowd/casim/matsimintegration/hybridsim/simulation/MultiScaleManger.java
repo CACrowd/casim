@@ -16,7 +16,11 @@ package org.cacrowd.casim.matsimintegration.hybridsim.simulation;
 
 
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.apache.log4j.Logger;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.FlowAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.QuantityAnalyzer;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -31,15 +35,25 @@ import java.util.*;
 @Singleton
 public class MultiScaleManger implements AfterMobsimListener {
 
-    private static final double mxDeviation = 1.05;
+    private static final Logger log = Logger.getLogger(MultiScaleManger.class);
+
+
+    private static final double mxDeviation = 10;
+    private final QuantityAnalyzer qa;
+    private final FlowAnalyzer fa;
 
     private List<MultiScaleProvider> multiScaleProviders = new ArrayList<>();
-    private Map<Id<Link>, NetworkChangeEvent> capacityEvents = new HashMap<>();
 
     private boolean runCA = true;
 
     private Map<Id<Link>, TreeMap<Integer, Double>> lookup = new HashMap<>();
-    private Set<Id<Link>> exclude = Sets.newHashSet(Id.createLinkId("origin"), Id.createLinkId("in"), Id.createLinkId("destination"));
+    private Set<Id<Link>> exclude = Sets.newHashSet(Id.createLinkId("origin"), Id.createLinkId("in"), Id.createLinkId("destination"), Id.createLinkId("out"));
+
+    @Inject
+    public MultiScaleManger(QuantityAnalyzer qa, FlowAnalyzer fa) {
+        this.qa = qa;
+        this.fa = fa;
+    }
 
     @Override
     public void notifyAfterMobsim(AfterMobsimEvent event) {
@@ -48,15 +62,17 @@ public class MultiScaleManger implements AfterMobsimListener {
 
         if (runCA) {
             updateLookupTable(event);
+            updateLanesLookupTable(event);
+            reviseStorageCaps(event);
         } else {
             if (reviseQSim(event)) {
                 runCA = true;
             }
         }
 
-//        if (event.getIteration() == 99) {
-//            runCA = true;
-//        }
+        if (event.getIteration() == 99) {
+            runCA = true;
+        }
 
 //        if (!runCA) {
         createNetworkChangeEvents(event);
@@ -67,16 +83,55 @@ public class MultiScaleManger implements AfterMobsimListener {
         multiScaleProviders.forEach(p -> p.setRunCAIteration(runCA));
     }
 
+    private void updateLanesLookupTable(AfterMobsimEvent event) {
+
+    }
+
+    private void reviseStorageCaps(AfterMobsimEvent event) {
+        Scenario sc = event.getServices().getScenario();
+        for (Link l : sc.getNetwork().getLinks().values()) {
+            if (exclude.contains(l.getId())) {
+                continue;
+            }
+            int[] volumes = qa.getQuantitySlotsForLink(l.getId());
+            if (volumes == null) {
+                continue;
+            }
+            int mxCnt = 0;
+            for (int cnt : volumes) {
+                if (cnt > mxCnt) {
+                    mxCnt = cnt;
+                }
+            }
+            double length = l.getLength();
+            double perLane = length / sc.getNetwork().getEffectiveCellSize();
+            double lanes = mxCnt / perLane;
+            l.setNumberOfLanes(lanes);
+
+            double flowCap = l.getCapacity();
+            double fs = l.getLength() / l.getFreespeed();
+            double mxStorage = mxCnt / fs;
+            if (flowCap > mxStorage) {
+                l.setCapacity(mxStorage);
+            }
+            l.setCapacity(666);
+        }
+    }
+
     private void createNetworkChangeEvents(AfterMobsimEvent event) {
         double binSize = event.getServices().getConfig().travelTimeCalculator().getTraveltimeBinSize();
         Scenario sc = event.getServices().getScenario();
         List<NetworkChangeEvent> events = new ArrayList<>();
 
-        events.addAll(capacityEvents.values());
 
         for (Link l : sc.getNetwork().getLinks().values()) {
-            TreeMap<Integer, Double> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
-            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+            if (exclude.contains(l.getId())) {
+                continue;
+            }
+
+            TreeMap<Integer, Double> lookupTableSpd = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
+//            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+            int[] volumes = qa.getQuantitySlotsForLink(l.getId());
             if (volumes == null) {
                 continue;
             }
@@ -85,8 +140,8 @@ public class MultiScaleManger implements AfterMobsimListener {
 //                if (!lookupTable.containsKey(volume)) {
 //                    continue;
 //                }
-                Map.Entry<Integer, Double> cE = lookupTable.ceilingEntry(volume);
-                Map.Entry<Integer, Double> fE = lookupTable.floorEntry(volume);
+                Map.Entry<Integer, Double> cE = lookupTableSpd.ceilingEntry(volume);
+                Map.Entry<Integer, Double> fE = lookupTableSpd.floorEntry(volume);
 
                 double spd;
                 if (cE == null && fE != null) {
@@ -113,15 +168,10 @@ public class MultiScaleManger implements AfterMobsimListener {
 
                 NetworkChangeEvent.ChangeValue changeValue = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, spd);
 
-                NetworkChangeEvent old = capacityEvents.get(l.getId());
-                if (old != null && old.getStartTime() == time) {
-                    old.setFreespeedChange(changeValue);
-                } else {
-                    NetworkChangeEvent ev = new NetworkChangeEvent(time);
-                    ev.setFreespeedChange(changeValue);
-                    ev.addLink(l);
-                    events.add(ev);
-                }
+                NetworkChangeEvent ev = new NetworkChangeEvent(time);
+                ev.setFreespeedChange(changeValue);
+                ev.addLink(l);
+                events.add(ev);
 
             }
         }
@@ -131,13 +181,13 @@ public class MultiScaleManger implements AfterMobsimListener {
     private boolean reviseQSim(AfterMobsimEvent event) {
         Scenario sc = event.getServices().getScenario();
         for (Link l : sc.getNetwork().getLinks().values()) {
-
             if (exclude.contains(l.getId())) {
                 continue;
             }
 
             TreeMap<Integer, Double> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
-            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+//            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+            int[] volumes = qa.getQuantitySlotsForLink(l.getId());
             if (volumes == null) {
                 continue;
             }
@@ -155,16 +205,17 @@ public class MultiScaleManger implements AfterMobsimListener {
                         minDist = dist;
                     }
                 }
-                if (fE != null && fE.getKey() > 0) {
+                if (fE != null) {// && fE.getKey() > 0) {
                     double dist = volume - fE.getKey();
                     if (dist < minDist) {
                         minDist = dist;
                     }
                 }
 
-                double deviation = volume / (volume - minDist);
+                double deviation = Math.abs(volume - minDist);
 
-                if (deviation > mxDeviation) {
+                if (minDist > mxDeviation) {
+                    log.info("Queue model needs revision, min dist is: " + minDist);
                     return true;
                 }
             }
@@ -187,7 +238,8 @@ public class MultiScaleManger implements AfterMobsimListener {
 
             double obsCapacity = 0;
             TreeMap<Integer, Double> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
-            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+//            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
+            int[] volumes = qa.getQuantitySlotsForLink(l.getId());
             if (volumes == null) {
                 continue;
             }

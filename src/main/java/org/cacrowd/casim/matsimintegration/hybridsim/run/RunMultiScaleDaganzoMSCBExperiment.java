@@ -66,7 +66,6 @@ public class RunMultiScaleDaganzoMSCBExperiment {
         final MSCBTravelDisutility tc = new MSCBTravelDisutility();
         final MSCBCongestionObserver obs = new MSCBCongestionObserver();
 
-        MultiScaleManger manager = new MultiScaleManger();
 
         controller.addOverridingModule(new AbstractModule() {
 
@@ -86,7 +85,7 @@ public class RunMultiScaleDaganzoMSCBExperiment {
                 bind(Controler.class).toInstance(controller);
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
-                bind(MultiScaleManger.class).toInstance(manager);
+//                bind(MultiScaleManger.class).toInstance(manager);
                 addControlerListenerBinding().to(MultiScaleManger.class);
 
             }
