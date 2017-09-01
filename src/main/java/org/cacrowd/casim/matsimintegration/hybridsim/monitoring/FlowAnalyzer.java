@@ -82,4 +82,16 @@ public class FlowAnalyzer implements LinkLeaveEventHandler, IterationEndsListene
             log.info("Link " + key + " " + Arrays.toString(value) + " total: " + IntStream.of(value).sum());
         });
     }
+
+    public double getFlow(double time, Id<Link> id) {
+        int[] qntty = links.get(id);
+        if (qntty == null) {
+            return 0;
+        }
+        int slot = getTimeSlot(time);
+        if (slot >= qntty.length) {
+            return 0;
+        }
+        return -qntty[slot] / timeBinSize;
+    }
 }

@@ -38,7 +38,7 @@ public class MultiScaleManger implements AfterMobsimListener {
     private static final Logger log = Logger.getLogger(MultiScaleManger.class);
 
 
-    private static final double mxDeviation = 10;
+    private static final double mxDeviation = 8;
     private final QuantityAnalyzer qa;
     private final FlowAnalyzer fa;
 
@@ -46,7 +46,7 @@ public class MultiScaleManger implements AfterMobsimListener {
 
     private boolean runCA = true;
 
-    private Map<Id<Link>, TreeMap<Integer, Double>> lookup = new HashMap<>();
+    private Map<Id<Link>, TreeMap<Integer, LinkState>> lookup = new HashMap<>();
     private Set<Id<Link>> exclude = Sets.newHashSet(Id.createLinkId("origin"), Id.createLinkId("in"), Id.createLinkId("destination"), Id.createLinkId("out"));
 
     @Inject
@@ -62,8 +62,6 @@ public class MultiScaleManger implements AfterMobsimListener {
 
         if (runCA) {
             updateLookupTable(event);
-            updateLanesLookupTable(event);
-            reviseStorageCaps(event);
         } else {
             if (reviseQSim(event)) {
                 runCA = true;
@@ -83,41 +81,6 @@ public class MultiScaleManger implements AfterMobsimListener {
         multiScaleProviders.forEach(p -> p.setRunCAIteration(runCA));
     }
 
-    private void updateLanesLookupTable(AfterMobsimEvent event) {
-
-    }
-
-    private void reviseStorageCaps(AfterMobsimEvent event) {
-        Scenario sc = event.getServices().getScenario();
-        for (Link l : sc.getNetwork().getLinks().values()) {
-            if (exclude.contains(l.getId())) {
-                continue;
-            }
-            int[] volumes = qa.getQuantitySlotsForLink(l.getId());
-            if (volumes == null) {
-                continue;
-            }
-            int mxCnt = 0;
-            for (int cnt : volumes) {
-                if (cnt > mxCnt) {
-                    mxCnt = cnt;
-                }
-            }
-            double length = l.getLength();
-            double perLane = length / sc.getNetwork().getEffectiveCellSize();
-            double lanes = mxCnt / perLane;
-            l.setNumberOfLanes(lanes);
-
-            double flowCap = l.getCapacity();
-            double fs = l.getLength() / l.getFreespeed();
-            double mxStorage = mxCnt / fs;
-            if (flowCap > mxStorage) {
-                l.setCapacity(mxStorage);
-            }
-            l.setCapacity(666);
-        }
-    }
-
     private void createNetworkChangeEvents(AfterMobsimEvent event) {
         double binSize = event.getServices().getConfig().travelTimeCalculator().getTraveltimeBinSize();
         Scenario sc = event.getServices().getScenario();
@@ -129,7 +92,7 @@ public class MultiScaleManger implements AfterMobsimListener {
                 continue;
             }
 
-            TreeMap<Integer, Double> lookupTableSpd = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
+            TreeMap<Integer, LinkState> lookupTableSpd = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
 //            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
             int[] volumes = qa.getQuantitySlotsForLink(l.getId());
             if (volumes == null) {
@@ -140,38 +103,75 @@ public class MultiScaleManger implements AfterMobsimListener {
 //                if (!lookupTable.containsKey(volume)) {
 //                    continue;
 //                }
-                Map.Entry<Integer, Double> cE = lookupTableSpd.ceilingEntry(volume);
-                Map.Entry<Integer, Double> fE = lookupTableSpd.floorEntry(volume);
+                Map.Entry<Integer, LinkState> cE = lookupTableSpd.ceilingEntry(volume);
+                Map.Entry<Integer, LinkState> fE = lookupTableSpd.floorEntry(volume);
 
                 double spd;
+                double lanes;
+                double cap;
                 if (cE == null && fE != null) {
-                    spd = fE.getValue();
+                    spd = fE.getValue().freeSpeed;
+                    lanes = fE.getValue().lanes;
+                    cap = fE.getValue().flowCap;
                 } else if (cE != null && fE == null) {
-                    spd = cE.getValue();
-                } else if (cE == null && fE == null) {
+                    spd = cE.getValue().freeSpeed;
+                    lanes = cE.getValue().lanes;
+                    cap = cE.getValue().flowCap;
+                } else if (cE == null) {
                     continue;
                 } else {
-                    double spd1 = fE.getValue();
-                    double spd2 = cE.getValue();
+                    double spd1 = fE.getValue().freeSpeed;
+                    double spd2 = cE.getValue().freeSpeed;
+                    double lanes1 = fE.getValue().lanes;
+                    double lanes2 = cE.getValue().lanes;
+                    double cap1 = fE.getValue().flowCap;
+                    double cap2 = cE.getValue().flowCap;
                     double range = cE.getKey() - fE.getKey();
                     if (range == 0) {
                         spd = spd1;
+                        lanes = lanes1;
+                        cap = cap1;
                     } else {
                         double w1 = 1 - (volume - fE.getKey()) / range;
                         double w2 = 1 - (cE.getKey() - volume) / range;
                         spd = w1 * spd1 + w2 * spd2;
+                        lanes = w1 * lanes1 + w2 * lanes2;
+                        cap = w1 * cap1 + w2 * cap2;
                     }
                 }
 
-//                double spd = lookupTable.get(volume);
+
+                lanes = Math.max(lanes, 1.);
+                cap = Math.max(cap, .5);
+
+                if (spd >= .4 / .3) {
+                    lanes = l.getNumberOfLanes();
+                    cap = l.getCapacity();
+                }
+//
+//                spd = 1.33;
                 double time = i * binSize;
 
-                NetworkChangeEvent.ChangeValue changeValue = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, spd);
+                NetworkChangeEvent.ChangeValue changeValueS = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, spd);
+                NetworkChangeEvent.ChangeValue changeValueL = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, lanes);
+                NetworkChangeEvent.ChangeValue changeValueC = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, cap);
 
-                NetworkChangeEvent ev = new NetworkChangeEvent(time);
-                ev.setFreespeedChange(changeValue);
-                ev.addLink(l);
-                events.add(ev);
+                {
+                    NetworkChangeEvent ev = new NetworkChangeEvent(time);
+                    ev.setFreespeedChange(changeValueS);
+                    ev.setFlowCapacityChange(changeValueC);
+                    ev.setLanesChange(changeValueL);
+                    ev.addLink(l);
+                    events.add(ev);
+                }
+                {
+                    NetworkChangeEvent ev = new NetworkChangeEvent(time + 1);
+                    ev.setFreespeedChange(changeValueS);
+                    ev.setFlowCapacityChange(changeValueC);
+                    ev.setLanesChange(changeValueL);
+                    ev.addLink(l);
+                    events.add(ev);
+                }
 
             }
         }
@@ -185,7 +185,7 @@ public class MultiScaleManger implements AfterMobsimListener {
                 continue;
             }
 
-            TreeMap<Integer, Double> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
+            TreeMap<Integer, LinkState> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
 //            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
             int[] volumes = qa.getQuantitySlotsForLink(l.getId());
             if (volumes == null) {
@@ -196,8 +196,8 @@ public class MultiScaleManger implements AfterMobsimListener {
                 if (volume == 0) {
                     continue;
                 }
-                Map.Entry<Integer, Double> cE = lookupTable.ceilingEntry(volume);
-                Map.Entry<Integer, Double> fE = lookupTable.floorEntry(volume);
+                Map.Entry<Integer, LinkState> cE = lookupTable.ceilingEntry(volume);
+                Map.Entry<Integer, LinkState> fE = lookupTable.floorEntry(volume);
                 double minDist = Double.POSITIVE_INFINITY;
                 if (cE != null) {
                     double dist = cE.getKey() - volume;
@@ -215,7 +215,7 @@ public class MultiScaleManger implements AfterMobsimListener {
                 double deviation = Math.abs(volume - minDist);
 
                 if (minDist > mxDeviation) {
-                    log.info("Queue model needs revision, min dist is: " + minDist);
+                    log.info("Queue model needs revision, min dist is: " + minDist + " link: " + l.getId());
                     return true;
                 }
             }
@@ -237,21 +237,30 @@ public class MultiScaleManger implements AfterMobsimListener {
             }
 
             double obsCapacity = 0;
-            TreeMap<Integer, Double> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
+            TreeMap<Integer, LinkState> lookupTable = lookup.computeIfAbsent(l.getId(), k -> new TreeMap<>());
 //            int[] volumes = event.getServices().getVolumes().getVolumesForLink(l.getId());
             int[] volumes = qa.getQuantitySlotsForLink(l.getId());
+
             if (volumes == null) {
                 continue;
             }
             for (int slot = 0; slot < volumes.length; slot++) {
                 double time = slot * binSize;
                 int volume = volumes[slot];
+                double flow = fa.getFlow(time, l.getId());
 //                double tmpCapacity = volume / binSize;
 //                if (tmpCapacity > obsCapacity) {
 //                    obsCapacity = tmpCapacity;
 //                }
                 double spd = l.getLength() / (tt.getLinkTravelTime(l, time, null, null));
-                lookupTable.put(volume, spd);
+                LinkState ls = new LinkState();
+                ls.freeSpeed = spd;
+                ls.flowCap = flow;
+
+                double perLane = l.getLength() / sc.getNetwork().getEffectiveCellSize();
+                ls.lanes = volume / perLane;
+
+                lookupTable.put(volume, ls);
             }
 //            if (l.getCapacity(1) < obsCapacity) {
 //                NetworkChangeEvent e = new NetworkChangeEvent(0);
@@ -266,5 +275,11 @@ public class MultiScaleManger implements AfterMobsimListener {
 
     public void subscribe(MultiScaleProvider p) {
         this.multiScaleProviders.add(p);
+    }
+
+    private static class LinkState {
+        double freeSpeed;
+        double flowCap;
+        double lanes;
     }
 }

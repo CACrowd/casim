@@ -537,10 +537,12 @@ public class DaganzoScenarioGernator {
         for (Link l : net.getLinks().values()) {
             l.setFreespeed(1.33);
             l.setCapacity(2 * 1.33);
-            l.setNumberOfLanes(2 * 1.33 / 0.71);
+            l.setNumberOfLanes(2 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));
         }
 
+        l89.setCapacity(.68);
+        l89.setNumberOfLanes(1);
 //        if (bottleneckWidth == 1.2) {
 ////            final double cap = 1;
 //

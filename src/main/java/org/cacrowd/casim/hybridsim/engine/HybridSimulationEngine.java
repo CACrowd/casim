@@ -146,7 +146,7 @@ public class HybridSimulationEngine {
             context.setTimeOfDay(time);
             doSimStep(time);
 
-            if (context.getIteration() % 1 == 0) {
+            if (context.getIteration() % 10 == 0) {
                 observer.observerDensityGrid();
                 observer.observePopulation();
             }
