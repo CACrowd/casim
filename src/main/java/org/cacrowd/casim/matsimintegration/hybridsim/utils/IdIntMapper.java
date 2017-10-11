@@ -46,7 +46,9 @@ public class IdIntMapper {
     }
 
     public Integer getIntPersId(Id<Person> id) {
-        return persIdIntIdMapping.computeIfAbsent(id, k -> (ids++));
+        int intId = Integer.parseInt(id.toString());
+
+        return persIdIntIdMapping.computeIfAbsent(id, k -> (intId));
     }
 
     public Integer getIntNodeId(Id<Node> id) {

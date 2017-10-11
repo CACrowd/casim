@@ -365,7 +365,7 @@ public class DaganzoScenarioGernator {
 
         PlanCalcScoreConfigGroup.ActivityParams pre = new PlanCalcScoreConfigGroup.ActivityParams("origin");
 
-        c.strategy().setMaxAgentPlanMemorySize(3);
+        c.strategy().setMaxAgentPlanMemorySize(2);
         c.strategy().addParam("ModuleDisableAfterIteration_1", "50");
         c.strategy().addParam("Module_1", "ReRoute");
         c.strategy().addParam("ModuleProbability_1", "0.1");
@@ -541,8 +541,8 @@ public class DaganzoScenarioGernator {
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));
         }
 
-        l89.setCapacity(.68);
-        l89.setNumberOfLanes(1);
+//        l89.setCapacity(.68);
+//        l89.setNumberOfLanes(1);
 //        if (bottleneckWidth == 1.2) {
 ////            final double cap = 1;
 //

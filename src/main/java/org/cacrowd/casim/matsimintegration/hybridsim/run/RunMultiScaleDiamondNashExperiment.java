@@ -15,7 +15,7 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
-import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
+import org.cacrowd.casim.matsimintegration.hybridsim.simulation.DefaultMultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -76,7 +76,7 @@ public class RunMultiScaleDiamondNashExperiment {
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, passagesWidth, "Nash approach"));
-                addControlerListenerBinding().to(MultiScaleManger.class);
+                addControlerListenerBinding().to(DefaultMultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
 //                bind(MultiScaleManger.class).toInstance(manger);
                 bind(VolumesAnalyzer.class).toInstance(va);

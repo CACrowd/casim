@@ -16,7 +16,9 @@ package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
 import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.FlowAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.LastEventAnalyzer;
 import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.QuantityAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.simulation.BruteForceMultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
@@ -66,12 +68,15 @@ public class RunMultiScaleDaganzoNashExperiment {
         QuantityAnalyzer qa = new QuantityAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
         FlowAnalyzer fa = new FlowAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
 
-        MultiScaleManger manger = new MultiScaleManger(qa, fa);
+//        MultiScaleManger manger = new BruteForceMultiScaleManger(qa, fa);
+
+        LastEventAnalyzer lea = new LastEventAnalyzer();
 
         controller.addOverridingModule(new AbstractModule() {
 
             @Override
             public void install() {
+                bind(LastEventAnalyzer.class).toInstance(lea);
                 bind(QuantityAnalyzer.class).toInstance(qa);
                 bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
                 bind(QNetworkFactory.class).toProvider(MultiScaleNetworkProvider.class);
@@ -80,14 +85,15 @@ public class RunMultiScaleDaganzoNashExperiment {
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
-                addControlerListenerBinding().to(MultiScaleManger.class);
+                addControlerListenerBinding().to(BruteForceMultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
-                bind(MultiScaleManger.class).toInstance(manger);
+                bind(MultiScaleManger.class).to(BruteForceMultiScaleManger.class);
 //                bind(VolumesAnalyzer.class).toInstance(va);
 //                addEventHandlerBinding().toInstance(va);
                 addEventHandlerBinding().toInstance(qa);
                 addControlerListenerBinding().toInstance(qa);
                 addEventHandlerBinding().toInstance(fa);
+                addEventHandlerBinding().toInstance(lea);
                 addControlerListenerBinding().toInstance(fa);
             }
 
