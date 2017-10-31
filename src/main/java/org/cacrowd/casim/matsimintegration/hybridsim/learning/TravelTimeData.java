@@ -12,6 +12,7 @@ public class TravelTimeData {
 	
 	private double minTravelTime;
 	private double maxTravelTime;
+	private double lastEventTime;
 	private Map<Id<Vehicle>,Double> ttAnalysis = new HashMap<Id<Vehicle>,Double>();
 	private Vector<Double> sortedTT = null;
 	
@@ -24,6 +25,7 @@ public class TravelTimeData {
 		//in this case the travel time can be calculated
 		else{
 			double newTravelTime = time - entranceTime;
+			lastEventTime = time;
 			ttAnalysis.put(pedId, newTravelTime);
 			if(minTravelTime == 0. || newTravelTime < minTravelTime){
 				minTravelTime = newTravelTime;
@@ -42,6 +44,10 @@ public class TravelTimeData {
 		return maxTravelTime;
 	}
 	
+	public double getLastEventTime(){
+		return lastEventTime;
+	}
+	
 	/**
 	 * LC
 	 * @return average of the highest 5% travel times of the link. It overwrites maxTravelTime.
@@ -51,7 +57,7 @@ public class TravelTimeData {
 			sortedTT = new Vector<Double>(ttAnalysis.values());
 			Collections.sort(sortedTT);
 			maxTravelTime = sortedTT.get(sortedTT.size()-1);
-			int numberEl = (int)(sortedTT.size()*.05);					//5%
+			int numberEl = (int)(sortedTT.size()*.15);					//5%
 			
 			for (int i = 1; i<numberEl;i++){
 				maxTravelTime += sortedTT.get(sortedTT.size()-i-1);
