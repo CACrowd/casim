@@ -45,8 +45,6 @@ public class AlternativeBruteForceMultiScaleManger implements MultiScaleManger, 
 
     private static final Logger log = Logger.getLogger(AlternativeBruteForceMultiScaleManger.class);
 
-
-    private static final double mxDeviation = 8;
     private final TravelTimeForLinkAnalyzer travelTimeForLinkAnalyzer;
 
     private List<MultiScaleProvider> multiScaleProviders = new ArrayList<>();
@@ -54,7 +52,8 @@ public class AlternativeBruteForceMultiScaleManger implements MultiScaleManger, 
     private boolean runCA = true;
 
 
-    private Set<Id<Link>> incl = Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9"), Id.createLinkId("9->10")); //
+    @SuppressWarnings("unchecked")
+	private Set<Id<Link>> incl = Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9"), Id.createLinkId("9->10")); //
     private Map<Id<Link>, Params> paramsMap = new HashMap<>();
     private Map<Id<Link>, TravelTimeData> targetTTMap = null;
 
@@ -257,13 +256,13 @@ public class AlternativeBruteForceMultiScaleManger implements MultiScaleManger, 
                 p.lCoeff = .2;
 
 //            double rfs = 1 + (MatsimRandom.getRandom().nextDouble() - .5) / 10;
-//            p.fsCoeff *= rfs;
-        	double adaptive_step_multiplier = 1;
-        	if (deviation > .2 && deviation != Double.POSITIVE_INFINITY)
-        		adaptive_step_multiplier = deviation/.2;
-            double rfl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 2);
+////            p.fsCoeff *= rfs;
+//        	double adaptive_step_multiplier = 1;
+//        	if (deviation > .2 && deviation != Double.POSITIVE_INFINITY)
+//        		adaptive_step_multiplier = deviation/.2;
+            double rfl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 10);
             p.flCoeff *= rfl;
-            double rl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 2);
+            double rl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 10);
             p.lCoeff *= rl;
         }
     }

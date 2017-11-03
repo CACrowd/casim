@@ -296,7 +296,6 @@
             <artifactId>grpc-all</artifactId>
             <version>${grpc.version}</version>
         </dependency>
-        <!-- http://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>gicentre</groupId>
             <artifactId>gicentreutils</artifactId>

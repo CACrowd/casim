@@ -50,7 +50,7 @@ import org.matsim.core.utils.geometry.CoordUtils;
  * @author LC
  */
 public class JsonScenarioGenerator {
-	private static final String path = "/casim/src/main/resources/daganzo";
+	private static final String path = "c:/Users/Luca/Dropbox/Personale/CACrowd/scenari/daganzo";
 	
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper) {
         enrichConfig(sc.getConfig());
@@ -129,7 +129,7 @@ public class JsonScenarioGenerator {
     }
 
     private static void enrichConfig(Config c) {
-        c.controler().setLastIteration(300);
+        c.controler().setLastIteration(500);
         c.controler().setWriteEventsInterval(1);
         c.qsim().setEndTime(3600);
 
