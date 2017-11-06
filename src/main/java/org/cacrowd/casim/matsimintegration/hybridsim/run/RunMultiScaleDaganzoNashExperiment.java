@@ -14,17 +14,20 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.run;
 
+import java.io.IOException;
+
 import org.cacrowd.casim.hybridsim.grpc.GRPCExternalClient;
-import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.FlowAnalyzer;
-import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.LastEventAnalyzer;
-import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.QuantityAnalyzer;
-import org.cacrowd.casim.matsimintegration.hybridsim.simulation.BruteForceMultiScaleManger;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.LastEventForLinkAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.TravelTimeForLinkAnalyzer;
+import org.cacrowd.casim.matsimintegration.hybridsim.simulation.AlternativeBruteForceMultiScaleManger;
+import org.cacrowd.casim.matsimintegration.hybridsim.simulation.GeneticAlgorithmMultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleManger;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleMobsimProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.simulation.MultiScaleNetworkProvider;
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoExperimentRunInfoSender;
 import org.cacrowd.casim.matsimintegration.scenarios.DaganzoScenarioGernator;
+import org.cacrowd.casim.matsimintegration.scenarios.JsonScenarioGenerator;
 import org.cacrowd.casim.proto.HybridSimProto;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -39,8 +42,6 @@ import org.matsim.core.mobsim.qsim.qnetsimengine.HybridNetworkFactory;
 import org.matsim.core.mobsim.qsim.qnetsimengine.QNetworkFactory;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import java.io.IOException;
-
 public class RunMultiScaleDaganzoNashExperiment {
     public static void run(double bottleneckWidth) throws IOException, InterruptedException {
 
@@ -53,31 +54,38 @@ public class RunMultiScaleDaganzoNashExperiment {
 
         final IdIntMapper idIntMapper = new IdIntMapper();
         final Scenario sc = ScenarioUtils.createScenario(c);
-        HybridSimProto.Scenario hsc = DaganzoScenarioGernator.generateScenario(sc, idIntMapper, bottleneckWidth);
+        HybridSimProto.Scenario hsc = JsonScenarioGenerator.generateScenario(sc, idIntMapper);
+//        HybridSimProto.Scenario hsc = DaganzoScenarioGernator.generateScenario(sc, idIntMapper, bottleneckWidth);
 
         GRPCExternalClient client = new GRPCExternalClient("localhost", 9000);
         client.getBlockingStub().initScenario(hsc);
 
         final Controler controller = new Controler(sc);
         controller.getConfig().controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.overwriteExistingFiles);
-
+        
+        //----------------------------------
+        //TODO: for tests only... remove this
+        controller.getConfig().controler().setOutputDirectory("E:/CACrowd");
+        //----------------------------------
+        
+        
         final EventsManager eventsManager = EventsUtils.createEventsManager();
 
 
 //        VolumesAnalyzer va = new VolumesAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60, sc.getNetwork());
-        QuantityAnalyzer qa = new QuantityAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
-        FlowAnalyzer fa = new FlowAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
+//        QuantityAnalyzer qa = new QuantityAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
+//        FlowAnalyzer fa = new FlowAnalyzer(c.travelTimeCalculator().getTraveltimeBinSize(), 30 * 60);
 
 //        MultiScaleManger manger = new BruteForceMultiScaleManger(qa, fa);
 
-        LastEventAnalyzer lea = new LastEventAnalyzer();
+        TravelTimeForLinkAnalyzer tta = new TravelTimeForLinkAnalyzer();
 
         controller.addOverridingModule(new AbstractModule() {
 
             @Override
             public void install() {
-                bind(LastEventAnalyzer.class).toInstance(lea);
-                bind(QuantityAnalyzer.class).toInstance(qa);
+                bind(TravelTimeForLinkAnalyzer.class).toInstance(tta);
+//                bind(QuantityAnalyzer.class).toInstance(qa);
                 bind(HybridNetworkFactory.class).toInstance(new HybridNetworkFactory());
                 bind(QNetworkFactory.class).toProvider(MultiScaleNetworkProvider.class);
                 bind(IdIntMapper.class).toInstance(idIntMapper);
@@ -85,16 +93,16 @@ public class RunMultiScaleDaganzoNashExperiment {
                 bindEventsManager().toInstance(eventsManager);
                 bind(Controler.class).toInstance(controller);
                 addControlerListenerBinding().toProvider(() -> new DaganzoExperimentRunInfoSender(client, bottleneckWidth, "Nash approach"));
-                addControlerListenerBinding().to(BruteForceMultiScaleManger.class);
+                addControlerListenerBinding().to(GeneticAlgorithmMultiScaleManger.class);
                 bind(Mobsim.class).toProvider(MultiScaleMobsimProvider.class);
-                bind(MultiScaleManger.class).to(BruteForceMultiScaleManger.class);
+                bind(MultiScaleManger.class).to(GeneticAlgorithmMultiScaleManger.class);
 //                bind(VolumesAnalyzer.class).toInstance(va);
 //                addEventHandlerBinding().toInstance(va);
-                addEventHandlerBinding().toInstance(qa);
-                addControlerListenerBinding().toInstance(qa);
-                addEventHandlerBinding().toInstance(fa);
-                addEventHandlerBinding().toInstance(lea);
-                addControlerListenerBinding().toInstance(fa);
+//                addEventHandlerBinding().toInstance(qa);
+//                addControlerListenerBinding().toInstance(qa);
+//                addEventHandlerBinding().toInstance(fa);
+                addEventHandlerBinding().toInstance(tta);
+//                addControlerListenerBinding().toInstance(fa);
             }
 
         });
