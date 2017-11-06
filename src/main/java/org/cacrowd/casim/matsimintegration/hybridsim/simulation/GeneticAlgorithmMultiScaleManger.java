@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -306,7 +306,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     }
     
     private static final class SolutionGA {
-    	Map<Id<Link>, Params> paramsMap = new HashMap<Id<Link>, Params>();
+    	Map<Id<Link>, Params> paramsMap = new LinkedHashMap<Id<Link>, Params>();
     	double deviation = Double.POSITIVE_INFINITY;
     }
 }

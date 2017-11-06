@@ -16,9 +16,7 @@ package org.cacrowd.casim.matsimintegration.scenarios;
 
 
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
@@ -40,8 +38,6 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
-import org.matsim.core.network.NetworkChangeEvent;
-import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.utils.geometry.CoordUtils;
 
 /***
@@ -50,7 +46,7 @@ import org.matsim.core.utils.geometry.CoordUtils;
  * @author LC
  */
 public class JsonScenarioGenerator {
-	private static final String path = "c:/Users/Luca/Dropbox/Personale/CACrowd/scenari/daganzo";
+	private static final String path = "src/main/resources";
 	
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper) {
         enrichConfig(sc.getConfig());
@@ -58,19 +54,6 @@ public class JsonScenarioGenerator {
 //        createNetworkChangeEvents(sc);
         createPopulation(sc);
         return createScenario();
-    }
-
-    private static void createNetworkChangeEvents(Scenario sc) {
-//        Collection<NetworkChangeEvent> chanageEvents = NetworkUtils.getNetworkChangeEvents(sc.getNetwork());
-        List<NetworkChangeEvent> events = new ArrayList<>();
-        NetworkChangeEvent ev = new NetworkChangeEvent(0);
-        NetworkChangeEvent.ChangeValue cv = new NetworkChangeEvent.ChangeValue(NetworkChangeEvent.ChangeType.ABSOLUTE_IN_SI_UNITS, 0.001);
-        ev.setFlowCapacityChange(cv);
-        Link link = sc.getNetwork().getLinks().get(Id.createLinkId("8->9"));
-        ev.addLink(link);
-        events.add(ev);
-//        NetworkUtils.addNetworkChangeEvent(sc.getNetwork(),ev);
-        NetworkUtils.setNetworkChangeEvents(sc.getNetwork(), events);
     }
 
     private static HybridSimProto.Scenario createScenario() {

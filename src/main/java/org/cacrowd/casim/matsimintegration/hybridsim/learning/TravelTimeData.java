@@ -1,7 +1,7 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.learning;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -13,7 +13,7 @@ public class TravelTimeData {
 	private double minTravelTime;
 	private double maxTravelTime;
 	private double lastEventTime;
-	private Map<Id<Vehicle>,Double> ttAnalysis = new HashMap<Id<Vehicle>,Double>();
+	private Map<Id<Vehicle>,Double> ttAnalysis = new LinkedHashMap<Id<Vehicle>,Double>();
 	private Vector<Double> sortedTT = null;
 	
 	
@@ -57,7 +57,7 @@ public class TravelTimeData {
 			sortedTT = new Vector<Double>(ttAnalysis.values());
 			Collections.sort(sortedTT);
 			maxTravelTime = sortedTT.get(sortedTT.size()-1);
-			int numberEl = (int)(sortedTT.size()*.15);					//5%
+			int numberEl = (int)(sortedTT.size()*.15);					//15%
 			
 			for (int i = 1; i<numberEl;i++){
 				maxTravelTime += sortedTT.get(sortedTT.size()-i-1);

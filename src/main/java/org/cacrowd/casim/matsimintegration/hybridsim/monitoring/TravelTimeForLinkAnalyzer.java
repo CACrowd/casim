@@ -14,7 +14,7 @@
 
 package org.cacrowd.casim.matsimintegration.hybridsim.monitoring;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cacrowd.casim.matsimintegration.hybridsim.learning.TravelTimeData;
@@ -27,7 +27,7 @@ import org.matsim.api.core.v01.network.Link;
 
 public class TravelTimeForLinkAnalyzer implements LinkLeaveEventHandler, LinkEnterEventHandler {
 
-    private Map<Id<Link>, TravelTimeData> travelTimeForLink = new HashMap<Id<Link>, TravelTimeData>();
+    private Map<Id<Link>, TravelTimeData> travelTimeForLink = new LinkedHashMap<Id<Link>, TravelTimeData>();
     
     @Override
     public void handleEvent(LinkEnterEvent event) {
@@ -56,6 +56,6 @@ public class TravelTimeForLinkAnalyzer implements LinkLeaveEventHandler, LinkEnt
     }
 
     public Map<Id<Link>, TravelTimeData> getTravelTimesForLink() {
-        return new HashMap<Id<Link>, TravelTimeData>(travelTimeForLink);
+        return new LinkedHashMap<Id<Link>, TravelTimeData>(travelTimeForLink);
     }
 }
