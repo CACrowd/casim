@@ -178,7 +178,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
         for (Id<Link> id : incl) {
             Link l = sc.getNetwork().getLinks().get(id);
             Params params = solution.paramsMap.get(id);
-//            l.setFreespeed(params.freespeed * params.fsCoeff);
+            l.setFreespeed(params.freespeed * params.fsCoeff);
             l.setNumberOfLanes(params.lanes * params.lCoeff);
             l.setCapacity(params.flow * params.flCoeff);
         }
@@ -227,7 +227,11 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
      */
     private void mutation(SolutionGA solution, double strength) {
         for (Params p : solution.paramsMap.values()) {
-            if (p.flCoeff > 5)
+        	if (p.fsCoeff > 5)
+            	p.fsCoeff = 5;
+            else if (p.fsCoeff < 0.2) 
+                p.fsCoeff = .2; 
+        	if (p.flCoeff > 5)
             	p.flCoeff = 5;
             else if (p.flCoeff < 0.2) 
                 p.flCoeff = .2;            
@@ -235,6 +239,8 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
             	p.lCoeff = 5;
             else if (p.lCoeff < 0.2) 
                 p.lCoeff = .2;
+            double rfs = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 50)*strength;
+            p.fsCoeff *= rfs;
             double rfl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 50)*strength;
             p.flCoeff *= rfl;
             double rl = 1 + ((MatsimRandom.getRandom().nextDouble() - 0.5) / 50)*strength;
