@@ -48,12 +48,19 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     private final TravelTimeForLinkAnalyzer travelTimeForLinkAnalyzer;
 
     private List<MultiScaleProvider> multiScaleProviders = new ArrayList<>();
+    private Scenario sc;
 
     private boolean runCA = true;
+    //TODO this maybe should be removed in the future...now it is needed to manually start the re-routing once the calibration phase is done 
+    private boolean networkCalibration = true;
 
 
     @SuppressWarnings("unchecked")
-	private Set<Id<Link>> incl = Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9"), Id.createLinkId("9->10")); //
+	private Set<Id<Link>> incl = Sets.newHashSet(); 	
+								//Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9"), Id.createLinkId("9->10"), 
+								//		Id.createLinkId("7->4"), Id.createLinkId("4->2"), Id.createLinkId("2->0"), Id.createLinkId("0->1"), 
+								//		Id.createLinkId("1->3"), Id.createLinkId("3->5"), Id.createLinkId("5->10")); 
+    
     
     //parameters of the genetic algorithm
     private int gaDynastySize = 8;
@@ -73,15 +80,19 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     private ArrayList<Double> deviations = new ArrayList<Double>();
 //    private double oldDeviation = Double.POSITIVE_INFINITY;
 
+
     @Inject
     public GeneticAlgorithmMultiScaleManger(Scenario sc, TravelTimeForLinkAnalyzer ttForLinkAnalyzer) {
         this.travelTimeForLinkAnalyzer = ttForLinkAnalyzer;
-        generation(sc);        
     }
 
     @Override
     public void notifyAfterMobsim(AfterMobsimEvent event) {
-
+    	if (!networkCalibration ){
+    		return;
+    	}
+    	
+    	
         NetworkUtils.setNetworkChangeEvents(event.getServices().getScenario().getNetwork(), new ArrayList<>());
         String iterOutputPath = event.getServices().getControlerIO().getIterationPath(event.getIteration());
 		new NetworkWriter(event.getServices().getScenario().getNetwork()).write(iterOutputPath+"/"+event.getIteration()+".network.xml");
@@ -89,6 +100,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
         double deviation = 0;
         if (runCA) {
             this.targetTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
+            generation(event.getServices().getScenario());            
             runCA = false;
             deviation = Double.POSITIVE_INFINITY;
         }        
@@ -100,7 +112,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 	        //SECOND WARNING: the check of "origin" and "destination" links is temporary, yet logic since they should not require any learning process. 
 	        //				  Needs improvement for a general implementation.
 	        for (Id<Link> link_id : currentTTMap.keySet()){
-	        	if (link_id.toString().equals("destination") || link_id.toString().equals("origin")){
+	        	if (!targetTTMap.containsKey(link_id) || link_id.toString().equals("destination") || link_id.toString().equals("origin")){
 	        		continue;
 	        	}
 	        	
@@ -134,7 +146,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 	        
 	        
 	        //update of solution to evaluate and execution of mutation/crossover, according to the case
-	    	if (deviation > .04){
+	    	if (deviation > .05){
 		        gaCurrentSolutionIndex+=1;	        
 		    	if (gaCurrentSolutionIndex == gaPopulationSize){
 		    		crossover();
@@ -185,6 +197,26 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     }
     
     private void generation(Scenario sc){
+    	//init of the set of links to be considered for the calibration
+    	for (Id<Link> id : targetTTMap.keySet()){
+    		//border links are not considered
+    		if(id.toString().equals("destination") || id.toString().equals("origin") || id.toString().equals("out")) {
+    			continue;
+    		}
+    		
+    		if (!incl.contains(id)){
+    			incl.add(id);
+    		}else{
+    			//TODO ---> what to do in this case must be clarified: if the set already contains this link
+    			// 			it means that the link has been already calibrated in the previous learning process. 
+    			//			A possible approach is to keep the link in the set only if the new maximum TT is higher 
+    			//			than the target for which it has been previously calibrated.
+    			//
+    			//			For the simple scenario currently tested, it can just be removed.
+    			incl.remove(id);
+    		}
+    	}
+    	
     	for (int i=0;i<gaPopulationSize;i++){
     		gaPopulation.add(new SolutionGA());
     		for (Id<Link> id : incl) {
@@ -283,6 +315,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 
     @Override
     public void subscribe(MultiScaleProvider p) {
+    	p.setRunCAIteration(runCA);
         this.multiScaleProviders.add(p);
     }
 
