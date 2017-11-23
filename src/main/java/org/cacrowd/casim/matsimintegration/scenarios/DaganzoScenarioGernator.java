@@ -359,7 +359,7 @@ public class DaganzoScenarioGernator {
 
     private static void enrichConfig(Config c) {
 
-        c.controler().setLastIteration(100);
+        c.controler().setLastIteration(500);
         c.controler().setWriteEventsInterval(1);
         c.qsim().setEndTime(3600);
 
@@ -535,7 +535,7 @@ public class DaganzoScenarioGernator {
 
 
         for (Link l : net.getLinks().values()) {
-            l.setFreespeed(1.33);
+            l.setFreespeed(1.33 * 2);
             l.setCapacity(2 * 1.33);
             l.setNumberOfLanes(2 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));

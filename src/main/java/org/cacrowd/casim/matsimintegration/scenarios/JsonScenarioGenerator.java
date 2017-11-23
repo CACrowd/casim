@@ -15,15 +15,9 @@
 package org.cacrowd.casim.matsimintegration.scenarios;
 
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import java.util.zip.GZIPInputStream;
 
 import org.cacrowd.casim.matsimintegration.hybridsim.utils.IdIntMapper;
 import org.cacrowd.casim.proto.HybridSimProto;
@@ -44,9 +38,7 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.api.core.v01.population.PopulationFactory;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.groups.PlanCalcScoreConfigGroup;
-import org.matsim.core.network.io.MatsimNetworkReader;
 import org.matsim.core.utils.geometry.CoordUtils;
-import org.matsim.core.utils.io.UnicodeInputStream;
 
 /***
  * It generates a simulation scenario by importing JSON objects from files.
@@ -55,14 +47,11 @@ import org.matsim.core.utils.io.UnicodeInputStream;
  */
 public class JsonScenarioGenerator {
 	private static final String path = "src/main/resources";
-	private static final String networkFileName = "";//"E:/CACrowd_tmp/ITERS/it.500/500.network.xml";
 	
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper) {
         enrichConfig(sc.getConfig());
-        if (networkFileName.equals(""))
-        	createNetwork(sc, mapper);
-        else
-        	loadCalibratedNetwork(sc, mapper);
+        createNetwork(sc, mapper);
+//        createNetworkChangeEvents(sc);
         createPopulation(sc);
         return createScenario();
     }
@@ -129,18 +118,12 @@ public class JsonScenarioGenerator {
 
         PlanCalcScoreConfigGroup.ActivityParams pre = new PlanCalcScoreConfigGroup.ActivityParams("origin");
 
-        c.strategy().setMaxAgentPlanMemorySize(2);
-        c.strategy().addParam("ModuleDisableAfterIteration_1", "500");
+        c.strategy().setMaxAgentPlanMemorySize(3);
+        c.strategy().addParam("ModuleDisableAfterIteration_1", "500");		//FOR TEST!!!!    "50");
         c.strategy().addParam("Module_1", "ReRoute");
+        c.strategy().addParam("ModuleProbability_1", "0.1");                    //"0.1");
         c.strategy().addParam("Module_2", "ChangeExpBeta");
-        if (networkFileName.equals("")){
-        	c.strategy().addParam("ModuleProbability_1", "0.");				
-        	c.strategy().addParam("ModuleProbability_2", "1.");
-        }
-        else{
-        	c.strategy().addParam("ModuleProbability_1", "0.1");
-        	c.strategy().addParam("ModuleProbability_2", "0.9"); 				        
-        }
+        c.strategy().addParam("ModuleProbability_2", "0.9");                //"0.9");
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
         c.travelTimeCalculator().setTraveltimeBinSize(60);
@@ -188,27 +171,6 @@ public class JsonScenarioGenerator {
         }
     }
 
-    private static void loadCalibratedNetwork(Scenario sc, IdIntMapper idIntMapper){
-    	Network net = sc.getNetwork();
-    	File networkFile = new File(networkFileName);
-    	try {
-    		FileInputStream fis = new FileInputStream(networkFile);
-			BufferedInputStream is = (networkFile.getName().toLowerCase(Locale.ROOT).endsWith(".gz")) ? 
-					new BufferedInputStream(new UnicodeInputStream(new GZIPInputStream(fis))) :
-					new BufferedInputStream(new UnicodeInputStream(fis));
-			new MatsimNetworkReader(net).parse(is);
-    	}catch(IOException e){
-    		e.printStackTrace();
-    	}
-    	
-    	for (Id<Link> link_id : net.getLinks().keySet()){
-	    	if (!(link_id.equals("origin")||link_id.equals("destination"))){
-				Link link = net.getLinks().get(link_id);
-				idIntMapper.addDestinationsLinkMapping(Integer.parseInt(link.getFromNode().getId().toString()), Integer.parseInt(net.getLinks().get(link_id).getToNode().getId().toString()), link);
-			}
-    	}
-    }
-    
     private static void createNetwork(Scenario sc, IdIntMapper idIntMapper) {
         Network net = sc.getNetwork();
         net.setCapacityPeriod(1);
@@ -270,7 +232,7 @@ public class JsonScenarioGenerator {
         }
         
         for (Link l : net.getLinks().values()) {
-            l.setFreespeed(1.33);
+            l.setFreespeed(2 * 1.33);
             l.setCapacity(2 * 1.33);
             l.setNumberOfLanes(2 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));
