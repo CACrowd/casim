@@ -85,6 +85,8 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
         double deviation = 0;
         if (runCA) {
             this.targetTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
+
+
             runCA = false;
             deviation = Double.POSITIVE_INFINITY;
         } else {
@@ -164,9 +166,40 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
             }
         }
 
+        decayLinkTravelTimes();
         runCA = (event.getIteration() + 1) % 10 == 0 || (event.getIteration() < 3);
         applyParams(event, gaPopulation.get(gaCurrentSolutionIndex));
         multiScaleProviders.forEach(p -> p.setRunCAIteration(runCA));
+    }
+
+    private void decayLinkTravelTimes() {
+
+        for (Id<Link> l : incl) {
+
+            //GL -- not sure with the "< 50" param; but "targetTTMap.get(l) == null" alone does not work
+            if (targetTTMap.get(l) == null || targetTTMap.get(l).getNRTravelers() < 50) {
+
+                //GL -- not sure about this probably we should only decay
+                //gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(l).fsCoeff
+                //What do you think Luca?
+
+                for (SolutionGA s : gaDynasty) {
+                    Params params = s.paramsMap.get(l);
+                    params.fsCoeff *= 1.1;
+
+                }
+                for (SolutionGA s : gaParents) {
+                    Params params = s.paramsMap.get(l);
+                    params.fsCoeff *= 1.1;
+
+                }
+                for (SolutionGA s : gaPopulation) {
+                    Params params = s.paramsMap.get(l);
+                    params.fsCoeff *= 1.1;
+                }
+            }
+        }
+
     }
 
     private void applyParams(AfterMobsimEvent event, SolutionGA solution) {
