@@ -48,14 +48,12 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     private final TravelTimeForLinkAnalyzer travelTimeForLinkAnalyzer;
 
     private List<MultiScaleProvider> multiScaleProviders = new ArrayList<>();
-    private Scenario sc;
 
     private boolean runCA = true;
     //TODO this maybe should be removed in the future...now it is needed to manually start the re-routing once the calibration phase is done 
     private boolean networkCalibration = true;
 
 
-    @SuppressWarnings("unchecked")
 	private Set<Id<Link>> incl = Sets.newHashSet(); 	
 								//Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9"), Id.createLinkId("9->10"), 
 								//		Id.createLinkId("7->4"), Id.createLinkId("4->2"), Id.createLinkId("2->0"), Id.createLinkId("0->1"), 
@@ -108,9 +106,8 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
         	//Error function
 	        Map<Id<Link>, TravelTimeData> currentTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
 	        int count_links = 0;
-	        //WARNING: 	      this will not work in case different links have been used in the current iteration (i.e. re-routing is activated)
-	        //SECOND WARNING: the check of "origin" and "destination" links is temporary, yet logic since they should not require any learning process. 
-	        //				  Needs improvement for a general implementation.
+	        //WARNING: the check of "origin" and "destination" links is temporary, yet logic since they should not require any learning process. 
+	        //		   Needs improvement for a general implementation.
 	        for (Id<Link> link_id : currentTTMap.keySet()){
 	        	if (!targetTTMap.containsKey(link_id) || link_id.toString().equals("destination") || link_id.toString().equals("origin")){
 	        		continue;
@@ -127,6 +124,12 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 					double targetLastEventTimeForLink = targetTTMap.get(link_id).getLastEventTime();
 					log.warn("link_id : "+link_id+" - currentLastET : "+currentLastEventTimeForLink+" - targetLastET : "+targetLastEventTimeForLink);
 					deviation+= Math.abs(currentLastEventTimeForLink - targetLastEventTimeForLink)/targetLastEventTimeForLink;
+					
+					//energy minimization
+					deviation += Math.abs(1-gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(link_id).fsCoeff)/3.;
+					deviation += Math.abs(1-gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(link_id).flCoeff)/3.;
+					deviation += Math.abs(1-gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(link_id).lCoeff)/3.;
+					
 				}
 				else{
 					log.error("link_id : "+link_id+" has targetMaxTT = 0. Calibration of this link is compromised.");
@@ -134,7 +137,7 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 	        }
 	        //This is to normalize the deviation value in [0,1] (*2 is due to the double sum above)-> actually it can be higher than 1 since the deviation for each link can be higher than 100%.
 	        //After a sufficient number of iterations the value should be lower than 1 though... LC
-	        deviation/=(count_links*2);
+	        deviation/=(count_links*3);
 	        gaPopulation.get(gaCurrentSolutionIndex).deviation = deviation;
 	        //update list of best performing solutions
 	        updateParents(gaPopulation.get(gaCurrentSolutionIndex));

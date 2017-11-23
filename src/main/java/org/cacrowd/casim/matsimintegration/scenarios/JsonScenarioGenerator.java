@@ -55,12 +55,14 @@ import org.matsim.core.utils.io.UnicodeInputStream;
  */
 public class JsonScenarioGenerator {
 	private static final String path = "src/main/resources";
-	private static final String networkFileName = "E:/CACrowd_tmp/ITERS/it.500/500.network.xml";
+	private static final String networkFileName = "";//"E:/CACrowd_tmp/ITERS/it.500/500.network.xml";
 	
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper) {
         enrichConfig(sc.getConfig());
-        createNetwork(sc, mapper);
-//        loadCalibratedNetwork(sc, mapper);
+        if (networkFileName.equals(""))
+        	createNetwork(sc, mapper);
+        else
+        	loadCalibratedNetwork(sc, mapper);
         createPopulation(sc);
         return createScenario();
     }
@@ -128,11 +130,17 @@ public class JsonScenarioGenerator {
         PlanCalcScoreConfigGroup.ActivityParams pre = new PlanCalcScoreConfigGroup.ActivityParams("origin");
 
         c.strategy().setMaxAgentPlanMemorySize(2);
-        c.strategy().addParam("ModuleDisableAfterIteration_1", "500");		//FOR TEST!!!!    "50");
+        c.strategy().addParam("ModuleDisableAfterIteration_1", "500");
         c.strategy().addParam("Module_1", "ReRoute");
-        c.strategy().addParam("ModuleProbability_1", "0.");					//"0.1");
         c.strategy().addParam("Module_2", "ChangeExpBeta");
-        c.strategy().addParam("ModuleProbability_2", "1."); 				//"0.9");
+        if (networkFileName.equals("")){
+        	c.strategy().addParam("ModuleProbability_1", "0.");				
+        	c.strategy().addParam("ModuleProbability_2", "1.");
+        }
+        else{
+        	c.strategy().addParam("ModuleProbability_1", "0.1");
+        	c.strategy().addParam("ModuleProbability_2", "0.9"); 				        
+        }
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
         c.travelTimeCalculator().setTraveltimeBinSize(60);
