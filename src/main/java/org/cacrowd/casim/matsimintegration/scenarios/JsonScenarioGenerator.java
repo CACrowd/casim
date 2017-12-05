@@ -46,7 +46,7 @@ import org.matsim.core.utils.geometry.CoordUtils;
  * @author LC
  */
 public class JsonScenarioGenerator {
-	private static final String path = "src/main/resources";
+	private static final String path = "src/main/resources/daganzo04";
 	
     public static HybridSimProto.Scenario generateScenario(Scenario sc, IdIntMapper mapper) {
         enrichConfig(sc.getConfig());
@@ -121,9 +121,9 @@ public class JsonScenarioGenerator {
         c.strategy().setMaxAgentPlanMemorySize(3);
         c.strategy().addParam("ModuleDisableAfterIteration_1", "500");		//FOR TEST!!!!    "50");
         c.strategy().addParam("Module_1", "ReRoute");
-        c.strategy().addParam("ModuleProbability_1", "0.1");                    //"0.1");
+        c.strategy().addParam("ModuleProbability_1", "0.01");                    //"0.1");
         c.strategy().addParam("Module_2", "ChangeExpBeta");
-        c.strategy().addParam("ModuleProbability_2", "0.9");                //"0.9");
+        c.strategy().addParam("ModuleProbability_2", "0.99");                //"0.9");
 
         c.travelTimeCalculator().setTravelTimeCalculatorType("TravelTimeCalculatorHashMap");
         c.travelTimeCalculator().setTraveltimeBinSize(60);
@@ -232,7 +232,7 @@ public class JsonScenarioGenerator {
         }
         
         for (Link l : net.getLinks().values()) {
-            l.setFreespeed(2 * 1.33);
+            l.setFreespeed(1.33);
             l.setCapacity(2 * 1.33);
             l.setNumberOfLanes(2 / 0.71);
             l.setLength(CoordUtils.calcEuclideanDistance(l.getFromNode().getCoord(), l.getToNode().getCoord()));

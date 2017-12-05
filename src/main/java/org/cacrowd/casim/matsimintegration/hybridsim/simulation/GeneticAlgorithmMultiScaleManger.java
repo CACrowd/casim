@@ -15,11 +15,18 @@
 package org.cacrowd.casim.matsimintegration.hybridsim.simulation;
 
 
-import com.google.common.collect.Sets;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
 import org.apache.log4j.Logger;
-import org.cacrowd.casim.matsimintegration.hybridsim.learning.TravelTimeData;
+import org.cacrowd.casim.matsimintegration.hybridsim.learning.TravelTimeLookUpTable;
 import org.cacrowd.casim.matsimintegration.hybridsim.monitoring.TravelTimeForLinkAnalyzer;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
@@ -30,24 +37,25 @@ import org.matsim.core.gbl.MatsimRandom;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.network.io.NetworkWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, AfterMobsimListener {
-    private static final Logger log = Logger.getLogger(GeneticAlgorithmMultiScaleManger.class);
+
+	private static final Logger log = Logger.getLogger(GeneticAlgorithmMultiScaleManger.class);
 
     private final TravelTimeForLinkAnalyzer travelTimeForLinkAnalyzer;
 
     private List<MultiScaleProvider> multiScaleProviders = new ArrayList<>();
 
     private boolean runCA = true;
+    private static final int runCAPeriod = 10;    //number of iterations granted to the GA algorithm before a new observation is performed
 
 
     @SuppressWarnings("unchecked")
-    private Set<Id<Link>> incl = Sets.newHashSet(Id.createLinkId("in"), Id.createLinkId("7->8"), Id.createLinkId("8->9")
+    private Set<Id<Link>> incl = Sets.newHashSet(Id.createLinkId("in"),Id.createLinkId("in1"), Id.createLinkId("7->8"), Id.createLinkId("8->9")
             , Id.createLinkId("9->10"), Id.createLinkId("7->4"), Id.createLinkId("4->2"), Id.createLinkId("2->0")
             , Id.createLinkId("0->1"), Id.createLinkId("1->3"), Id.createLinkId("3->5"), Id.createLinkId("5->10")); //
 
@@ -60,10 +68,15 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
     private Vector<SolutionGA> gaPopulation = new Vector<SolutionGA>(gaPopulationSize);
     private int gaInitialMutation = 30;
     private int gaCurrentSolutionIndex = 0;
+    
+    //initial value of the limit for the free speed parameter
+//    private double fsLimit = 10;
 
 
     //    private Map<Id<Link>, Params> paramsMap = new HashMap<>();
-    private Map<Id<Link>, TravelTimeData> targetTTMap = null;
+//    private Map<Id<Link>, TravelTimeData> targetTTMap = null;
+    private Map<Id<Link>, TravelTimeLookUpTable> targetTTTables = null;
+    private double alphaDataPersistence = .8;
 
     //this is used to store the output
     private ArrayList<Double> deviations = new ArrayList<Double>();
@@ -84,42 +97,118 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
 
         double deviation = 0;
         if (runCA) {
-            this.targetTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
-
-
+//            targetTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
+            if (targetTTTables == null){
+            	targetTTTables = travelTimeForLinkAnalyzer.getTTTablesForLink();
+            }
+            else {
+            	Map<Id<Link>, TravelTimeLookUpTable> newTTTables = travelTimeForLinkAnalyzer.getTTTablesForLink();
+            	for (Id<Link> link_id : newTTTables.keySet()) {
+            		TravelTimeLookUpTable oldTTTable = targetTTTables.get(link_id);
+            		
+            		//the link has been previously observed, so the new data is
+            		//integrated according to the alpha parameter
+            		if (oldTTTable != null){
+	            		Map<Integer,Double> newTTTable = newTTTables.get(link_id).getTTLookupTable();               
+	    	        	for (int occupation : newTTTable.keySet()) {
+	    	        		oldTTTable.getTTLookupTable().computeIfAbsent(occupation, k -> newTTTable.get(occupation));
+	    	        		oldTTTable.getTTLookupTable().put(occupation, (alphaDataPersistence *oldTTTable.getTTLookupTable().get(occupation) + (1-alphaDataPersistence)*newTTTable.get(occupation)));
+	    	        	}
+	    	        	oldTTTable.maxOccupation = newTTTables.get(link_id).maxOccupation;
+	                }
+            		// First observation on link link_id, so
+            		// direct integration in the targetTTTables map
+            		else {
+            			targetTTTables.put(link_id, newTTTables.get(link_id));
+            		}
+            	}
+            }
+            
+            storeLookupTable(event, iterOutputPath, targetTTTables);
+            
             runCA = false;
             deviation = Double.POSITIVE_INFINITY;
         } else {
             //Error function
-            Map<Id<Link>, TravelTimeData> currentTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
-            int count_links = 0;
+//            int count_links = 0;
+            int deviation_divisor = 0;
+            Map<Id<Link>, TravelTimeLookUpTable> currentTTTables = travelTimeForLinkAnalyzer.getTTTablesForLink();
+		    for (Id<Link> link_id : currentTTTables.keySet()) {
+		        if (link_id.toString().equals("destination") || link_id.toString().equals("origin") || targetTTTables.get(link_id) == null) {
+		            continue;
+		        }
+		        Map <Integer,Double> currentTable = currentTTTables.get(link_id).getTTLookupTable();
+		        Map <Integer,Double> targetTable = targetTTTables.get(link_id).getTTLookupTable();
+		        
+		        double deviation_sum = 0;
+		        for (int occupation : currentTable.keySet()){
+		        	if (targetTable.get(occupation) != null){
+		        		if (targetTable.get(occupation)<1){
+		        			targetTable.put(occupation, 1.0);
+		        		}
+		        		deviation_sum += Math.abs(currentTable.get(occupation) - targetTable.get(occupation))/targetTable.get(occupation);
+		        	}
+		        	else{
+		        		deviation_sum += 0.2;   //penalty for not observed value
+		        	}
+		        }
+		        deviation += deviation_sum/currentTable.keySet().size();
+		        deviation_divisor+=1;
+		        
+		        int currentMaxOccupation = currentTTTables.get(link_id).maxOccupation;
+		        int targetMaxOccupation = targetTTTables.get(link_id).maxOccupation;
+		        if (targetMaxOccupation >= 1){
+//			        double occupancyError = .5*(1 + Math.tanh(Math.abs((double)currentMaxOccupation - targetMaxOccupation)/(10) - 2));
+		        	double occupancyError = Math.abs((double)currentMaxOccupation - targetMaxOccupation)/Math.max(targetMaxOccupation, 5);
+			        deviation += occupancyError;
+			        deviation_divisor+=1;
+			        log.warn(link_id+": current: " +currentMaxOccupation+" - target: "+targetMaxOccupation+" -------------> occupancyError: "+occupancyError);
+		        }
+		        
+		    }
+            deviation/=deviation_divisor;
+            
+            
             //WARNING: 	      this will not work in case different links have been used in the current iteration (i.e. re-routing is activated)
             //SECOND WARNING: the check of "origin" and "destination" links is temporary, yet logic since they should not require any learning process.
             //				  Needs improvement for a general implementation.
-            for (Id<Link> link_id : currentTTMap.keySet()) {
-                if (link_id.toString().equals("destination") || link_id.toString().equals("origin") || targetTTMap.get(link_id) == null) {
-                    continue;
-                }
-
-                double currentMaxTTForLink = currentTTMap.get(link_id).getMaxTravelTime();
-                double targetMaxTTForLink = targetTTMap.get(link_id).getAvgMaxTravelTime();
-                if (targetMaxTTForLink != 0.) {
-                    count_links += 1;
-                    log.warn("link_id : " + link_id + " - currentMaxTT : " + currentMaxTTForLink + " - targetMaxTT : " + targetMaxTTForLink);
-                    deviation += Math.abs(currentMaxTTForLink - targetMaxTTForLink) / targetMaxTTForLink;
-
-                    double currentLastEventTimeForLink = currentTTMap.get(link_id).getLastEventTime();
-                    double targetLastEventTimeForLink = targetTTMap.get(link_id).getLastEventTime();
-
-                    log.warn("link_id : " + link_id + " - currentLastET : " + currentLastEventTimeForLink + " - targetLastET : " + targetLastEventTimeForLink);
-                    deviation += Math.abs(currentLastEventTimeForLink - targetLastEventTimeForLink) / targetLastEventTimeForLink;
-                } else {
-                    log.error("link_id : " + link_id + " has targetMaxTT = 0. Calibration of this link is compromised.");
-                }
-            }
-            //This is to normalize the deviation value in [0,1] (*2 is due to the double sum above)-> actually it can be higher than 1 since the deviation for each link can be higher than 100%.
-            //After a sufficient number of iterations the value should be lower than 1 though... LC
-            deviation /= (count_links * 2);
+//            Map<Id<Link>, TravelTimeData> currentTTMap = travelTimeForLinkAnalyzer.getTravelTimesForLink();
+//            for (Id<Link> link_id : currentTTMap.keySet()) {
+//                if (link_id.toString().equals("destination") || link_id.toString().equals("origin") || targetTTMap.get(link_id) == null) {
+//                    continue;
+//                }
+//
+//                double currentMaxTTForLink = currentTTMap.get(link_id).getMaxTravelTime();
+//                double targetMaxTTForLink = targetTTMap.get(link_id).getAvgMaxTravelTime();
+//                double currentMinTTForLink = currentTTMap.get(link_id).getMinTravelTime();
+//                double targetMinTTForLink = targetTTMap.get(link_id).getMinTravelTime();
+//                double currentLastEventTimeForLink = currentTTMap.get(link_id).getLastEventTime();
+//                double targetLastEventTimeForLink = targetTTMap.get(link_id).getLastEventTime();
+//                if (targetMinTTForLink == 0){
+//                	targetMinTTForLink = 1;
+//                }
+//                if (targetMaxTTForLink == 0){
+//                	targetMaxTTForLink = 1;
+//                }
+//                if (targetMaxTTForLink != 0.) {
+//                	
+//                    log.warn("link_id : " + link_id + " - currentMinTT : " + currentMinTTForLink + " - targetMinTT : " + targetMinTTForLink);
+//                    deviation += Math.abs(currentMinTTForLink - targetMinTTForLink) / targetMinTTForLink;
+//                	deviation_divisor+=1;
+//                	
+//                	log.warn("link_id : " + link_id + " - currentMaxTT : " + currentMaxTTForLink + " - targetMaxTT : " + targetMaxTTForLink);
+//                    deviation += Math.abs(currentMaxTTForLink - targetMaxTTForLink) / targetMaxTTForLink;
+//                    deviation_divisor+=1;
+//                    
+//                    log.warn("link_id : " + link_id + " - currentLastET : " + currentLastEventTimeForLink + " - targetLastET : " + targetLastEventTimeForLink);
+//                    deviation += Math.abs(currentLastEventTimeForLink - targetLastEventTimeForLink) / targetLastEventTimeForLink;
+//                    deviation_divisor+=1;
+//                    
+//                } else {
+//                    log.error("link_id : " + link_id + " has targetMaxTT = 0. Calibration of this link is compromised.");
+//                }
+//            }
+			
             gaPopulation.get(gaCurrentSolutionIndex).deviation = deviation;
             //update list of best performing solutions
             updateParents(gaPopulation.get(gaCurrentSolutionIndex));
@@ -129,7 +218,9 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
             deviations.add(deviation);
             log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-
+            if (event.getIteration() % 5==0){
+            	storeLookupTable(event, iterOutputPath, currentTTTables);
+            }
             //update of solution to evaluate and execution of mutation/crossover, according to the case
             if (deviation > .04) {
                 gaCurrentSolutionIndex += 1;
@@ -167,38 +258,67 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
         }
 
         decayLinkTravelTimes();
-        runCA = (event.getIteration() + 1) % 10 == 0 || (event.getIteration() < 3);
+        runCA = (event.getIteration() + 1) % runCAPeriod == 0 || (event.getIteration() < 3);
         applyParams(event, gaPopulation.get(gaCurrentSolutionIndex));
-        multiScaleProviders.forEach(p -> p.setRunCAIteration(runCA));
+        multiScaleProviders.forEach(p -> p.setRunCAIteration(runCA));       
     }
+
+	private void storeLookupTable(AfterMobsimEvent event, String iterOutputPath, Map<Id<Link>, TravelTimeLookUpTable> table) {
+		try {
+			File outputFile;
+			for (Id<Link> link_id : table.keySet()) {
+		    	Link link = event.getServices().getScenario().getNetwork().getLinks().get(link_id);
+		    	if (link_id.toString().contains("->"))
+		    		outputFile = new File(iterOutputPath + "/lookupTable"+link.getFromNode().getId()+"-"+link.getToNode().getId()+".csv");
+		    	else
+		    		outputFile = new File(iterOutputPath + "/lookupTable"+link_id+".csv");
+		    	outputFile.createNewFile();
+		    	FileWriter csvWriter = new FileWriter(outputFile);
+		    	char SEPARATOR = ',';
+		    	csvWriter.write("#occupation" + SEPARATOR + "tt [s]" + "\n");
+		    	Map<Integer,Double> ttTable = table.get(link_id).getTTLookupTable();
+		        for (int occupation : ttTable.keySet()) {
+		        	csvWriter.write("" + occupation + SEPARATOR + ttTable.get(occupation) + "\n");                    
+		        }
+		        csvWriter.close();
+		    }
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
 
     private void decayLinkTravelTimes() {
 
         for (Id<Link> l : incl) {
 
             //GL -- not sure with the "< 50" param; but "targetTTMap.get(l) == null" alone does not work
-            if (targetTTMap.get(l) == null || targetTTMap.get(l).getNRTravelers() < 50) {
+            if (targetTTTables.get(l) == null || targetTTTables.get(l).getNRTravelers() < 50) {
 
                 //GL -- not sure about this probably we should only decay
                 //gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(l).fsCoeff
-                //What do you think Luca?
+                //What do you think Luca?   ---> Yes otherwise we multiply the parameters of the whole population at every iteration
+            	gaPopulation.get(gaCurrentSolutionIndex).paramsMap.get(l).fsCoeff *= 1.1;
 
-                for (SolutionGA s : gaDynasty) {
-                    Params params = s.paramsMap.get(l);
-                    params.fsCoeff *= 1.1;
-
-                }
-                for (SolutionGA s : gaParents) {
-                    Params params = s.paramsMap.get(l);
-                    params.fsCoeff *= 1.1;
-
-                }
-                for (SolutionGA s : gaPopulation) {
-                    Params params = s.paramsMap.get(l);
-                    params.fsCoeff *= 1.1;
-                }
+//                for (SolutionGA s : gaDynasty) {
+//                    Params params = s.paramsMap.get(l);
+//                    params.fsCoeff *= 1.1;
+//
+//                }
+//                for (SolutionGA s : gaParents) {
+//                    Params params = s.paramsMap.get(l);
+//                    params.fsCoeff *= 1.1;
+//
+//                }
+//                for (SolutionGA s : gaPopulation) {
+//                    Params params = s.paramsMap.get(l);
+//                    params.fsCoeff *= 1.1;
+//                }
             }
         }
+        
+//        if (fsLimit > 2){
+//        	fsLimit *= .995;
+//        }
 
     }
 
@@ -255,8 +375,8 @@ public class GeneticAlgorithmMultiScaleManger implements MultiScaleManger, After
      */
     private void mutation(SolutionGA solution, double strength) {
         for (Params p : solution.paramsMap.values()) {
-            if (p.fsCoeff > 5)
-                p.fsCoeff = 5;
+        	if (p.fsCoeff > 1.5)
+                p.fsCoeff = 1.5;
             else if (p.fsCoeff < 0.2)
                 p.fsCoeff = .2;
             if (p.flCoeff > 5)
