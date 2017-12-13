@@ -24,7 +24,7 @@ import java.util.Vector;
 
 public class TravelTimeData {
 	
-	private double minTravelTime;
+	private double minTravelTime;			//this to avoid division by zero in case of travel times less than 1s
 	private double maxTravelTime;
 	private double lastEventTime;
 	private Map<Id<Vehicle>,Double> ttAnalysis = new LinkedHashMap<Id<Vehicle>,Double>();
@@ -38,7 +38,10 @@ public class TravelTimeData {
 			ttAnalysis.put(pedId,time);
 		//in this case the travel time can be calculated
 		else{
-			double newTravelTime = time - entranceTime;
+			double newTravelTime = time - entranceTime;		//+1 is to round the TT to the next second
+			if (newTravelTime == 0){
+				newTravelTime = 1;		//this to avoid division by zero in case of travel times less than 1s
+			}
 			lastEventTime = time;
 			ttAnalysis.put(pedId, newTravelTime);
 			if(minTravelTime == 0. || newTravelTime < minTravelTime){
@@ -83,6 +86,10 @@ public class TravelTimeData {
 
 	public int getNRTravelers() {
 		return ttAnalysis.size();
+	}
+
+	public void updateMinTravelTime(double currentMinTT) {
+		minTravelTime = Math.min(minTravelTime, currentMinTT);		
 	}
 	
 }

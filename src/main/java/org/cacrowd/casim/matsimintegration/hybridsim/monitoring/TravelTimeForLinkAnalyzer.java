@@ -28,38 +28,38 @@ import org.matsim.api.core.v01.network.Link;
 
 public class TravelTimeForLinkAnalyzer implements LinkLeaveEventHandler, LinkEnterEventHandler {
 
-//    private Map<Id<Link>, TravelTimeData> travelTimeForLink = new LinkedHashMap<Id<Link>, TravelTimeData>();
-    private Map<Id<Link>, TravelTimeLookUpTable> ttTableForLink = new LinkedHashMap<Id<Link>, TravelTimeLookUpTable>();
+    private Map<Id<Link>, TravelTimeData> travelTimeForLink = new LinkedHashMap<Id<Link>, TravelTimeData>();
+//    private Map<Id<Link>, TravelTimeLookUpTable> ttTableForLink = new LinkedHashMap<Id<Link>, TravelTimeLookUpTable>();
     
     @Override
     public void handleEvent(LinkEnterEvent event) {
-//        TravelTimeData ttData = travelTimeForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeData());
-//        ttData.updateTravelTime(event.getVehicleId(), event.getTime());
-        TravelTimeLookUpTable ttTable = ttTableForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeLookUpTable());
-        ttTable.updateTravelTime(event.getVehicleId(), event.getTime());
+        TravelTimeData ttData = travelTimeForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeData());
+        ttData.updateTravelTime(event.getVehicleId(), event.getTime());
+//        TravelTimeLookUpTable ttTable = ttTableForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeLookUpTable());
+//        ttTable.updateTravelTime(event.getVehicleId(), event.getTime());
     }
     
     @Override
     public void handleEvent(LinkLeaveEvent event) {
     	//same code of handleEvent(LinkEnterEvent event)
-//        TravelTimeData ttData = travelTimeForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeData());
-//        ttData.updateTravelTime(event.getVehicleId(), event.getTime());
-        TravelTimeLookUpTable ttTable = ttTableForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeLookUpTable());
-        ttTable.updateTravelTime(event.getVehicleId(), event.getTime());
+        TravelTimeData ttData = travelTimeForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeData());
+        ttData.updateTravelTime(event.getVehicleId(), event.getTime());
+//        TravelTimeLookUpTable ttTable = ttTableForLink.computeIfAbsent(event.getLinkId(), k -> new TravelTimeLookUpTable());
+//        ttTable.updateTravelTime(event.getVehicleId(), event.getTime());
     }
 
     @Override
     public void reset(int iteration) {
-//        travelTimeForLink.clear();
-        ttTableForLink.clear();
+        travelTimeForLink.clear();
+//        ttTableForLink.clear();
     }
 
     public Map<Id<Link>, TravelTimeData> getTravelTimesForLink() {
-    	return null;
-//        return new LinkedHashMap<Id<Link>, TravelTimeData>(travelTimeForLink);
+        return new LinkedHashMap<Id<Link>, TravelTimeData>(travelTimeForLink);
     }
     
     public Map<Id<Link>, TravelTimeLookUpTable> getTTTablesForLink() {
-        return new LinkedHashMap<Id<Link>, TravelTimeLookUpTable>(ttTableForLink);
+    	return null;
+//        return new LinkedHashMap<Id<Link>, TravelTimeLookUpTable>(ttTableForLink);
     }
 }
